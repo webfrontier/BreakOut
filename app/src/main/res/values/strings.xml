@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Breakout</string>
+    <string name="ball_btn">ball</string>
+    <string name="ready_message">Touch Start</string>
+    <string name="pause_message">Pause</string>
+    <string name="game_over_message">Game Over</string>
+    <string name="game_clear_message">Congratulation!!</string>
+    <string name="new_ball_help">Push [BALL]</string>
+    <string name="stock_ball_count">残りのボール : </string>
+</resources>
