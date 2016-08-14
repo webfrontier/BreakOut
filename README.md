@@ -9,4 +9,6 @@ Breakout
 
 ## 使い方
 
+![ゲーム画面](images/Screenshot_20160814-155537.png)
+
 ## 操作方法
