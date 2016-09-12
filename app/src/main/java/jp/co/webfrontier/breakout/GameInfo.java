@@ -1,13 +1,13 @@
 package jp.co.webfrontier.breakout;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.View;
 import android.util.Log;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ゲーム情報
@@ -164,7 +164,9 @@ public class GameInfo {
             int xCrash; // ブロックとの当たり判定（X方向）
             int yCrash; // ブロックとの当たり判定（Y方向）
             // ボールごとに表示更新／当たり判定
-            for(Ball ball : mBalls) {
+            for(int i=mBalls.size()-1; i>=0; i--) {
+                Ball ball = mBalls.get(i);
+
                 xCrash = 0;
                 yCrash = 0;
                 // ボール表示更新

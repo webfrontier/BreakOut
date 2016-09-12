@@ -2,24 +2,21 @@ package jp.co.webfrontier.breakout;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Bundle;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Button;
 
 /**
  * ブロック崩しViewクラス
  */
-public class BreakoutView extends View implements View.OnClickListener {
+public class BreakoutView extends View {
     /**
      * デバッグログ用タグ
      */
@@ -111,7 +108,7 @@ public class BreakoutView extends View implements View.OnClickListener {
      *
      * @param msgId メッセージID
      */
-    private void showMessage(int msgId) {
+    public void showMessage(int msgId) {
         TextView tv = (TextView)getRootView().findViewById(R.id.message);
         if(tv != null) {
             tv.setText(msgId);
@@ -122,7 +119,7 @@ public class BreakoutView extends View implements View.OnClickListener {
     /**
      * メッセージ非表示
      */
-    private void hideMessage() {
+    public void hideMessage() {
         TextView tv = (TextView)getRootView().findViewById(R.id.message);
         if(tv != null) {
             tv.setVisibility(View.INVISIBLE);
@@ -132,7 +129,7 @@ public class BreakoutView extends View implements View.OnClickListener {
     /**
      * 残りボール数表示更新
      */
-    private void refreshStockBallCount() {
+    public void refreshStockBallCount() {
         TextView tv = (TextView)getRootView().findViewById(R.id.stock_balls);
         if(tv != null) {
             Resources resource = getContext().getResources();
@@ -205,9 +202,6 @@ public class BreakoutView extends View implements View.OnClickListener {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // ステータス表示領域設定
         STATUS_RECT = new Rect(0, STATUS_H, w, h);
-        // ボタンリスナー登録
-        Button btn = (Button)getRootView().findViewById(R.id.add_ball);
-        btn.setOnClickListener(this);
         // ゲーム情報生成
         gInfo = new GameInfo(w, h, STATUS_H);
         // ボール残数表示
@@ -252,57 +246,6 @@ public class BreakoutView extends View implements View.OnClickListener {
     }
 
     /**
-     * ボタン押下ハンドラ
-     *
-     * @param v 表示描画オブジェクト
-     */
-    public void onClick(View v) {
-        // メッセージ消去
-        hideMessage();
-        // ボール追加
-        if(gInfo.addBall()) {
-            // ボール残数再表示
-            refreshStockBallCount();
-        }
-    }
-
-    /**
-     * タッチイベントハンドラ
-     *
-     * @param event タッチイベント
-     *
-     * @return true 処理成功
-     */
-    public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
-        if(action == MotionEvent.ACTION_DOWN) {
-            // タッチ（押下）操作
-            switch(gInfo.getMode()){
-                case GameInfo.READY:
-                    setMode(GameInfo.RUNNING);
-                    break;
-                case GameInfo.RUNNING:
-                    setMode(GameInfo.PAUSE);
-                    break;
-                case GameInfo.PAUSE:
-                    setMode(GameInfo.RUNNING);
-                    break;
-                case GameInfo.GAMEOVER:
-                    setMode(GameInfo.READY);
-                    break;
-                case GameInfo.CLEAR:
-                    setMode(GameInfo.READY);
-                    break;
-            }
-        } else if(action == MotionEvent.ACTION_MOVE) {
-            // タッチ（移動）操作
-            gInfo.setPadCx(event.getX());
-        }
-
-        return true;
-    }
-
-    /**
      * 状態保存<br>
      * バックグランド移行時の状態保存を行う。
      *
@@ -323,5 +266,32 @@ public class BreakoutView extends View implements View.OnClickListener {
         // モードを一時停止に移行
         setMode(GameInfo.PAUSE);
         gInfo.restoreState(state);
+    }
+
+    /**
+     * モード取得
+     *
+     * @return 現在のモード
+     */
+    public int getMode() {
+        return gInfo.getMode();
+    }
+
+    /**
+     * パッド中央位置設定
+     *
+     * @param x パッド中央設定X座標
+     */
+    public void setPadCx(float x) {
+        gInfo.setPadCx(x);
+    }
+
+    /**
+     * ボールをフィールドへ追加
+     *
+     * @return true:成功／false:失敗
+     */
+    public boolean addBall() {
+        return gInfo.addBall();
     }
 }

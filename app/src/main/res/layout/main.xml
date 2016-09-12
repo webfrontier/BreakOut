@@ -9,26 +9,53 @@
         android:layout_height="fill_parent"
         />
 
-    <TextView
-        android:id="@+id/stock_balls"
-        android:text="@string/stock_ball_count"
-        android:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="top"
-        android:textColor="#000000"
-        android:textSize="18sp"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <Button
-        android:id="@+id/add_ball"
-        android:text="@string/ball_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center|center_horizontal"
-        android:textSize="18sp"
-        android:layout_gravity="right"
-        android:height="60dp" />
+        <TextView
+            android:id="@+id/stock_balls"
+            android:text="@string/stock_ball_count"
+            android:visibility="visible"
+            android:layout_width="450px"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="top"
+            android:textColor="#000000"
+            android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/bt_btn"
+            android:text="@string/bt_btn"
+            android:layout_width="150px"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:textSize="16sp"
+            android:layout_gravity="right"
+            android:height="50dp" />
+
+        <Button
+            android:id="@+id/start_btn"
+            android:text="@string/start_btn"
+            android:layout_width="250px"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:textSize="16sp"
+            android:layout_gravity="right"
+            android:height="50dp" />
+
+        <Button
+            android:id="@+id/ball_btn"
+            android:text="@string/ball_btn"
+            android:layout_width="200px"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:textSize="16sp"
+            android:layout_gravity="right"
+            android:height="50dp" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"

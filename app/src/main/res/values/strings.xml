@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Breakout</string>
+    <string name="bt_btn">BT</string>
+    <string name="start_btn">start</string>
     <string name="ball_btn">ball</string>
     <string name="ready_message">Touch Start</string>
     <string name="pause_message">Pause</string>
