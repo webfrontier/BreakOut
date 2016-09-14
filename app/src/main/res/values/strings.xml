@@ -9,4 +9,7 @@
     <string name="game_clear_message">Congratulation!!</string>
     <string name="new_ball_help">Push [BALL]</string>
     <string name="stock_ball_count">残りのボール : </string>
+
+    <!-- Toast Message -->
+    <string name="msg_gatt_connect_fail">"GATT接続に失敗しました。"</string>
 </resources>

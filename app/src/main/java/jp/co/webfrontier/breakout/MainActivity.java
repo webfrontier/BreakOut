@@ -1,5 +1,7 @@
 package jp.co.webfrontier.breakout;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -27,12 +29,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // ボタンリスナー登録
         Button btn;
-        btn = (Button)findViewById(R.id.bt_btn);
-        btn.setOnClickListener(this);
         btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
         btn = (Button)findViewById(R.id.ball_btn);
         btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.bt_btn);
+        // デバイスがBLEに対応しているかを確認する.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            // BLEに対応していない旨のToastやダイアログを表示する.
+            // BLE非対応のため、無効化
+            btn.setEnabled(false);
+        } else {
+            btn.setOnClickListener(this);
+        }
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
@@ -48,8 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch(v.getId())
         {
-            case R.id.bt_btn:
+            case R.id.bt_btn: {
                 // BT接続
+                Intent intent = new Intent(this, BleActivity.class);
+                startActivity(intent);
+            }
                 break;
             case R.id.start_btn:
                 // START
