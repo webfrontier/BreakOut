@@ -15,9 +15,13 @@ public class Pad implements DrawableItem {
      */
     private static final String TAG = "Pad";
     /**
-     * パッドの色
+     * パッドの色(BLE未接続)
      */
     private static final int PAD_COLOR = Color.YELLOW;
+    /**
+     * パッドの色(BLE接続)
+     */
+    private static final int BLEPAD_COLOR = Color.BLUE;
     /**
      * 画面の幅
      */
@@ -46,14 +50,30 @@ public class Pad implements DrawableItem {
      * ボールを打ち返した回数
      */
     private int hitCount = 0;
+    /**
+     * BLE接続有無
+     */
+    private boolean mBleConnect = false;
+    /**
+     * ペインタ
+     */
+    private Paint mPadPaint = new Paint();
 
     /**
      * コンストラクタ
+     */
+    public Pad() {
+        // ペインタへ色設定
+        mPadPaint.setColor(PAD_COLOR);
+    }
+
+    /**
+     * 初期化処理
      *
      * @param w 画面の幅
      * @param h 画面の高さ
      */
-    public Pad(int w, int h) {
+    public void init(int w, int h) {
         disp_w = w;
 
         // パッドサイズを画面サイズから算出
@@ -62,7 +82,7 @@ public class Pad implements DrawableItem {
 
         // パッド位置を画面サイズから算出
         x = (w - Pad.WIDTH) / 2;
-        y = h / 100 * 95;
+        y = h / 100 * 90;
 
         // タッチ位置を画面中央で設定
         mSetCx = w / 2;
@@ -75,9 +95,7 @@ public class Pad implements DrawableItem {
      */
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(PAD_COLOR);
-        canvas.drawRect(x, y, x + WIDTH, y + HEIGHT, paint);
+        canvas.drawRect(x, y, x + WIDTH, y + HEIGHT, mPadPaint);
     }
 
     /**
@@ -96,6 +114,19 @@ public class Pad implements DrawableItem {
         );
     }
 
+    /**
+     * タッチ位置設定
+     *
+     * @param d パッド移動変化値
+     */
+    public void setPadDelta(double d) {
+        mSetCx += d;
+        if(mSetCx < Pad.WIDTH / 2) {
+            mSetCx = Pad.WIDTH / 2;
+        } else if(mSetCx > disp_w - Pad.WIDTH / 2) {
+            mSetCx = disp_w - Pad.WIDTH / 2;
+        }
+    }
     /**
      * タッチ位置設定
      *
@@ -168,5 +199,19 @@ public class Pad implements DrawableItem {
             ++hitCount;
         }
         return ret;
+    }
+
+    /**
+     * BLE接続状態設定
+     *
+     * @param connect BLE接続状態
+     */
+    public void setmBleConnect(boolean connect) {
+        mBleConnect = connect;
+        if(connect) {
+            mPadPaint.setColor(BLEPAD_COLOR);
+        } else {
+            mPadPaint.setColor(PAD_COLOR);
+        }
     }
 }

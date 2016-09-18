@@ -1,9 +1,9 @@
 package jp.co.webfrontier.breakout;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,14 +18,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     /**
+     * BlueNinja BLE接続制御
+     */
+    private BlueNinjaController mBlueNinjaController = new BlueNinjaController(this);
+
+    /**
      * BreakoutView
      */
-    private BreakoutView breakoutView;
+    private BreakoutView mBreakoutView;
 
+    /**
+     * アプリ生成時に呼び出し
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        Log.d(TAG, "onCreate()");
+
+        mBlueNinjaController.init();
 
         // ボタンリスナー登録
         Button btn;
@@ -43,7 +57,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn.setOnClickListener(this);
         }
 
-        breakoutView = (BreakoutView)findViewById(R.id.breakout);
+        mBreakoutView = (BreakoutView)findViewById(R.id.breakout);
+    }
+
+    /**
+     * 他のアプリが移動（一時停止）
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Log.d(TAG, "onPause()");
+
+        // BLE接続を切断
+        mBlueNinjaController.disconnectBle();
+    }
+
+    /**
+     * 一時停止からの再開
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "onResume()");
+
+        // BLEを再度接続
+
     }
 
     /**
@@ -53,41 +93,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public void onClick(View v) {
         // メッセージ消去
-        breakoutView.hideMessage();
+        mBreakoutView.hideMessage();
 
         switch(v.getId())
         {
             case R.id.bt_btn: {
                 // BT接続
-                Intent intent = new Intent(this, BleActivity.class);
-                startActivity(intent);
+//                mBlueNinjaController.showDialog();
+                mBlueNinjaController.connectBle();
             }
                 break;
             case R.id.start_btn:
                 // START
-                switch(breakoutView.getMode()){
-                    case GameInfo.READY:
-                        breakoutView.setMode(GameInfo.RUNNING);
-                        break;
-                    case GameInfo.RUNNING:
-                        breakoutView.setMode(GameInfo.PAUSE);
-                        break;
-                    case GameInfo.PAUSE:
-                        breakoutView.setMode(GameInfo.RUNNING);
-                        break;
-                    case GameInfo.GAMEOVER:
-                        breakoutView.setMode(GameInfo.READY);
-                        break;
-                    case GameInfo.CLEAR:
-                        breakoutView.setMode(GameInfo.READY);
-                        break;
-                }
+                mBreakoutView.pushStart();
                 break;
             case R.id.ball_btn:
                 // ボール追加
-                if(breakoutView.addBall()) {
+                if(mBreakoutView.addBall()) {
                     // ボール残数再表示
-                    breakoutView.refreshStockBallCount();
+                    mBreakoutView.refreshStockBallCount();
                 }
                 break;
         }
@@ -104,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int action = event.getAction();
         if(action == MotionEvent.ACTION_MOVE) {
             // タッチ（移動）操作
-            breakoutView.setPadCx(event.getX());
+            mBreakoutView.setPadCx(event.getX());
         }
 
         return true;

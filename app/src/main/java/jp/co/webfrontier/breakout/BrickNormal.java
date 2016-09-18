@@ -21,7 +21,7 @@ public class BrickNormal extends Brick {
         super(x, y);
 
         // ブロック強度初期化
-        super.robustness = 2;
+        super.robustness = 1;
     }
 
     /**
