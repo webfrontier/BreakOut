@@ -14,16 +14,31 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <TextView
-            android:id="@+id/stock_balls"
-            android:text="@string/stock_ball_count"
-            android:visibility="visible"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
             android:layout_width="450px"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="top"
-            android:textColor="#000000"
-            android:textSize="18sp"/>
+            android:layout_height="160px">
+
+            <TextView
+                android:id="@+id/stock_balls"
+                android:text="@string/stock_ball_count"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/remain_bricks"
+                android:text="@string/remain_brick_count"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/bt_btn"

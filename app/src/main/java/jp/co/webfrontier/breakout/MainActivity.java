@@ -99,8 +99,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.bt_btn: {
                 // BT接続
-//                mBlueNinjaController.showDialog();
-                mBlueNinjaController.connectBle();
+                if(mBlueNinjaController.isConnected()) {
+                    mBlueNinjaController.disconnectBle();
+                } else {
+                    // デバイス名を入力し接続する場合は"showDialog()"を有効にする
+//                    mBlueNinjaController.showDialog();
+                    mBlueNinjaController.connectBle();
+                }
             }
                 break;
             case R.id.start_btn:
@@ -128,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int action = event.getAction();
         if(action == MotionEvent.ACTION_MOVE) {
             // タッチ（移動）操作
-            mBreakoutView.setPadCx(event.getX());
+            if(!mBlueNinjaController.isConnected()) {
+                // BLE機器未接続の場合はタッチによるパッド操作を行う
+                mBreakoutView.setPadCx(event.getX());
+            }
         }
 
         return true;

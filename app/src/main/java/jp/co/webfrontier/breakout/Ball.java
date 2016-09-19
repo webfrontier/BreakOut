@@ -32,7 +32,7 @@ public class Ball implements DrawableItem {
     /**
      * 初期速度（Y方向）
      */
-    private static final float INITIAL_SPEED_Y = 4f;
+    private static final float INITIAL_SPEED_Y = 3f;
     /**
      * 最大速度（X方向）
      */
@@ -77,6 +77,10 @@ public class Ball implements DrawableItem {
      * パッドに当たった回数
      */
     private int hitCount = 0;
+    /**
+     * ペインター
+     */
+    private Paint mBallPaint = new Paint();
 
     /**
      * コンストラクタ
@@ -85,6 +89,8 @@ public class Ball implements DrawableItem {
      * @param y ボール位置Y座標
      */
     public Ball(float x, float y) {
+        mBallPaint.setColor(BALL_COLOR);
+        mBallPaint.setAntiAlias(true);
         this.x = x;
         this.y = y;
     }
@@ -98,6 +104,8 @@ public class Ball implements DrawableItem {
      * @param ySpeed Y方向速度
      */
     public Ball(float x, float y, float xSpeed, float ySpeed) {
+        mBallPaint.setColor(BALL_COLOR);
+        mBallPaint.setAntiAlias(true);
         this.x = x;
         this.y = y;
         this.xSpeed = xSpeed;
@@ -112,10 +120,7 @@ public class Ball implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         int halfSize = SIZE / 2;
-        Paint paint = new Paint();
-        paint.setColor(BALL_COLOR);
-        paint.setAntiAlias(true);
-        canvas.drawCircle(x+halfSize, y+halfSize, halfSize, paint);
+        canvas.drawCircle(x+halfSize, y+halfSize, halfSize, mBallPaint);
     }
 
     /**

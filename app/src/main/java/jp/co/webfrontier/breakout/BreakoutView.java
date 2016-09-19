@@ -54,9 +54,9 @@ public class BreakoutView extends View {
      */
     private static final int STATUS_H = 160;
     /**
-     * ステータス表示領域
+     * ブロックの上のスペースの高さ
      */
-    private static Rect STATUS_RECT;
+    private static final int UPPER_SPACE = 100;
     /**
      * 描画更新頻度
      */
@@ -179,6 +179,18 @@ public class BreakoutView extends View {
     }
 
     /**
+     * 残りブロック数表示更新
+     */
+    public void refreshRemainBrickCount() {
+        TextView tv = (TextView)getRootView().findViewById(R.id.remain_bricks);
+        if(tv != null) {
+            Resources resource = getContext().getResources();
+            CharSequence newMessage = resource.getText(R.string.remain_brick_count);
+            tv.setText(newMessage + Integer.toString(getBricksCount()));
+        }
+    }
+
+    /**
      * 新しくゲーム開始
      */
     private void newGame() {
@@ -196,7 +208,7 @@ public class BreakoutView extends View {
         for(int col = 0; col < BRICK_COL; col++) {
             for(int row = 0; row < BRICK_ROW; row++) {
                 // ブロック情報生成
-                mBricks[col][row] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H);
+                mBricks[col][row] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
             }
         }
 
@@ -442,7 +454,7 @@ public class BreakoutView extends View {
      */
     private SetXY calcBrickIndex(float x, float y) {
         // ブロック全体の表示領域
-        Rect blockArea = new Rect(0, STATUS_H, Brick.WIDTH * BRICK_COL, Brick.HEIGHT * BRICK_ROW + STATUS_H);
+        Rect blockArea = new Rect(0, STATUS_H + UPPER_SPACE, Brick.WIDTH * BRICK_COL, Brick.HEIGHT * BRICK_ROW + STATUS_H + UPPER_SPACE);
 
         SetXY index = null;
         if(blockArea.contains((int)x, (int)y)) {
@@ -468,17 +480,17 @@ public class BreakoutView extends View {
      */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        // ステータス表示領域設定
-        STATUS_RECT = new Rect(0, STATUS_H, w, h);
         disp_w = w;
         disp_h = h;
         // パッドへサイズ設定
         mPad.init(w, h);
-        // ボール残数表示
-        refreshStockBallCount();
         setMode(MODE_READY);
 
         newGame();
+        // ボール残数表示
+        refreshStockBallCount();
+        // ブロック残数表示
+        refreshRemainBrickCount();
     }
 
     /**
@@ -537,6 +549,8 @@ public class BreakoutView extends View {
                 for(SetXY target : hitBricks) {
                     mBricks[target.col][target.row].crash(this);
                 }
+                // 残りブロック数表示更新
+                refreshRemainBrickCount();
 
                 // ブロックとの反射
                 if(yCrash < 0 || yCrash > 0) {
@@ -586,7 +600,7 @@ public class BreakoutView extends View {
     public void onDraw(Canvas canvas) {
         // ステータス領域描画
         canvas.drawColor(STS_BG_COLOR);
-        canvas.drawRect(STATUS_RECT, mPaint);
+        canvas.drawRect(new Rect(0, STATUS_H, disp_w, disp_h), mPaint);
 
         // ゲームフィールド領域描画
         // パッド描画

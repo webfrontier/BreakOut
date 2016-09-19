@@ -18,10 +18,18 @@ abstract class Brick implements DrawableItem {
      */
     public static final int UNBREAKABLE = -1;
     /**
+     * ブロック間のスペース
+     */
+    public static final int BLOCK_SPACE = 5;
+    /**
      * ブロック強度<br>
      *     ブロックが壊れるまでのボールヒット回数
      */
     protected int robustness = 1;
+    /**
+     * ペインター
+     */
+    private Paint mBrickPaint = new Paint();
     /**
      * ブロックX座標（左）
      */
@@ -58,6 +66,7 @@ abstract class Brick implements DrawableItem {
         this.y = y;
         this.ly = y + HEIGHT;
         this.lx = x + WIDTH;
+        mBrickPaint.setColor(getColor());
     }
 
     /**
@@ -68,9 +77,7 @@ abstract class Brick implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         if(isUnbroken()) {
-            Paint paint = new Paint();
-            paint.setColor(getColor());
-            canvas.drawRect(x, y, lx - 1, ly - 1, paint);
+            canvas.drawRect(x, y, lx - BLOCK_SPACE, ly - BLOCK_SPACE, mBrickPaint);
         }
     }
 
