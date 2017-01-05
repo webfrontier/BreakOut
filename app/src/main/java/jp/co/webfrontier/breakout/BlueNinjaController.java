@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * BLE(BlueNinja)接続制御クラス
+ * BLE(BlueNinja)接続制御クラス [Task 13] BLE接続
  */
 public class BlueNinjaController {
     /**

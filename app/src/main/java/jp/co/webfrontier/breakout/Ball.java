@@ -28,27 +28,27 @@ public class Ball implements DrawableItem {
     /**
      * 初期速度（X方向）
      */
-    private static final float INITIAL_SPEED_X = -0.2f;
+    private static final float INITIAL_SPEED_X = -0.2f; // [Task 6] ボール速度（初期速度）
     /**
      * 初期速度（Y方向）
      */
-    private static final float INITIAL_SPEED_Y = 3f;
+    private static final float INITIAL_SPEED_Y = 3f; // [Task 6] ボール速度（初期速度）
     /**
      * 最大速度（X方向）
      */
-    private static final float MAX_SPEED_X     = 5f;
+    private static final float MAX_SPEED_X     = 5f; // [Task 6] ボール速度（最大速度）
     /**
      * 最大速度（Y方向）
      */
-    private static final float MAX_SPEED_Y     = 8f;
+    private static final float MAX_SPEED_Y     = 8f; // [Task 6] ボール速度（最大速度）
     /**
      * 速度変化率（X方向）
      */
-    private static final float CHANGE_RATE_SPEED_X = 1.01f;
+    private static final float CHANGE_RATE_SPEED_X = 1.01f; // [Task 6] ボール速度（速度変化率）
     /**
      * 速度変化率（Y方向）
      */
-    private static final float CHANGE_RATE_SPEED_Y = 1.2f;
+    private static final float CHANGE_RATE_SPEED_Y = 1.2f; // [Task 6] ボール速度（速度変化率）
     /**
      * ボールの色
      */
@@ -222,6 +222,7 @@ public class Ball implements DrawableItem {
     public void update(View view) {
         view.invalidate(getRect());
 
+        // [Task 8] 壁との当たり判定
         x += xSpeed;
         // X方向判定
         if(x < Ball.field.left) {

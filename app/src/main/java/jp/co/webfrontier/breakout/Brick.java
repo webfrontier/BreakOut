@@ -16,7 +16,7 @@ abstract class Brick implements DrawableItem {
     /**
      * ブロック強度（破壊不可）
      */
-    public static final int UNBREAKABLE = -1;
+    public static final int UNBREAKABLE = -1; // [Task 15] 壊れないブロック
     /**
      * ブロック間のスペース
      */
@@ -25,7 +25,11 @@ abstract class Brick implements DrawableItem {
      * ブロック強度<br>
      *     ブロックが壊れるまでのボールヒット回数
      */
-    protected int robustness = 1;
+    protected int robustness = 1; // [Task 14] ブロック耐久性
+    /**
+     * ブロック種別
+     */
+    protected BrickType brikeType = BrickType.Blank;
     /**
      * ペインター
      */
@@ -104,6 +108,15 @@ abstract class Brick implements DrawableItem {
     }
 
     /**
+     * ブロック強度設定
+     *
+     * @param  robustness  強度
+     */
+    public void setRobustness(int robustness) {
+        this.robustness = robustness;
+    }
+
+    /**
      * ブロックが壊れていないか
      *
      * @return true  未破壊
@@ -129,6 +142,16 @@ abstract class Brick implements DrawableItem {
      * @return ブロックの色
      */
     abstract protected int getColor();
+
+    /**
+     * ブロック種別取得
+     *
+     * @return ブロック種別
+     */
+    public BrickType getType()
+    {
+        return brikeType;
+    }
 
     /**
      * 静的定義初期化

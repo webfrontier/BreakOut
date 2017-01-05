@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     // デバイス名を入力し接続する場合は"showDialog()"を有効にする
 //                    mBlueNinjaController.showDialog();
-                    mBlueNinjaController.connectBle();
+                    mBlueNinjaController.connectBle(); // [Task 13] BLE接続
                 }
             }
                 break;

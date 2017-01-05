@@ -40,11 +40,11 @@ public class BreakoutView extends View {
     /**
      * ブロック行数
      */
-    public static final int BRICK_ROW = 3;
+    public static final int BRICK_ROW = 3; // [Task 12] ブロッック行列追加
     /**
      * ブロック列数
      */
-    public static final int BRICK_COL = 6;
+    public static final int BRICK_COL = 6; // [Task 12] ブロッック行列追加
     /**
      * ステータス領域背景色
      */
@@ -71,7 +71,7 @@ public class BreakoutView extends View {
     /**
      * ブロック情報
      */
-    public Brick[][] mBricks = new Brick[BRICK_COL][BRICK_ROW];
+    public Brick[][] mBricks = new Brick[BRICK_ROW][BRICK_COL];
     /**
      * パッド情報
      */
@@ -205,10 +205,25 @@ public class BreakoutView extends View {
         int brick_h = disp_h / 30;
         // ブロックサイズ設定
         Brick.Initialize(brick_w, brick_h);
+        // ブロック配置（0:ブロックなし、1:通常ブロック、2:破壊不可） [Task 22] ブロックの配置 / [Task 12] ブロッック行列追加
+        final int[][] brickArray = {
+            {0, 1, 1, 1, 1, 0},
+            {1, 1, 2, 2, 1, 1},
+            {1, 1, 1, 1, 1, 1}
+        };
         for(int col = 0; col < BRICK_COL; col++) {
             for(int row = 0; row < BRICK_ROW; row++) {
                 // ブロック情報生成
-                mBricks[col][row] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
+                if(brickArray[row][col] == BrickType.Blank.getValue()) {
+                    // ブロックなし
+                    mBricks[row][col] = new BrickBlank(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
+                } else if(brickArray[row][col] == BrickType.Normal.getValue()){
+                    // 通常ブロック
+                    mBricks[row][col] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
+                } else if(brickArray[row][col] == BrickType.Unbroken.getValue()){
+                    // 破壊不可 [Task 15] 壊れないブロック
+                    mBricks[row][col] = new BrickUnbroken(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
+                }
             }
         }
 
@@ -332,7 +347,7 @@ public class BreakoutView extends View {
      */
     @org.jetbrains.annotations.Contract("null -> false")
     private boolean isHitBricks(SetXY index) {
-        return (index != null && mBricks[index.col][index.row].isUnbroken());
+        return (index != null && mBricks[index.row][index.col].isUnbroken());
     }
 
     /**
@@ -374,7 +389,7 @@ public class BreakoutView extends View {
         for(int col = 0; col < BRICK_COL; col++) {
             for(int row = 0; row < BRICK_ROW; row++) {
                 // 破壊可能なブロック数のみ集計
-                if(mBricks[col][row].isBreakable()) {
+                if(mBricks[row][col].isBreakable()) {
                     ++count;
                 }
             }
@@ -461,7 +476,7 @@ public class BreakoutView extends View {
             index = new SetXY(
                     (int) ((x - blockArea.left) / Brick.WIDTH),
                     (int) ((y - blockArea.top) / Brick.HEIGHT));
-            if(!mBricks[index.col][index.row].isUnbroken()) {
+            if(!mBricks[index.row][index.col].isUnbroken()) {
                 // すでにブロックが破壊済み
                 index = null;
             }
@@ -513,6 +528,7 @@ public class BreakoutView extends View {
                 // ボール表示更新
                 ball.update(this);
 
+                // [Task 9] ボールとブロックの当たり判定
                 // ブロックとボールの当たり判定（左上／右上／左下／右下）
                 // 各点がどのブロックと当たっているか判定
                 // 当たっていない場合はnull返却
@@ -547,7 +563,7 @@ public class BreakoutView extends View {
                 hitBricks = optimumList(hitBricks, r_bottom);
                 // 当たり判定対象ブロックの表示更新
                 for(SetXY target : hitBricks) {
-                    mBricks[target.col][target.row].crash(this);
+                    mBricks[target.row][target.col].crash(this);
                 }
                 // 残りブロック数表示更新
                 refreshRemainBrickCount();
@@ -565,7 +581,7 @@ public class BreakoutView extends View {
                     ball.hitPad(mPad.getcx());
                 }
 
-                // ボールロスト
+                // ボールロスト [Task 11] ボールが下に落ちる
                 if(ball.isLost()) {
                     mBalls.remove(ball);
                 }
@@ -577,13 +593,13 @@ public class BreakoutView extends View {
                 // ボール残数あり
                 if(getBricksCount() == 0) {
                     // 残ブロック数が０のため、クリア
-                    setMode(MODE_CLEAR);
+                    setMode(MODE_CLEAR); // [Task 10] クリア画面
                 } else {
                     // ゲーム継続のため、sleep
                     mFieldHandler.sleep(DELAY_MILLIS);
                 }
             } else if(ballCnt == 0) {
-                // ボール残数なしのため、GameOver
+                // ボール残数なしのため、GameOver [Task 11] ボールが全て下に落ちゲームオーバー
                 setMode(MODE_GAMEOVER);
             }
         } else {
@@ -604,17 +620,17 @@ public class BreakoutView extends View {
 
         // ゲームフィールド領域描画
         // パッド描画
-        mPad.draw(canvas);
+        mPad.draw(canvas); // [Task 2] バーの表示
 
         // ボール描画
         for(Ball ball : mBalls) {
-            ball.draw(canvas);
+            ball.draw(canvas); // [Task 5] ボールの表示
         }
 
         // ブロック描画
         for(int col = 0; col < BRICK_COL; col++) {
             for(int row = 0; row < BRICK_ROW; row++) {
-                mBricks[col][row].draw(canvas);
+                mBricks[row][col].draw(canvas);
             }
         }
     }

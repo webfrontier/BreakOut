@@ -172,6 +172,7 @@ public class Pad implements DrawableItem {
     public void update(View view) {
         view.invalidate(getRect());
 
+        // [Task 3] パッド移動位置
         // 指定位置からパッド位置を算出
         x = mSetCx - Pad.WIDTH / 2;
         // 画面領域外の場合は補正する
@@ -193,6 +194,7 @@ public class Pad implements DrawableItem {
      * @return false 外れ
      */
     public boolean isBallHit(Ball ball) {
+        // [Task 7] ボールとの当たり判定
         boolean ret = (y <= ball.getly() && getly() >= ball.gety() &&
                        x <= ball.getlx() && getlx() >= ball.getx());
         if(ret) {
