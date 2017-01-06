@@ -208,7 +208,7 @@ public class BreakoutView extends View {
         // ブロック配置（0:ブロックなし、1:通常ブロック、2:破壊不可） [Task 22] ブロックの配置 / [Task 12] ブロッック行列追加
         final int[][] brickArray = {
             {0, 1, 1, 1, 1, 0},
-            {1, 1, 2, 2, 1, 1},
+            {1, 3, 2, 2, 3, 1},
             {1, 1, 1, 1, 1, 1}
         };
         for(int col = 0; col < BRICK_COL; col++) {
@@ -217,12 +217,15 @@ public class BreakoutView extends View {
                 if(brickArray[row][col] == BrickType.Blank.getValue()) {
                     // ブロックなし
                     mBricks[row][col] = new BrickBlank(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                } else if(brickArray[row][col] == BrickType.Normal.getValue()){
+                } else if(brickArray[row][col] == BrickType.Normal.getValue()) {
                     // 通常ブロック
                     mBricks[row][col] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                } else if(brickArray[row][col] == BrickType.Unbroken.getValue()){
+                } else if(brickArray[row][col] == BrickType.Unbroken.getValue()) {
                     // 破壊不可 [Task 15] 壊れないブロック
                     mBricks[row][col] = new BrickUnbroken(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
+                } else if(brickArray[row][col] == BrickType.Special.getValue()) {
+                    // スペシャルブロック
+                    mBricks[row][col] = new BrickSpecial(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
                 }
             }
         }
@@ -273,9 +276,13 @@ public class BreakoutView extends View {
                     msgId = R.string.ready_message;
                     break;
                 case MODE_GAMEOVER:
+                    // [Task 23] 効果音追加
+                    SoundController.playGameOver();
                     msgId = R.string.game_over_message;
                     break;
                 case MODE_CLEAR:
+                    // [Task 23] 効果音追加
+                    SoundController.playClear();
                     msgId = R.string.game_clear_message;
                     break;
             }
@@ -564,6 +571,18 @@ public class BreakoutView extends View {
                 // 当たり判定対象ブロックの表示更新
                 for(SetXY target : hitBricks) {
                     mBricks[target.row][target.col].crash(this);
+
+                    // [Task 16] 特定ブロックHit
+                    if(mBricks[target.row][target.col].getType() == BrickType.Special)
+                    {
+                        // [Task 16] ボール増やす
+                        ++mStockBallCount;
+                        refreshStockBallCount();
+                        // [Task 18] ボールSpeed Up
+                        ball.speedUp();
+                        // [Task 19] パッド伸ばす
+                        Pad.WIDTH *= 1.5;
+                    }
                 }
                 // 残りブロック数表示更新
                 refreshRemainBrickCount();
@@ -578,11 +597,15 @@ public class BreakoutView extends View {
 
                 // パッドとの反射処理
                 if(mPad.isBallHit(ball)) {
+                    // [Task 23] 効果音追加
+                    SoundController.playHitPad();
                     ball.hitPad(mPad.getcx());
                 }
 
                 // ボールロスト [Task 11] ボールが下に落ちる
                 if(ball.isLost()) {
+                    // [Task 23] 効果音追加
+                    SoundController.playLostBall();
                     mBalls.remove(ball);
                 }
             }

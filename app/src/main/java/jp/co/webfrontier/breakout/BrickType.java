@@ -15,7 +15,11 @@ public enum BrickType {
     /**
      * 破壊不可
      */
-    Unbroken(2);
+    Unbroken(2),
+    /**
+     * スペシャルブロック
+     */
+    Special(3);
 
     /**
      * 種別値

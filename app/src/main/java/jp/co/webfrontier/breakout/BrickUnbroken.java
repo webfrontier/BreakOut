@@ -1,6 +1,7 @@
 package jp.co.webfrontier.breakout;
 
 import android.graphics.Color;
+import android.view.View;
 
 /**
  * ブロック（破壊不可） [Task 15] 壊れないブロック
@@ -35,5 +36,17 @@ public class BrickUnbroken extends Brick {
     protected int getColor()
     {
         return Color.WHITE;
+    }
+
+    /**
+     * ブロック破壊
+     *
+     * @param view ブロック描画オブジェクト
+     */
+    public void crash(View view) {
+        super.crash(view);
+
+        // [Task 23] 効果音追加
+        SoundController.playHitHardBrick();
     }
 }

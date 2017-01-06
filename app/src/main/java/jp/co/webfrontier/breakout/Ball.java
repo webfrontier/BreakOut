@@ -283,6 +283,36 @@ public class Ball implements DrawableItem {
     }
 
     /**
+     * 速度アップ
+     */
+    public void speedUp() {
+        // ボールの色変化
+        BALL_COLOR = Color.RED;
+        mBallPaint.setColor(BALL_COLOR);
+
+        xSpeed *= CHANGE_RATE_SPEED_X * 5;
+        ySpeed *= CHANGE_RATE_SPEED_Y * 5;
+
+        // X方向
+        if(MAX_SPEED_X < Math.abs(xSpeed)) {
+            if(xSpeed > 0) {
+                xSpeed = MAX_SPEED_X;
+            }else{
+                xSpeed = -MAX_SPEED_X;
+            }
+        }
+
+        // Y方向
+        if(MAX_SPEED_Y < Math.abs(ySpeed)) {
+            if(ySpeed > 0) {
+                ySpeed = MAX_SPEED_Y;
+            } else {
+                ySpeed = -MAX_SPEED_Y;
+            }
+        }
+    }
+
+    /**
      * Y方向反射
      */
     public void boundX() {

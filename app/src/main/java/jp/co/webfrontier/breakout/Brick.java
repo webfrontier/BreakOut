@@ -103,6 +103,8 @@ abstract class Brick implements DrawableItem {
     public void crash(View view) {
         if(robustness > 0) {
             --robustness;
+            // [Task 23] 効果音追加
+            SoundController.playHitBrick();
         }
         view.invalidate(getRect());
     }

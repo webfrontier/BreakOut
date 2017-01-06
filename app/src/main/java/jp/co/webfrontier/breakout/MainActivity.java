@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.d(TAG, "onPause()");
 
+        // [Task 23] 効果音追加
+        // 音データリリース
+        SoundController.release();
+
         // BLE接続を切断
         mBlueNinjaController.disconnectBle();
     }
@@ -81,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         Log.d(TAG, "onResume()");
+
+        // [Task 23] 効果音追加
+        SoundController.initialize(this);
 
         // BLEを再度接続
 
