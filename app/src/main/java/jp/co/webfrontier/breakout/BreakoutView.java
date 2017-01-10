@@ -301,7 +301,7 @@ public class BreakoutView extends View {
         int brick_h = disp_h / 30;
         // ブロックサイズ設定
         Brick.Initialize(brick_w, brick_h);
-        // ブロック配置（0:ブロックなし、1:通常ブロック、2:破壊不可） [Task 22] ブロックの配置 / [Task 12] ブロッック行列追加
+        // ブロック配置（0:ブロックなし、1:通常ブロック、2:破壊不可） [Task 22] ブロックの配置 / [Task 12] ブロック行列追加
         final int[][] brickArray = {
             {0, 1, 1, 1, 1, 0},
             {1, 3, 2, 2, 3, 1},
