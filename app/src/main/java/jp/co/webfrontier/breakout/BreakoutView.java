@@ -9,9 +9,11 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class BreakoutView extends View {
     /**
      * ステータス表示領域の高さ
      */
-    private static final int STATUS_H = 160;
+    private static final int STATUS_H = 180;
     /**
      * ブロックの上のスペースの高さ
      */
@@ -102,6 +104,10 @@ public class BreakoutView extends View {
             BreakoutView.this.update();
         }
     };
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    public static final int BALL_SPEEDUP_ELAPSED_MILLISECONDS = 60 * 1000; // スピードを上げる経過時間(秒)
+    private long mElapsedMilliseconds = 0; // 実際の経過時間
 
     /**
      * コンストラクタ
@@ -190,6 +196,80 @@ public class BreakoutView extends View {
         }
     }
 
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * 経過時間を表示するChronometerを開始する
+     */
+    private void startElapsedTimeCounter() {
+        if (this.mode != MODE_RUNNING)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            mElapsedMilliseconds = 0;
+            counter.setBase(SystemClock.elapsedRealtime());
+            counter.start();
+        }
+    }
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * 経過時間を表示するChronometerを停止する
+     */
+    private void stopElapsedTimeCounter() {
+        if (this.mode != MODE_RUNNING
+                && this.mode != MODE_CLEAR
+                && this.mode != MODE_GAMEOVER)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.stop();
+        }
+    }
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * 経過時間を表示するChronometerを一時停止する
+     * Chronometerは内部時間が止まらないため、再開時のために一時停止した時間を覚えておく
+     */
+    public void pauseElapsedTimeCounter() {
+        if (this.mode != MODE_RUNNING
+                && this.mode != MODE_PAUSE)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.stop();
+            mElapsedMilliseconds = counter.getBase() - SystemClock.elapsedRealtime();
+        }
+    }
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * 経過時間を表示するChronometerを再開する
+     * Chronometerは内部時間が止まらないため、一時停止の時間に巻き戻す
+     */
+    public void resumeElapsedTimeCounter() {
+        if (this.mode != MODE_RUNNING
+                && this.mode != MODE_PAUSE)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.setBase(SystemClock.elapsedRealtime() + mElapsedMilliseconds);
+            counter.start();
+        }
+    }
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * ゲーム開始からの経過時間(ミリ秒)を取得する
+     */
+    private long getElapsedTime() {
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            return SystemClock.elapsedRealtime() - counter.getBase();
+        }
+        return 0;
+    }
+
     /**
      * 新しくゲーム開始
      */
@@ -256,12 +336,16 @@ public class BreakoutView extends View {
             if(oldMode == MODE_READY) {
                 newGame();
                 showMessage(R.string.new_ball_help);
+                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                startElapsedTimeCounter();
             } else if(oldMode == MODE_PAUSE) {
                 if(!isBallinField()) {
                     showMessage(R.string.new_ball_help);
                 } else {
                     hideMessage();
                 }
+                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                resumeElapsedTimeCounter();
             }
             if (oldMode != MODE_RUNNING) {
                 update();
@@ -271,6 +355,8 @@ public class BreakoutView extends View {
             switch(newMode) {
                 case MODE_PAUSE:
                     msgId = R.string.pause_message;
+                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                    pauseElapsedTimeCounter();
                     break;
                 case MODE_READY:
                     msgId = R.string.ready_message;
@@ -279,11 +365,15 @@ public class BreakoutView extends View {
                     // [Task 23] 効果音追加
                     SoundController.playGameOver();
                     msgId = R.string.game_over_message;
+                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                    stopElapsedTimeCounter();
                     break;
                 case MODE_CLEAR:
                     // [Task 23] 効果音追加
                     SoundController.playClear();
                     msgId = R.string.game_clear_message;
+                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                    stopElapsedTimeCounter();
                     break;
             }
             showMessage(msgId);
@@ -529,6 +619,11 @@ public class BreakoutView extends View {
             // ボールごとに表示更新／当たり判定
             for(int i=mBalls.size()-1; i>=0; i--) {
                 Ball ball = mBalls.get(i);
+
+                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+                if (getElapsedTime() > BALL_SPEEDUP_ELAPSED_MILLISECONDS) {
+                    ball.speedUp();
+                }
 
                 xCrash = 0;
                 yCrash = 0;

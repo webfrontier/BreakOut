@@ -13,4 +13,5 @@
 
     <!-- Toast Message -->
     <string name="msg_gatt_connect_fail">"BLE Device disconnected."</string>
+    <string name="elapsed_time">経過時間：%s</string>
 </resources>

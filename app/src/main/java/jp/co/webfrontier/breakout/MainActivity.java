@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // BLE接続を切断
         mBlueNinjaController.disconnectBle();
+
+        // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+        // ゲームの経過時間を表示するためのカウンタを一時停止
+        mBreakoutView.pauseElapsedTimeCounter();
     }
 
     /**
@@ -91,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // BLEを再度接続
 
+        // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+        // ゲームの経過時間を表示するためのカウンタの再開
+        mBreakoutView.resumeElapsedTimeCounter();
     }
 
     /**
