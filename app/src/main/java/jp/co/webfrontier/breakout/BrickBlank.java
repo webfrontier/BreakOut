@@ -11,6 +11,8 @@ public class BrickBlank extends Brick {
      */
     private static final String TAG = "BrickBlank";
 
+    private static final int BRICK_BLANK_POINT = 0;
+
     /**
      * コンストラクタ
      *
@@ -35,5 +37,16 @@ public class BrickBlank extends Brick {
     protected int getColor()
     {
         return Color.BLACK;
+    }
+
+    /**
+     * [Task 24] スコア表示
+     * 得点の取得
+     *
+     * @return 得点
+     */
+    @Override
+    protected int getPoint() {
+        return BRICK_BLANK_POINT;
     }
 }

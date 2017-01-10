@@ -17,7 +17,7 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="450px"
-            android:layout_height="180px">
+            android:layout_height="240px">
 
             <TextView
                 android:id="@+id/stock_balls"
@@ -48,6 +48,16 @@
                 android:textColor="#000000"
                 android:textSize="18sp"
                 android:format="@string/elapsed_time" />
+
+            <TextView
+                android:id="@+id/score"
+                android:text="@string/score"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <Button

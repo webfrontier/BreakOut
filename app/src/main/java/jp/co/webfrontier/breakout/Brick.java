@@ -146,6 +146,14 @@ abstract class Brick implements DrawableItem {
     abstract protected int getColor();
 
     /**
+     * [Task 24] スコア表示
+     * ブロックを壊したときに得られる得点を取得する
+     *
+     * @return 得点
+     */
+    abstract protected int getPoint();
+
+    /**
      * ブロック種別取得
      *
      * @return ブロック種別

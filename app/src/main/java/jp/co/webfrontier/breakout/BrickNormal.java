@@ -11,6 +11,8 @@ public class BrickNormal extends Brick {
      */
     private static final String TAG = "BrickNormal";
 
+    private static final int BRICK_NORMAL_POINT = 1;
+
     /**
      * コンストラクタ
      *
@@ -43,5 +45,10 @@ public class BrickNormal extends Brick {
             default:
                 return Color.BLACK;
         }
+    }
+
+    @Override
+    protected int getPoint() {
+        return BRICK_NORMAL_POINT;
     }
 }

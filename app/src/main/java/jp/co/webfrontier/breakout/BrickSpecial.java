@@ -11,6 +11,8 @@ public class BrickSpecial extends Brick {
      */
     private static final String TAG = "BrickSpecial";
 
+    private static final int BRICK_NORMAL_SPECIAL = 3;
+
     /**
      * コンストラクタ
      *
@@ -35,5 +37,10 @@ public class BrickSpecial extends Brick {
     protected int getColor()
     {
         return Color.BLUE;
+    }
+
+    @Override
+    protected int getPoint() {
+        return 0;
     }
 }

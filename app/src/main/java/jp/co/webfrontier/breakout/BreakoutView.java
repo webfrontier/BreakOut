@@ -54,7 +54,7 @@ public class BreakoutView extends View {
     /**
      * ステータス表示領域の高さ
      */
-    private static final int STATUS_H = 180;
+    private static final int STATUS_H = 240;
     /**
      * ブロックの上のスペースの高さ
      */
@@ -108,6 +108,9 @@ public class BreakoutView extends View {
     // [Task 17] スタートから一定時間経つとボールのスピードが上がる
     public static final int BALL_SPEEDUP_ELAPSED_MILLISECONDS = 60 * 1000; // スピードを上げる経過時間(秒)
     private long mElapsedMilliseconds = 0; // 実際の経過時間
+
+    // [Task 24] スコア表示
+    private long mScore = 0;
 
     /**
      * コンストラクタ
@@ -193,6 +196,19 @@ public class BreakoutView extends View {
             Resources resource = getContext().getResources();
             CharSequence newMessage = resource.getText(R.string.remain_brick_count);
             tv.setText(newMessage + Integer.toString(getBricksCount()));
+        }
+    }
+
+    // [Task 24] スコア表示
+    /**
+     * スコア表示更新
+     */
+    public void refreshScore() {
+        TextView tv = (TextView)getRootView().findViewById(R.id.score);
+        if(tv != null) {
+            Resources resource = getContext().getResources();
+            CharSequence newMessage = "得点：";
+            tv.setText(newMessage + Long.toString(mScore));
         }
     }
 
@@ -309,6 +325,10 @@ public class BreakoutView extends View {
                 }
             }
         }
+
+        // [Task 24] スコア表示
+        // スコアをクリア
+        mScore = 0;
 
         invalidate();
     }
@@ -678,7 +698,16 @@ public class BreakoutView extends View {
                         // [Task 19] パッド伸ばす
                         Pad.WIDTH *= 1.5;
                     }
+
+                    // [Task 24] スコア表示
+                    // hitしたブロックの得点を加算
+                    mScore += mBricks[target.row][target.col].getPoint();
                 }
+
+                // [Task 24] スコア表示
+                // 得点の表示を更新
+                refreshScore();
+
                 // 残りブロック数表示更新
                 refreshRemainBrickCount();
 

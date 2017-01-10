@@ -12,6 +12,8 @@ public class BrickUnbroken extends Brick {
      */
     private static final String TAG = "BrickUnbroken";
 
+    private static final int BRICK_NORMAL_UNBREAKABLE = 0;
+
     /**
      * コンストラクタ
      *
@@ -36,6 +38,11 @@ public class BrickUnbroken extends Brick {
     protected int getColor()
     {
         return Color.WHITE;
+    }
+
+    @Override
+    protected int getPoint() {
+        return BRICK_NORMAL_UNBREAKABLE;
     }
 
     /**
