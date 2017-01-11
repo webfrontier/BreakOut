@@ -52,9 +52,9 @@ public class BreakoutView extends View {
      */
     private static final int STS_BG_COLOR = Color.WHITE;
     /**
-     * ステータス表示領域の高さ
+     * ステータス表示領域(基本部分)の高さ
      */
-    private static final int STATUS_H = 240;
+    private static final int STATUS_BASE_H = 160;
     /**
      * ブロックの上のスペースの高さ
      */
@@ -106,11 +106,18 @@ public class BreakoutView extends View {
     };
 
     // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    private static final int STATUS_ELAPSED_TIME_H = 20; // ステータス表示領域の高さ
     public static final int BALL_SPEEDUP_ELAPSED_MILLISECONDS = 60 * 1000; // スピードを上げる経過時間(秒)
     private long mElapsedMilliseconds = 0; // 実際の経過時間
 
     // [Task 24] スコア表示
+    private static final int STATUS_SCORE_H = 60; // ステータス表示領域の高さ
     private long mScore = 0;
+
+    /**
+     * ステータス表示領域の高さ
+     */
+    private static final int STATUS_H = STATUS_BASE_H + STATUS_ELAPSED_TIME_H + STATUS_SCORE_H;
 
     /**
      * コンストラクタ
