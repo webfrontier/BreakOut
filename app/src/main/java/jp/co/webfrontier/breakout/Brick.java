@@ -29,7 +29,7 @@ abstract class Brick implements DrawableItem {
     /**
      * ブロック種別
      */
-    protected BrickType brikeType = BrickType.Blank;
+    protected BrickType brickType = BrickType.Blank;
     /**
      * ペインター
      */
@@ -160,7 +160,7 @@ abstract class Brick implements DrawableItem {
      */
     public BrickType getType()
     {
-        return brikeType;
+        return brickType;
     }
 
     /**

@@ -11,7 +11,8 @@ public class BrickBlank extends Brick {
      */
     private static final String TAG = "BrickBlank";
 
-    private static final int BRICK_BLANK_POINT = 0;
+    // [Task 24] スコア表示
+    private static final int BRICK_BLANK_POINT = 0; // ブロック(なし)は壊せないので0点として扱う
 
     /**
      * コンストラクタ
@@ -23,7 +24,7 @@ public class BrickBlank extends Brick {
         super(x, y);
 
         // ブロック種別
-        super.brikeType = BrickType.Blank;
+        super.brickType = BrickType.Blank;
         // ブロック強度初期化
         super.robustness = 0;
     }

@@ -11,7 +11,8 @@ public class BrickSpecial extends Brick {
      */
     private static final String TAG = "BrickSpecial";
 
-    private static final int BRICK_NORMAL_SPECIAL = 3;
+    // [Task 24] スコア表示
+    private static final int BRICK_SPECIAL_POINT = 3; // ブロック(スペシャル)を壊したら3点
 
     /**
      * コンストラクタ
@@ -23,7 +24,7 @@ public class BrickSpecial extends Brick {
         super(x, y);
 
         // ブロック種別
-        super.brikeType = BrickType.Special;
+        super.brickType = BrickType.Special;
         // ブロック強度初期化
         super.robustness = 1;
     }

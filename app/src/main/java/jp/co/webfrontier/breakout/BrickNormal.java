@@ -11,7 +11,8 @@ public class BrickNormal extends Brick {
      */
     private static final String TAG = "BrickNormal";
 
-    private static final int BRICK_NORMAL_POINT = 1;
+    // [Task 24] スコア表示
+    private static final int BRICK_NORMAL_POINT = 1; // ブロック(通常)を壊したら1点
 
     /**
      * コンストラクタ
@@ -23,7 +24,7 @@ public class BrickNormal extends Brick {
         super(x, y);
 
         // ブロック種別
-        super.brikeType = BrickType.Normal;
+        super.brickType = BrickType.Normal;
         // ブロック強度初期化
         super.robustness = 1; // [Task 14] ブロック耐久性
     }
