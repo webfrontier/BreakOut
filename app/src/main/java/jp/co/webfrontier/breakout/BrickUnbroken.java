@@ -12,9 +12,6 @@ public class BrickUnbroken extends Brick {
      */
     private static final String TAG = "BrickUnbroken";
 
-    // [Task 24] スコア表示
-    private static final int BRICK_UNBREAKABLE_POINT = 0; // ブロック(破壊不可)は壊せないので0点として扱う
-
     /**
      * コンストラクタ
      *
@@ -26,8 +23,6 @@ public class BrickUnbroken extends Brick {
 
         // ブロック種別
         super.brickType = BrickType.Unbroken;
-        // ブロック強度初期化
-        super.robustness = UNBREAKABLE;
     }
 
     /**
@@ -41,11 +36,6 @@ public class BrickUnbroken extends Brick {
         return Color.WHITE;
     }
 
-    @Override
-    protected int getPoint() {
-        return BRICK_UNBREAKABLE_POINT;
-    }
-
     /**
      * ブロック破壊
      *
@@ -53,8 +43,5 @@ public class BrickUnbroken extends Brick {
      */
     public void crash(View view) {
         super.crash(view);
-
-        // [Task 23] 効果音追加
-        SoundController.playHitHardBrick();
     }
 }

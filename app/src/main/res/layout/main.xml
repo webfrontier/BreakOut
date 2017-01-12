@@ -19,77 +19,9 @@
             android:layout_width="450px"
             android:layout_height="240px">
 
-            <TextView
-                android:id="@+id/stock_balls"
-                android:text="@string/stock_ball_count"
-                android:visibility="visible"
-                android:layout_width="450px"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="#000000"
-                android:textSize="18sp"/>
-
-            <TextView
-                android:id="@+id/remain_bricks"
-                android:text="@string/remain_brick_count"
-                android:visibility="visible"
-                android:layout_width="450px"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="#000000"
-                android:textSize="18sp"/>
-
-            <Chronometer
-                android:id="@+id/elapsed_time"
-                android:visibility="visible"
-                android:layout_width="450px"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:format="@string/elapsed_time" />
-
-            <TextView
-                android:id="@+id/score"
-                android:text="@string/score"
-                android:visibility="visible"
-                android:layout_width="450px"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="#000000"
-                android:textSize="18sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_btn"
-            android:text="@string/bt_btn"
-            android:layout_width="150px"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center|center_horizontal"
-            android:textSize="16sp"
-            android:layout_gravity="right"
-            android:height="50dp" />
-
         <!-- [Task 4] Startボタン表示 -->
-        <Button
-            android:id="@+id/start_btn"
-            android:text="@string/start_btn"
-            android:layout_width="250px"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center|center_horizontal"
-            android:textSize="16sp"
-            android:layout_gravity="right"
-            android:height="50dp" />
-
-        <Button
-            android:id="@+id/ball_btn"
-            android:text="@string/ball_btn"
-            android:layout_width="200px"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center|center_horizontal"
-            android:textSize="16sp"
-            android:layout_gravity="right"
-            android:height="50dp" />
 
     </LinearLayout>
 
@@ -97,16 +29,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/message"
-            android:text="@string/ready_message"
-            android:visibility="visible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:textColor="#ff8888ff"
-            android:textSize="24sp"/>
     </RelativeLayout>
 
 </FrameLayout>

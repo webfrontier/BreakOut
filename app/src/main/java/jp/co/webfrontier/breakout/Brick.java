@@ -14,18 +14,9 @@ abstract class Brick implements DrawableItem {
      */
     private static final String TAG = "Brick";
     /**
-     * ブロック強度（破壊不可）
-     */
-    public static final int UNBREAKABLE = -1; // [Task 15] 壊れないブロック
-    /**
      * ブロック間のスペース
      */
     public static final int BLOCK_SPACE = 5;
-    /**
-     * ブロック強度<br>
-     *     ブロックが壊れるまでのボールヒット回数
-     */
-    protected int robustness = 1; // [Task 14] ブロック耐久性
     /**
      * ブロック種別
      */
@@ -101,21 +92,7 @@ abstract class Brick implements DrawableItem {
      * @param view ブロック描画オブジェクト
      */
     public void crash(View view) {
-        if(robustness > 0) {
-            --robustness;
-            // [Task 23] 効果音追加
-            SoundController.playHitBrick();
-        }
         view.invalidate(getRect());
-    }
-
-    /**
-     * ブロック強度設定
-     *
-     * @param  robustness  強度
-     */
-    public void setRobustness(int robustness) {
-        this.robustness = robustness;
     }
 
     /**
@@ -125,17 +102,7 @@ abstract class Brick implements DrawableItem {
      * @return false 破壊済み
      */
     public boolean isUnbroken() {
-        return (robustness == Brick.UNBREAKABLE || robustness > 0);
-    }
-
-    /**
-     * 破壊可能か
-     *
-     * @return true  未破壊
-     * @return false 破壊済み／破壊不可
-     */
-    public boolean isBreakable() {
-        return (robustness > 0);
+        return true;
     }
 
     /**
@@ -144,14 +111,6 @@ abstract class Brick implements DrawableItem {
      * @return ブロックの色
      */
     abstract protected int getColor();
-
-    /**
-     * [Task 24] スコア表示
-     * ブロックを壊したときに得られる得点を取得する
-     *
-     * @return 得点
-     */
-    abstract protected int getPoint();
 
     /**
      * ブロック種別取得

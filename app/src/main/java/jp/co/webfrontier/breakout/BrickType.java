@@ -13,7 +13,7 @@ public enum BrickType {
      */
     Normal(1),
     /**
-     * 破壊不可
+     * 破壊不可ブロック
      */
     Unbroken(2),
     /**

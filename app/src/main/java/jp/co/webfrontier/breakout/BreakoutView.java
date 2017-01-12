@@ -40,13 +40,9 @@ public class BreakoutView extends View {
      */
     private int mode;
     /**
-     * ブロック行数
-     */
-    public static final int BRICK_ROW = 3; // [Task 12] ブロッック行列追加
-    /**
      * ブロック列数
      */
-    public static final int BRICK_COL = 6; // [Task 12] ブロッック行列追加
+    public static final int BRICK_COL = 6; // [Task 12] ブロック行列追加
     /**
      * ステータス領域背景色
      */
@@ -62,7 +58,7 @@ public class BreakoutView extends View {
     /**
      * 描画更新頻度
      */
-    private static final long DELAY_MILLIS = 1000 / 60;
+    private static final long DELAY_MILLIS = 1000 / 60; // 60fps
     /**
      * フィールドサイズ（画面サイズ）
      */
@@ -73,7 +69,7 @@ public class BreakoutView extends View {
     /**
      * ブロック情報
      */
-    public Brick[][] mBricks = new Brick[BRICK_ROW][BRICK_COL];
+    public Brick[] mBricks = new Brick[BRICK_COL];
     /**
      * パッド情報
      */
@@ -105,19 +101,10 @@ public class BreakoutView extends View {
         }
     };
 
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    private static final int STATUS_ELAPSED_TIME_H = 20; // ステータス表示領域の高さ
-    public static final int BALL_SPEEDUP_ELAPSED_MILLISECONDS = 60 * 1000; // スピードを上げる経過時間(秒)
-    private long mElapsedMilliseconds = 0; // 実際の経過時間
-
-    // [Task 24] スコア表示
-    private static final int STATUS_SCORE_H = 60; // ステータス表示領域の高さ
-    private long mScore = 0;
-
     /**
      * ステータス表示領域の高さ
      */
-    private static final int STATUS_H = STATUS_BASE_H + STATUS_ELAPSED_TIME_H + STATUS_SCORE_H;
+    private static final int STATUS_H = STATUS_BASE_H;
 
     /**
      * コンストラクタ
@@ -160,140 +147,6 @@ public class BreakoutView extends View {
     }
 
     /**
-     * メッセージ表示
-     *
-     * @param msgId メッセージID
-     */
-    public void showMessage(int msgId) {
-        TextView tv = (TextView)getRootView().findViewById(R.id.message);
-        if(tv != null) {
-            tv.setText(msgId);
-            tv.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * メッセージ非表示
-     */
-    public void hideMessage() {
-        TextView tv = (TextView)getRootView().findViewById(R.id.message);
-        if(tv != null) {
-            tv.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    /**
-     * 残りボール数表示更新
-     */
-    public void refreshStockBallCount() {
-        TextView tv = (TextView)getRootView().findViewById(R.id.stock_balls);
-        if(tv != null) {
-            Resources resource = getContext().getResources();
-            CharSequence newMessage = resource.getText(R.string.stock_ball_count);
-            tv.setText(newMessage + Integer.toString(mStockBallCount));
-        }
-    }
-
-    /**
-     * 残りブロック数表示更新
-     */
-    public void refreshRemainBrickCount() {
-        TextView tv = (TextView)getRootView().findViewById(R.id.remain_bricks);
-        if(tv != null) {
-            Resources resource = getContext().getResources();
-            CharSequence newMessage = resource.getText(R.string.remain_brick_count);
-            tv.setText(newMessage + Integer.toString(getBricksCount()));
-        }
-    }
-
-    // [Task 24] スコア表示
-    /**
-     * スコア表示更新
-     */
-    public void refreshScore() {
-        TextView tv = (TextView)getRootView().findViewById(R.id.score);
-        if(tv != null) {
-            Resources resource = getContext().getResources();
-            CharSequence newMessage = "得点：";
-            tv.setText(newMessage + Long.toString(mScore));
-        }
-    }
-
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    /**
-     * 経過時間を表示するChronometerを開始する
-     */
-    private void startElapsedTimeCounter() {
-        if (this.mode != MODE_RUNNING)
-            return;
-        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
-        if(counter != null) {
-            mElapsedMilliseconds = 0;
-            counter.setBase(SystemClock.elapsedRealtime());
-            counter.start();
-        }
-    }
-
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    /**
-     * 経過時間を表示するChronometerを停止する
-     */
-    private void stopElapsedTimeCounter() {
-        if (this.mode != MODE_RUNNING
-                && this.mode != MODE_CLEAR
-                && this.mode != MODE_GAMEOVER)
-            return;
-        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
-        if(counter != null) {
-            counter.stop();
-        }
-    }
-
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    /**
-     * 経過時間を表示するChronometerを一時停止する
-     * Chronometerは内部時間が止まらないため、再開時のために一時停止した時間を覚えておく
-     */
-    public void pauseElapsedTimeCounter() {
-        if (this.mode != MODE_RUNNING
-                && this.mode != MODE_PAUSE)
-            return;
-        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
-        if(counter != null) {
-            counter.stop();
-            mElapsedMilliseconds = counter.getBase() - SystemClock.elapsedRealtime();
-        }
-    }
-
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    /**
-     * 経過時間を表示するChronometerを再開する
-     * Chronometerは内部時間が止まらないため、一時停止の時間に巻き戻す
-     */
-    public void resumeElapsedTimeCounter() {
-        if (this.mode != MODE_RUNNING
-                && this.mode != MODE_PAUSE)
-            return;
-        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
-        if(counter != null) {
-            counter.setBase(SystemClock.elapsedRealtime() + mElapsedMilliseconds);
-            counter.start();
-        }
-    }
-
-    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-    /**
-     * ゲーム開始からの経過時間(ミリ秒)を取得する
-     */
-    private long getElapsedTime() {
-        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
-        if(counter != null) {
-            return SystemClock.elapsedRealtime() - counter.getBase();
-        }
-        return 0;
-    }
-
-    /**
      * 新しくゲーム開始
      */
     private void newGame() {
@@ -308,34 +161,10 @@ public class BreakoutView extends View {
         int brick_h = disp_h / 30;
         // ブロックサイズ設定
         Brick.Initialize(brick_w, brick_h);
-        // ブロック配置（0:ブロックなし、1:通常ブロック、2:破壊不可） [Task 22] ブロックの配置 / [Task 12] ブロック行列追加
-        final int[][] brickArray = {
-            {0, 1, 1, 1, 1, 0},
-            {1, 3, 2, 2, 3, 1},
-            {1, 1, 1, 1, 1, 1}
-        };
-        for(int col = 0; col < BRICK_COL; col++) {
-            for(int row = 0; row < BRICK_ROW; row++) {
-                // ブロック情報生成
-                if(brickArray[row][col] == BrickType.Blank.getValue()) {
-                    // ブロックなし
-                    mBricks[row][col] = new BrickBlank(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                } else if(brickArray[row][col] == BrickType.Normal.getValue()) {
-                    // 通常ブロック
-                    mBricks[row][col] = new BrickNormal(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                } else if(brickArray[row][col] == BrickType.Unbroken.getValue()) {
-                    // 破壊不可 [Task 15] 壊れないブロック
-                    mBricks[row][col] = new BrickUnbroken(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                } else if(brickArray[row][col] == BrickType.Special.getValue()) {
-                    // スペシャルブロック
-                    mBricks[row][col] = new BrickSpecial(col * brick_w, row * brick_h + STATUS_H + UPPER_SPACE);
-                }
-            }
-        }
 
-        // [Task 24] スコア表示
-        // スコアをクリア
-        mScore = 0;
+        for(int col = 0; col < BRICK_COL; col++) {
+            mBricks[col] = new BrickNormal(col * brick_w, brick_h + STATUS_H + UPPER_SPACE);
+        }
 
         invalidate();
     }
@@ -362,17 +191,7 @@ public class BreakoutView extends View {
         if(newMode == MODE_RUNNING) {
             if(oldMode == MODE_READY) {
                 newGame();
-                showMessage(R.string.new_ball_help);
-                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                startElapsedTimeCounter();
             } else if(oldMode == MODE_PAUSE) {
-                if(!isBallinField()) {
-                    showMessage(R.string.new_ball_help);
-                } else {
-                    hideMessage();
-                }
-                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                resumeElapsedTimeCounter();
             }
             if (oldMode != MODE_RUNNING) {
                 update();
@@ -381,29 +200,14 @@ public class BreakoutView extends View {
             int msgId = 0;
             switch(newMode) {
                 case MODE_PAUSE:
-                    msgId = R.string.pause_message;
-                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                    pauseElapsedTimeCounter();
                     break;
                 case MODE_READY:
-                    msgId = R.string.ready_message;
                     break;
                 case MODE_GAMEOVER:
-                    // [Task 23] 効果音追加
-                    SoundController.playGameOver();
-                    msgId = R.string.game_over_message;
-                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                    stopElapsedTimeCounter();
                     break;
                 case MODE_CLEAR:
-                    // [Task 23] 効果音追加
-                    SoundController.playClear();
-                    msgId = R.string.game_clear_message;
-                    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                    stopElapsedTimeCounter();
                     break;
             }
-            showMessage(msgId);
         }
     }
 
@@ -471,7 +275,7 @@ public class BreakoutView extends View {
      */
     @org.jetbrains.annotations.Contract("null -> false")
     private boolean isHitBricks(SetXY index) {
-        return (index != null && mBricks[index.row][index.col].isUnbroken());
+        return false;
     }
 
     /**
@@ -511,12 +315,7 @@ public class BreakoutView extends View {
     public int getBricksCount() {
         int count = 0;
         for(int col = 0; col < BRICK_COL; col++) {
-            for(int row = 0; row < BRICK_ROW; row++) {
-                // 破壊可能なブロック数のみ集計
-                if(mBricks[row][col].isBreakable()) {
                     ++count;
-                }
-            }
         }
         return count;
     }
@@ -583,32 +382,6 @@ public class BreakoutView extends View {
     }
 
     /**
-     * ブロック表示インデックス番号算出<br>
-     * 座標位置（左上）からブロック配列のインデックス番号を算出する。<br>
-     * 存在しない場合はnullを返却する。
-     *
-     * @param x X座標
-     * @param y Y座標
-     * @return ブロック配列のインデックス番号
-     */
-    private SetXY calcBrickIndex(float x, float y) {
-        // ブロック全体の表示領域
-        Rect blockArea = new Rect(0, STATUS_H + UPPER_SPACE, Brick.WIDTH * BRICK_COL, Brick.HEIGHT * BRICK_ROW + STATUS_H + UPPER_SPACE);
-
-        SetXY index = null;
-        if(blockArea.contains((int)x, (int)y)) {
-            index = new SetXY(
-                    (int) ((x - blockArea.left) / Brick.WIDTH),
-                    (int) ((y - blockArea.top) / Brick.HEIGHT));
-            if(!mBricks[index.row][index.col].isUnbroken()) {
-                // すでにブロックが破壊済み
-                index = null;
-            }
-        }
-        return index;
-    }
-
-    /**
      * 画面サイズ変更通知<br>
      * コンストラクタ、初期化処理時には画面サイズ不定のため、
      *
@@ -626,10 +399,6 @@ public class BreakoutView extends View {
         setMode(MODE_READY);
 
         newGame();
-        // ボール残数表示
-        refreshStockBallCount();
-        // ブロック残数表示
-        refreshRemainBrickCount();
     }
 
     /**
@@ -644,101 +413,8 @@ public class BreakoutView extends View {
             int xCrash; // ブロックとの当たり判定（X方向）
             int yCrash; // ブロックとの当たり判定（Y方向）
             // ボールごとに表示更新／当たり判定
-            for(int i=mBalls.size()-1; i>=0; i--) {
+            for(int i = mBalls.size()-1; i>=0; i--) {
                 Ball ball = mBalls.get(i);
-
-                // [Task 17] スタートから一定時間経つとボールのスピードが上がる
-                if (getElapsedTime() > BALL_SPEEDUP_ELAPSED_MILLISECONDS) {
-                    ball.speedUp();
-                }
-
-                xCrash = 0;
-                yCrash = 0;
-                // ボール表示更新
-                ball.update(this);
-
-                // [Task 9] ボールとブロックの当たり判定
-                // ブロックとボールの当たり判定（左上／右上／左下／右下）
-                // 各点がどのブロックと当たっているか判定
-                // 当たっていない場合はnull返却
-                SetXY l_top    = calcBrickIndex(ball.getx(),  ball.gety());
-                SetXY r_top    = calcBrickIndex(ball.getlx(), ball.gety());
-                SetXY l_bottom = calcBrickIndex(ball.getx(),  ball.getly());
-                SetXY r_bottom = calcBrickIndex(ball.getlx(), ball.getly());
-
-                // X方向／Y方向それぞれの当たり判定箇所を集計
-                // 相反する箇所の当たり判定は相殺する。
-                if(isHitBricks(l_top)) {
-                    xCrash++;
-                    yCrash++;
-                }
-                if(isHitBricks(r_top)) {
-                    xCrash--;
-                    yCrash++;
-                }
-                if(isHitBricks(l_bottom)) {
-                    xCrash++;
-                    yCrash--;
-                }
-                if(isHitBricks(r_bottom)) {
-                    xCrash--;
-                    yCrash--;
-                }
-                // 1回の当たりで多重処理しないため、同一ブロックをまとめる。
-                List<SetXY> hitBricks = new ArrayList<>();
-                hitBricks = optimumList(hitBricks, l_top);
-                hitBricks = optimumList(hitBricks, r_top);
-                hitBricks = optimumList(hitBricks, l_bottom);
-                hitBricks = optimumList(hitBricks, r_bottom);
-                // 当たり判定対象ブロックの表示更新
-                for(SetXY target : hitBricks) {
-                    mBricks[target.row][target.col].crash(this);
-
-                    // [Task 16] 特定ブロックHit
-                    if(mBricks[target.row][target.col].getType() == BrickType.Special)
-                    {
-                        // [Task 16] ボール増やす
-                        ++mStockBallCount;
-                        refreshStockBallCount();
-                        // [Task 18] ボールSpeed Up
-                        ball.speedUp();
-                        // [Task 19] パッド伸ばす
-                        Pad.WIDTH *= 1.5;
-                    }
-
-                    // [Task 24] スコア表示
-                    // hitしたブロックの得点を加算
-                    mScore += mBricks[target.row][target.col].getPoint();
-                }
-
-                // [Task 24] スコア表示
-                // 得点の表示を更新
-                refreshScore();
-
-                // 残りブロック数表示更新
-                refreshRemainBrickCount();
-
-                // ブロックとの反射
-                if(yCrash < 0 || yCrash > 0) {
-                    ball.boundY();
-                }
-                if(xCrash < 0 || xCrash > 0) {
-                    ball.boundX();
-                }
-
-                // パッドとの反射処理
-                if(mPad.isBallHit(ball)) {
-                    // [Task 23] 効果音追加
-                    SoundController.playHitPad();
-                    ball.hitPad(mPad.getcx());
-                }
-
-                // ボールロスト [Task 11] ボールが下に落ちる
-                if(ball.isLost()) {
-                    // [Task 23] 効果音追加
-                    SoundController.playLostBall();
-                    mBalls.remove(ball);
-                }
             }
 
             // ボール残総数を返却
@@ -753,7 +429,8 @@ public class BreakoutView extends View {
                     mFieldHandler.sleep(DELAY_MILLIS);
                 }
             } else if(ballCnt == 0) {
-                // ボール残数なしのため、GameOver [Task 11] ボールが全て下に落ちゲームオーバー
+                // ボール残数なしのため、GameOver
+                // [Task 11] ボールが全て下に落ちゲームオーバー
                 setMode(MODE_GAMEOVER);
             }
         } else {
@@ -774,18 +451,15 @@ public class BreakoutView extends View {
 
         // ゲームフィールド領域描画
         // パッド描画
-        mPad.draw(canvas); // [Task 2] バーの表示
+        // [Task 2] バーの表示
 
         // ボール描画
         for(Ball ball : mBalls) {
-            ball.draw(canvas); // [Task 5] ボールの表示
         }
 
         // ブロック描画
         for(int col = 0; col < BRICK_COL; col++) {
-            for(int row = 0; row < BRICK_ROW; row++) {
-                mBricks[row][col].draw(canvas);
-            }
+            mBricks[col].draw(canvas);
         }
     }
 

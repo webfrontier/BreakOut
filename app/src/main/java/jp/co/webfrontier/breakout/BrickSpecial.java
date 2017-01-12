@@ -11,9 +11,6 @@ public class BrickSpecial extends Brick {
      */
     private static final String TAG = "BrickSpecial";
 
-    // [Task 24] スコア表示
-    private static final int BRICK_SPECIAL_POINT = 3; // ブロック(スペシャル)を壊したら3点
-
     /**
      * コンストラクタ
      *
@@ -25,8 +22,6 @@ public class BrickSpecial extends Brick {
 
         // ブロック種別
         super.brickType = BrickType.Special;
-        // ブロック強度初期化
-        super.robustness = 1;
     }
 
     /**
@@ -38,10 +33,5 @@ public class BrickSpecial extends Brick {
     protected int getColor()
     {
         return Color.BLUE;
-    }
-
-    @Override
-    protected int getPoint() {
-        return 0;
     }
 }
