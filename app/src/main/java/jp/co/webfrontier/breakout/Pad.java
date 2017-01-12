@@ -3,11 +3,13 @@ package jp.co.webfrontier.breakout;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.View;
 
 /**
- * パッド
+ * 操作パッドを表すクラス
+ * 表示部品なのでDrawableItemインターフェースを実装する
  */
 public class Pad implements DrawableItem {
     /**
@@ -15,103 +17,139 @@ public class Pad implements DrawableItem {
      */
     private static final String TAG = "Pad";
     /**
-     * パッドの色(BLE未接続)
+     * パッドの色(BLE未接続状態)
      */
-    private static final int PAD_COLOR = Color.YELLOW;
+    private static final int BLE_DISCONNECTED_COLOR = Color.YELLOW;
     /**
-     * パッドの色(BLE接続)
+     * パッドの色(BLE接続状態)
      */
-    private static final int BLEPAD_COLOR = Color.BLUE;
+    private static final int BLE_CONNECTED_COLOR = Color.BLUE;
+
     /**
-     * 画面の幅
+     * ゲームフィールドの領域
      */
-    private int disp_w;
+    private static Rect fieldRect = new Rect();
+
     /**
-     * パッドの高さ
+     * パッドの左上の座標
      */
-    public static int HEIGHT;
+    private PointF p = new PointF();
+
+    /**
+     * パッドの中心座標
+     */
+    private PointF c = new PointF();
+
+    /**
+     * パッドの右下の座標
+     */
+    private PointF q = new PointF();
     /**
      * パッドの幅
      */
-    public static int WIDTH;
+    private int w;
     /**
-     * パッド位置（左）
+     * パッドの高さ
      */
-    public float x;
-    /**
-     * パッド位置（上）
-     */
-    public float y;
-    /**
-     * パッド指定位置
-     */
-    private float mSetCx;
+    private int h;
     /**
      * ボールを打ち返した回数
      */
     private int hitCount = 0;
     /**
-     * BLE接続有無
+     * パッドを描画するView
      */
-    private boolean mBleConnect = false;
+    private View v;
+    /**
+     * BLEの接続状態
+     */
+    private boolean BLEConnected = false;
     /**
      * ペインタ
      */
-    private Paint mPadPaint = new Paint();
+    private Paint painter = new Paint();
 
     /**
      * コンストラクタ
      */
     public Pad() {
+        this.w = 0;
+        this.h = 0;
         // ペインタへ色設定
-        mPadPaint.setColor(PAD_COLOR);
+        painter.setColor(BLE_DISCONNECTED_COLOR);
     }
 
     /**
-     * 初期化処理
+     * パッドを描画するViewを設定する(setter)
      *
-     * @param w 画面の幅
-     * @param h 画面の高さ
+     * @param view
      */
-    public void init(int w, int h) {
-        disp_w = w;
-
-        // パッドサイズを画面サイズから算出
-        Pad.HEIGHT = h / 100;
-        Pad.WIDTH = w / 6;
-
-        // パッド位置を画面サイズから算出
-        x = (w - Pad.WIDTH) / 2;
-        y = h / 100 * 90;
-
-        // タッチ位置を画面中央で設定
-        mSetCx = w / 2;
+    public void setView(View v) {
+        this.v = v;
     }
 
     /**
-     * 描画処理
+     * パッドの左上(Left-Top)の座標を取得する(getter)
      *
-     * @param canvas キャンバス
+     * @return パッドの左上の座標
      */
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawRect(x, y, x + WIDTH, y + HEIGHT, mPadPaint);
+    public PointF getLTPoint() {
+        PointF lt = new PointF();
+        lt.set(p);
+        return lt;
     }
 
     /**
-     * 描画領域取得
+     * パッドの中心座標
      *
-     * @return 描画領域
+     * @return パッドの中央座標を取得する(getter)
      */
-    @Override
-    public Rect getRect() {
-        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
-        return new Rect(
-                (int)this.x - 1,
-                (int)this.y - 1,
-                (int)this.getlx() + 1,
-                (int)this.getly() + 1
-        );
+    public PointF getCenter() {
+        PointF d = new PointF();
+        d.set(c);
+        return d;
+    }
+
+    /**
+     * パッドの右下(Right-Bottom)の座標を取得する(getter)
+     *
+     * @return パッドの右下の座標
+     */
+    public PointF getRBPoint() {
+        PointF rb = new PointF();
+        rb.set(q);
+        return rb;
+    }
+
+    /**
+     * BLEの接続状態を設定する(setter)
+     *
+     * @param connect BLE接続状態
+     */
+    public void setBLEConnected(boolean connect) {
+        BLEConnected = connect;
+        painter.setColor(BLEConnected ? BLE_CONNECTED_COLOR : BLE_DISCONNECTED_COLOR);
+    }
+
+    /**
+     * タッチ位置設定
+     *
+     * @param x タッチX座標
+     */
+    public void setPadCx(float x) {
+    }
+
+    /**
+     * ゲームフィールドの領域変更を処理する
+     *
+     * @param rect ゲームフィールドの領域
+     */
+    public void onGameFieldChanged(Rect rect) {
+        Pad.fieldRect.set(rect);
+
+        // パッドの大きさと位置をゲームフィールドの大きさから算出する
+        w = Pad.fieldRect.width() / 6;
+        h = Pad.fieldRect.height() / 100;
     }
 
     /**
@@ -120,100 +158,57 @@ public class Pad implements DrawableItem {
      * @param d パッド移動変化値
      */
     public void setPadDelta(double d) {
-        mSetCx += d;
-        if(mSetCx < Pad.WIDTH / 2) {
-            mSetCx = Pad.WIDTH / 2;
-        } else if(mSetCx > disp_w - Pad.WIDTH / 2) {
-            mSetCx = disp_w - Pad.WIDTH / 2;
-        }
     }
+
+
     /**
-     * タッチ位置設定
-     *
-     * @param x タッチX座標
+     * パッドの描画領域を取得する
+     * DrawableItemインターフェースの実装
+     * @return 描画領域
      */
-    public void setPadCx(float x) {
-        mSetCx = x;
+    @Override
+    public Rect getRect() {
+        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
+        return new Rect(
+                (int)this.p.x - 1,
+                (int)this.p.y - 1,
+                (int)this.getRBPoint().x + 1,
+                (int)this.getRBPoint().y + 1
+        );
     }
 
     /**
-     * パッド中央X座標取得
-     *
-     * @return パッド中央X座標
-     */
-    public float getcx() {
-        return x + Pad.WIDTH / 2;
-    }
-
-    /**
-     * パッド位置（右）X座標取得
-     *
-     * @return パッド位置（右）X座標
-     */
-    public float getlx() {
-        return(x + WIDTH);
-    }
-
-    /**
-     * パッド位置（下）Y座標取得
-     *
-     * @return パッド位置（下）Y座標
-     */
-    public float getly() {
-        return(y + HEIGHT);
-    }
-
-    /**
-     * 更新処理<br>
-     * 指定位置からパッドの位置を算出し、パッドの再描画を行う。
+     * パッドの状態の更新を行う
+     * 速度や当たり判定などの状況に応じて次のフレームでボールを表示する座標に更新する
+     * 更新後はViewクラスのinvalidateメソッドを呼ぶことで再描画を要求すること
      *
      * @param view パッド描画オブジェクト
      */
     public void update(View view) {
         view.invalidate(getRect());
-
-        // [Task 3] パッド移動位置
-        // 指定位置からパッド位置を算出
-        x = mSetCx - Pad.WIDTH / 2;
-        // 画面領域外の場合は補正する
-        if(x < 0) {
-            x = 0;
-        }else if(getlx() > disp_w){
-            x = disp_w - Pad.WIDTH;
-        }
-
-        view.invalidate(getRect());
     }
 
     /**
-     * パッドとボールの当たり判定
+     * パッドの描画処理を行う
+     * DrawableItemインターフェースの実装
+     * Viewクラスのinvalidateメソッドが呼ばれるとシステムからこのメソッドが呼ばれる
      *
-     * @param ball 判定対象ボールオブジェクト
+     * @param canvas キャンバス
+     */
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawRect(p.x, p.y, p.x + w, p.y + h, painter);
+    }
+
+    /**
+     * パッドとボールの当たり判定を行う
      *
-     * @return true  当たり
-     * @return false 外れ
+     * @param ball 判定対象のボール
+     *
+     * @return true  ボールに当たった
+     * @return false ボールに当たってない
      */
     public boolean isBallHit(Ball ball) {
-        // [Task 7] ボールとの当たり判定
-        boolean ret = (y <= ball.getly() && getly() >= ball.gety() &&
-                       x <= ball.getlx() && getlx() >= ball.getx());
-        if(ret) {
-            ++hitCount;
-        }
-        return ret;
-    }
-
-    /**
-     * BLE接続状態設定
-     *
-     * @param connect BLE接続状態
-     */
-    public void setmBleConnect(boolean connect) {
-        mBleConnect = connect;
-        if(connect) {
-            mPadPaint.setColor(BLEPAD_COLOR);
-        } else {
-            mPadPaint.setColor(PAD_COLOR);
-        }
+        return false;
     }
 }

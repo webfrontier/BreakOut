@@ -1,19 +1,19 @@
 package jp.co.webfrontier.breakout;
 
 /**
- * ブロック種別
+ * ブロックの種別
  */
 public enum BrickType {
     /**
-     * ブロックなし
+     * ブロックがない
      */
     Blank(0),
     /**
-     * 通常ブロック
+     * 通常のブロック
      */
     Normal(1),
     /**
-     * 破壊不可ブロック
+     * 破壊不可のブロック
      */
     Unbroken(2),
     /**
@@ -37,9 +37,9 @@ public enum BrickType {
     }
 
     /**
-     * 種別値取得
+     * ブロックの種別を取得する
      *
-     * @return 種別値
+     * @return 種別
      */
     int getValue()
     {

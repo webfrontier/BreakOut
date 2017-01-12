@@ -3,17 +3,20 @@ package jp.co.webfrontier.breakout;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.View;
 
 /**
- * ボール
+ * ボールを表すクラス
+ * 表示部品なのでDrawableItemインターフェースを実装する
  */
 public class Ball implements DrawableItem {
     /**
      * デバッグログ用タグ
      */
     private static final String TAG = "Ball";
+
     /**
      * ボール位置定義
      */
@@ -22,49 +25,37 @@ public class Ball implements DrawableItem {
     private static final int LEFT_DOWN  = 2;    // 左下
     private static final int RIGHT_DOWN = 3;    // 右下
     /**
-     * ボール表示領域
-     */
-    private static Rect field;
-    /**
      * 初期速度（X方向）
+     * [Task 6] ボール速度（初期速度）
      */
-    private static final float INITIAL_SPEED_X = -0.2f; // [Task 6] ボール速度（初期速度）
+    public static final float INITIAL_SPEED_X = -0.2f;
     /**
      * 初期速度（Y方向）
+     * [Task 6] ボール速度（初期速度）
      */
-    private static final float INITIAL_SPEED_Y = 3f; // [Task 6] ボール速度（初期速度）
+    public static final float INITIAL_SPEED_Y = 3f;
     /**
-     * 最大速度（X方向）
+     * デフォルトの色
      */
-    private static final float MAX_SPEED_X     = 5f; // [Task 6] ボール速度（最大速度）
+    public static final int DEFAULT_COLOR = Color.WHITE;
     /**
-     * 最大速度（Y方向）
+     * デフォルトの半径
      */
-    private static final float MAX_SPEED_Y     = 8f; // [Task 6] ボール速度（最大速度）
+    public static final int DEFAULT_RADIUS = 16;
+
     /**
-     * 速度変化率（X方向）
+     * ゲームフィールドの領域
      */
-    private static final float CHANGE_RATE_SPEED_X = 1.01f; // [Task 6] ボール速度（速度変化率）
+    private static Rect fieldRect = new Rect();
+
     /**
-     * 速度変化率（Y方向）
+     * ボールの中心座標
      */
-    private static final float CHANGE_RATE_SPEED_Y = 1.2f; // [Task 6] ボール速度（速度変化率）
+    private PointF c;
     /**
-     * ボールの色
+     * ボールの半径
      */
-    private int BALL_COLOR = Color.WHITE;
-    /**
-     * ボールサイズ
-     */
-    private static int SIZE = 32;
-    /**
-     * ボール位置（左）
-     */
-    private float x;
-    /**
-     * ボール位置（上）
-     */
-    private float y;
+    private int r;
     /**
      * ボール速度（X方向）
      */
@@ -80,268 +71,184 @@ public class Ball implements DrawableItem {
     /**
      * ペインター
      */
-    private Paint mBallPaint = new Paint();
+    private Paint painter = new Paint();
 
     /**
      * コンストラクタ
      *
-     * @param x ボール位置X座標
-     * @param y ボール位置Y座標
+     * @param x ボールの位置(X座標)
+     * @param y ボールの位置(Y座標)
      */
     public Ball(float x, float y) {
-        mBallPaint.setColor(BALL_COLOR);
-        mBallPaint.setAntiAlias(true);
-        this.x = x;
-        this.y = y;
+        painter.setColor(DEFAULT_COLOR);
+        painter.setAntiAlias(true);
+        this.c.x = x;
+        this.c.y = y;
+        this.r = DEFAULT_RADIUS;
     }
 
     /**
      * コンストラクタ
      *
-     * @param x ボール位置X座標
-     * @param y ボール位置Y座標
-     * @param xSpeed X方向速度
-     * @param ySpeed Y方向速度
+     * @param x ボールの位置(X座標)
+     * @param y ボールの位置(Y座標)
+     * @param xSpeed ボールの速度(X座標)
+     * @param ySpeed ボールの速度(Y座標)
      */
     public Ball(float x, float y, float xSpeed, float ySpeed) {
-        mBallPaint.setColor(BALL_COLOR);
-        mBallPaint.setAntiAlias(true);
-        this.x = x;
-        this.y = y;
+        painter.setColor(DEFAULT_COLOR);
+        painter.setAntiAlias(true);
+        this.c.x = x;
+        this.c.y = y;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
+        this.r = DEFAULT_RADIUS;
     }
 
     /**
-     * 描画処理
+     * コンストラクタ
      *
-     * @param canvas キャンバス
+     * @param x ボールの位置(X座標)
+     * @param y ボールの位置(Y座標)
+     * @param xSpeed ボールの速度(X座標)
+     * @param ySpeed ボールの速度(Y座標)
+     * @param r ボールの半径
      */
-    @Override
-    public void draw(Canvas canvas) {
-        int halfSize = SIZE / 2;
-        canvas.drawCircle(x+halfSize, y+halfSize, halfSize, mBallPaint);
+    public Ball(float x, float y, float xSpeed, float ySpeed, int r) {
+        painter.setColor(DEFAULT_COLOR);
+        painter.setAntiAlias(true);
+        this.c.x = x;
+        this.c.y = y;
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+        this.r = r;
     }
 
     /**
-     * 描画領域取得
+     * ボールの中心のX座標を取得する(getter)
      *
-     * @return 描画領域
+     * @return ボールの中心座標
      */
-    @Override
-    public Rect getRect() {
-        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
-        return new Rect(
-                (int)this.x - 1,
-                (int)this.y - 1,
-                (int)this.getlx() + 1,
-                (int)this.getly() + 1
-        );
-    }
+    public PointF getCenterPoint() { return c; }
 
     /**
-     * ボール位置（左）X座標取得
+     * ボールの中心座標を設定する(setter)
      *
-     * @return ボール位置（左）X座標
      */
-    public float getx() {
-        return x;
+    public void setCenterPoint(float x, float y) {
+        c.x = x;
+        c.y = y;
     }
 
     /**
-     * ボール位置（上）Y座標取得
+     * ボールの半径を取得する(getter)
      *
-     * @return ボール位置（上）Y座標
+     * @return ボールの半径
      */
-    public float gety() {
-        return y;
-    }
+    public int getRadius() { return r; }
 
     /**
-     * ボール位置（右）X座標取得
+     * ボールの半径を設定する(setter)
      *
-     * @return ボール位置（右）X座標
+     * @param r 設定する半径
      */
-    public float getlx() {
-        return x + SIZE;
-    }
+    public void setRadius(int r) { this.r = r; }
 
     /**
-     * ボール位置（下）Y座標取得
+     * ボールのX方向の速度を取得する(getter)
      *
-     * @return ボール位置（下）Y座標
-     */
-    public float getly() {
-        return y + SIZE;
-    }
-
-    /**
-     * ボール位置（中央）X座標取得
-     *
-     * @return ボール位置（中央）X座標
-     */
-    public float getcx() {
-        return x + SIZE / 2;
-    }
-
-    /**
-     * ボール位置（中央）Y座標取得
-     *
-     * @return ボール位置（中央）Y座標
-     */
-    public float getcy() {
-        return y + SIZE / 2;
-    }
-
-    /**
-     * X方向速度取得
-     *
-     * @return X方向速度
+     * @return ボールのX方向の速度
      */
     public float getXSpeed() {
         return xSpeed;
     }
 
     /**
-     * Y方向速度取得
+     * ボールのY方向の速度を取得する(setter)
      *
-     * @return Y方向速度
+     * @return ボールのY方向の速度
      */
     public float getYSpeed() {
         return ySpeed;
     }
 
     /**
-     * 更新処理<br>
-     * 速度から次の描画座標を算出し、ボールの再描画を行う。<br>
-     * この処理ではブロックでの反射は考慮せず、壁での反射のみ速度へ反映する。<br>
-     * 速度に応じて次に表示する座標に更新する。
+     * ボールの描画領域を取得する
+     * DrawableItemインターフェースの実装
+     * @return 描画領域
+     */
+    @Override
+    public Rect getRect() {
+        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
+        return new Rect(
+                (int)this.c.x - r - 1,
+                (int)this.c.y - r - 1,
+                (int)this.c.x + r + 1,
+                (int)this.c.y + r + 1
+        );
+    }
+
+    /**
+     * ボールの状態の更新を行う
+     * 速度や当たり判定などの状況に応じて次のフレームでボールを表示する座標に更新する
+     * 更新後はViewクラスのinvalidateメソッドを呼ぶことで再描画を要求すること
      *
      * @param view ボール描画オブジェクト
      */
     public void update(View view) {
         view.invalidate(getRect());
-
-        // [Task 8] 壁との当たり判定
-        x += xSpeed;
-        // X方向判定
-        if(x < Ball.field.left) {
-            // 壁（左）で反射
-            x = Ball.field.left * 2 - x;
-            // 速度反転
-            boundX();
-        } else if(getlx() > Ball.field.right) {
-            // 壁（右）で反射
-            x = Ball.field.right * 2 - getlx() - SIZE;
-            // 速度反転
-            boundX();
-        }
-
-        y += ySpeed;
-        // Y方向判定
-        if(y + ySpeed < Ball.field.top) {
-            // 壁（上）で反射
-            y = Ball.field.top * 2 - y;
-            // 速度反転
-            boundY();
-        }
-
-        view.invalidate(getRect());
     }
 
     /**
-     * パッドでの反射
+     * ボールの描画処理を行う
+     * DrawableItemインターフェースの実装
+     * Viewクラスのinvalidateメソッドが呼ばれるとシステムからこのメソッドが呼ばれる
      *
-     * @param pad_cx パッド中央位置
+     * @param canvas キャンバス
+     */
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawCircle(c.x+r, c.y+r, r, painter);
+    }
+
+    /**
+     * ゲームフィールドの領域を設定する
+     *
+     * @param rect ゲームフィールドの領域
+     */
+    public static void onGameFieldChanged(Rect rect) {
+        Ball.fieldRect.set(rect);
+    }
+
+    /**
+     * パッドで反射された場合の処理を行う
+     *
+     * @param pad_cx パッドの中心座標
      */
     public void hitPad(float pad_cx) {
-        ++hitCount;
-        // パッドの当たる位置によりX方向の反射角を変える。
-        xSpeed += (getcx() - pad_cx) / 8;
-
-        // X方向
-        if(MAX_SPEED_X < Math.abs(xSpeed)) {
-            if(xSpeed > 0) {
-                xSpeed = MAX_SPEED_X;
-            }else{
-                xSpeed = -MAX_SPEED_X;
-            }
-        } else {
-            xSpeed *= CHANGE_RATE_SPEED_X;
-        }
-
-        // Y方向
-        if(MAX_SPEED_Y < Math.abs(ySpeed)) {
-            if(ySpeed > 0) {
-                ySpeed = MAX_SPEED_Y;
-            } else {
-                ySpeed = -MAX_SPEED_Y;
-            }
-        } else {
-            ySpeed *= -CHANGE_RATE_SPEED_Y;
-        }
     }
 
     /**
-     * 速度アップ
-     */
-    public void speedUp() {
-        // ボールの色変化
-        BALL_COLOR = Color.RED;
-        mBallPaint.setColor(BALL_COLOR);
-
-        xSpeed *= CHANGE_RATE_SPEED_X * 5;
-        ySpeed *= CHANGE_RATE_SPEED_Y * 5;
-
-        // X方向
-        if(MAX_SPEED_X < Math.abs(xSpeed)) {
-            if(xSpeed > 0) {
-                xSpeed = MAX_SPEED_X;
-            }else{
-                xSpeed = -MAX_SPEED_X;
-            }
-        }
-
-        // Y方向
-        if(MAX_SPEED_Y < Math.abs(ySpeed)) {
-            if(ySpeed > 0) {
-                ySpeed = MAX_SPEED_Y;
-            } else {
-                ySpeed = -MAX_SPEED_Y;
-            }
-        }
-    }
-
-    /**
-     * Y方向反射
+     * X方向の反射処理を行う
      */
     public void boundX() {
         xSpeed = -xSpeed;
     }
 
     /**
-     * X方向反射
+     * Y方向の反射処理を行う
      */
     public void boundY() {
         ySpeed = -ySpeed;
     }
 
     /**
-     * ボール消失判定
+     * ボールが画面外に出たかを判定する
      *
-     * @return true  画面外に消失
-     * @return false 画面内に存在
+     * @return true  ボールが画面外に出た
+     * @return false ボールが画面内に存在する
      */
     public boolean isLost() {
-        return !Ball.field.contains((int)getcx(), (int)getcy());
-    }
-
-    /**
-     * ボール描画領域設定
-     *
-     * @param rect ボール描画領域
-     */
-    public static void setFieldRect(Rect rect) {
-        Ball.field = rect;
+        return false;
     }
 }

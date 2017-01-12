@@ -87,7 +87,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onTouchEvent(MotionEvent event) {
         // ここにタッチイベントが発生した時に行う処理を書く
         Log.d(TAG, "タッチされたよ");
-        Log.d(TAG, "アクション: " + event.getAction() + " x:" + event.getX() + ", y:" + event.getY());
+        Log.d(TAG, "x座標:" + event.getX() + ", y座標:" + event.getY() + " で発生したよ");
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN: // 押下された場合
+                Log.d(TAG, "発生したアクションはACTION_DOWNだよ");
+                break;
+            case MotionEvent.ACTION_UP: // 指を持ち上げた場合
+                Log.d(TAG, "発生したアクションはACTION_UPだよ");
+                break;
+            case MotionEvent.ACTION_MOVE: // 指を持ち上げずにスライドさせた場合
+                Log.d(TAG, "発生したアクションはACTION_MOVEだよ");
+                break;
+            case MotionEvent.ACTION_CANCEL: // UP+DOWNの同時発生(＝キャンセル)の場合
+                Log.d(TAG, "発生したアクションはACTION_CANCELだよ");
+                break;
+            case MotionEvent.ACTION_OUTSIDE: // ターゲットとするUIの範囲外で発生した場合
+                Log.d(TAG, "発生したアクションはACTION_OUTSIDEだよ");
+                break;
+            default: // その他のアクション
+                break;
+        }
         return true;
     }
 }

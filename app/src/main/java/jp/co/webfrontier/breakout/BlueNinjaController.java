@@ -511,7 +511,7 @@ public class BlueNinjaController {
     private void changeBleStatus(BleStatus status) {
         Log.d(TAG, "changeBleStatus(" + status.name() + ")");
 
-        ((BreakoutView) mMainActivity.findViewById(R.id.breakout)).setBleConnect(status == BleStatus.CONNECTED);
+        ((BreakoutView) mMainActivity.findViewById(R.id.breakout)).setBLEConnected(status == BleStatus.CONNECTED);
     }
 
     /**

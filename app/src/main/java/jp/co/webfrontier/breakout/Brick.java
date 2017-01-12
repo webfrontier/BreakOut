@@ -6,7 +6,8 @@ import android.graphics.Rect;
 import android.view.View;
 
 /**
- * ブロック基底クラス
+ * ブロックを表す基底クラス
+ * 表示部品なのでDrawableItemインターフェースを実装する
  */
 abstract class Brick implements DrawableItem {
     /**
@@ -24,7 +25,7 @@ abstract class Brick implements DrawableItem {
     /**
      * ペインター
      */
-    private Paint mBrickPaint = new Paint();
+    private Paint painter = new Paint();
     /**
      * ブロックX座標（左）
      */
@@ -61,18 +62,18 @@ abstract class Brick implements DrawableItem {
         this.y = y;
         this.ly = y + HEIGHT;
         this.lx = x + WIDTH;
-        mBrickPaint.setColor(getColor());
+        painter.setColor(getColor());
     }
 
     /**
-     * 描画処理
+     * ブロックの描画処理を行う
      *
      * @param canvas キャンバス
      */
     @Override
     public void draw(Canvas canvas) {
         if(isUnbroken()) {
-            canvas.drawRect(x, y, lx - BLOCK_SPACE, ly - BLOCK_SPACE, mBrickPaint);
+            canvas.drawRect(x, y, lx - BLOCK_SPACE, ly - BLOCK_SPACE, painter);
         }
     }
 
