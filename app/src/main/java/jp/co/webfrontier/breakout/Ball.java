@@ -193,7 +193,7 @@ public class Ball implements DrawableItem {
      * 速度や当たり判定などの状況に応じて次のフレームでボールを表示する座標に更新する
      * 更新後はViewクラスのinvalidateメソッドを呼ぶことで再描画を要求すること
      *
-     * @param view ボール描画オブジェクト
+     * @param view ボールが存在するビュー
      */
     public void update(View view) {
         view.invalidate(getRect());
@@ -204,7 +204,7 @@ public class Ball implements DrawableItem {
      * DrawableItemインターフェースの実装
      * Viewクラスのinvalidateメソッドが呼ばれるとシステムからこのメソッドが呼ばれる
      *
-     * @param canvas キャンバス
+     * @param canvas 描画キャンバス
      */
     @Override
     public void draw(Canvas canvas) {
@@ -243,12 +243,12 @@ public class Ball implements DrawableItem {
     }
 
     /**
-     * ボールが画面外に出たかを判定する
+     * ボールがゲームフィールド外に出たかを判定する
      *
-     * @return true  ボールが画面外に出た
-     * @return false ボールが画面内に存在する
+     * @return true  ボールがゲームフィールド外に出た
+     * @return false ボールがゲームフィールド内に存在する
      */
-    public boolean isLost() {
+    public boolean isInGameField() {
         return false;
     }
 }

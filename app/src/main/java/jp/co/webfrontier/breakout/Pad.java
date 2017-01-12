@@ -31,19 +31,19 @@ public class Pad implements DrawableItem {
     private static Rect fieldRect = new Rect();
 
     /**
-     * パッドの左上の座標
+     * パッドの左上(Left-Top)の座標
      */
-    private PointF p = new PointF();
+    private PointF lt = new PointF();
 
     /**
-     * パッドの中心座標
+     * パッドの中心(Center)座標
      */
     private PointF c = new PointF();
 
     /**
-     * パッドの右下の座標
+     * パッドの右下(Right-Bottom)の座標
      */
-    private PointF q = new PointF();
+    private PointF rb = new PointF();
     /**
      * パッドの幅
      */
@@ -82,7 +82,7 @@ public class Pad implements DrawableItem {
     /**
      * パッドを描画するViewを設定する(setter)
      *
-     * @param view
+     * @param v ビュー
      */
     public void setView(View v) {
         this.v = v;
@@ -94,9 +94,9 @@ public class Pad implements DrawableItem {
      * @return パッドの左上の座標
      */
     public PointF getLTPoint() {
-        PointF lt = new PointF();
-        lt.set(p);
-        return lt;
+        PointF p = new PointF();
+        p.set(lt);
+        return p;
     }
 
     /**
@@ -105,9 +105,9 @@ public class Pad implements DrawableItem {
      * @return パッドの中央座標を取得する(getter)
      */
     public PointF getCenter() {
-        PointF d = new PointF();
-        d.set(c);
-        return d;
+        PointF p = new PointF();
+        p.set(c);
+        return p;
     }
 
     /**
@@ -116,9 +116,9 @@ public class Pad implements DrawableItem {
      * @return パッドの右下の座標
      */
     public PointF getRBPoint() {
-        PointF rb = new PointF();
-        rb.set(q);
-        return rb;
+        PointF p = new PointF();
+        p.set(rb);
+        return p;
     }
 
     /**
@@ -160,7 +160,6 @@ public class Pad implements DrawableItem {
     public void setPadDelta(double d) {
     }
 
-
     /**
      * パッドの描画領域を取得する
      * DrawableItemインターフェースの実装
@@ -170,10 +169,10 @@ public class Pad implements DrawableItem {
     public Rect getRect() {
         // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
         return new Rect(
-                (int)this.p.x - 1,
-                (int)this.p.y - 1,
-                (int)this.getRBPoint().x + 1,
-                (int)this.getRBPoint().y + 1
+                (int)this.lt.x - 1,
+                (int)this.lt.y - 1,
+                (int)this.rb.x + 1,
+                (int)this.rb.y + 1
         );
     }
 
@@ -193,11 +192,11 @@ public class Pad implements DrawableItem {
      * DrawableItemインターフェースの実装
      * Viewクラスのinvalidateメソッドが呼ばれるとシステムからこのメソッドが呼ばれる
      *
-     * @param canvas キャンバス
+     * @param canvas 描画キャンバス
      */
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawRect(p.x, p.y, p.x + w, p.y + h, painter);
+        canvas.drawRect(lt.x, lt.y, rb.x, rb.y, painter);
     }
 
     /**

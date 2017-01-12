@@ -2,6 +2,7 @@ package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.View;
 
@@ -17,39 +18,97 @@ abstract class Brick implements DrawableItem {
     /**
      * ブロック間のスペース
      */
-    public static final int BLOCK_SPACE = 5;
+    public static final int SPACE = 5;
     /**
-     * ブロック種別
+     * ブロックの幅
      */
-    protected BrickType brickType = BrickType.Blank;
+    public static int WIDTH;
+    /**
+     * ブロックの高さ
+     */
+    public static int HEIGHT;
+
+    /**
+     * ブロックの種別
+     */
+    public enum Type {
+        /**
+         * ブロックがない
+         */
+        Blank(0),
+        /**
+         * 通常のブロック
+         */
+        Normal(1),
+        /**
+         * 破壊不可のブロック
+         */
+        Unbroken(2),
+        /**
+         * スペシャルブロック
+         */
+        Special(3);
+
+        /**
+         * 種別値
+         */
+        int value = 0;
+
+        /**
+         * コンストラクタ
+         *
+         * @param value 種別値
+         */
+        private Type(int value)
+        {
+            this.value = value;
+        }
+
+        /**
+         * ブロックの種別を取得する
+         *
+         * @return 種別
+         */
+        int getValue()
+        {
+            return value;
+        }
+    }
+    /**
+     * ブロックの種別
+     */
+    protected Type type = Type.Blank;
+
+    /**
+     * ブロックの左上(Left-Top)の座標
+     */
+    private PointF lt = new PointF();
+
+    /**
+     * ブロックの中心(Center)座標
+     */
+    private PointF c = new PointF();
+
+    /**
+     * ブロックの右下(Right-Bottom)の座標
+     */
+    private PointF rb = new PointF();
+
     /**
      * ペインター
      */
     private Paint painter = new Paint();
+
     /**
-     * ブロックX座標（左）
+     * ブロックの大きさを設定する
+     *
+     * @param w ブロックの幅
+     * @param h ブロックの高さ
      */
-    protected int x;
-    /**
-     * ブロックY座標（上）
-     */
-    protected int y;
-    /**
-     * ブロックX座標（右）
-     */
-    protected int lx;
-    /**
-     * ブロックY座標（下）
-     */
-    protected int ly;
-    /**
-     * ブロック幅
-     */
-    public static int WIDTH;
-    /**
-     * ブロック高さ
-     */
-    public static int HEIGHT;
+    static public void setSize(int w, int h) {
+        Brick.WIDTH = w;
+        Brick.HEIGHT = h;
+    }
 
     /**
      * コンストラクタ
@@ -58,10 +117,10 @@ abstract class Brick implements DrawableItem {
      * @param y ブロック位置Y座標
      */
     public Brick(int x,int y) {
-        this.x = x;
-        this.y = y;
-        this.ly = y + HEIGHT;
-        this.lx = x + WIDTH;
+        this.lt.x = x;
+        this.lt.y = y;
+        this.rb.x = x + WIDTH;
+        this.rb.y = y + HEIGHT;
         painter.setColor(getColor());
     }
 
@@ -73,18 +132,24 @@ abstract class Brick implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         if(isUnbroken()) {
-            canvas.drawRect(x, y, lx - BLOCK_SPACE, ly - BLOCK_SPACE, painter);
+            canvas.drawRect(lt.x, lt.y, rb.x - SPACE, rb.y - SPACE, painter);
         }
     }
 
     /**
-     * 描画領域取得
-     *
+     * パッドの描画領域を取得する
+     * DrawableItemインターフェースの実装
      * @return 描画領域
      */
     @Override
     public Rect getRect() {
-        return(new Rect(x,y,lx,ly));
+        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
+        return new Rect(
+                (int)this.lt.x - 1,
+                (int)this.lt.y - 1,
+                (int)this.rb.x + 1,
+                (int)this.rb.y + 1
+        );
     }
 
     /**
@@ -97,7 +162,7 @@ abstract class Brick implements DrawableItem {
     }
 
     /**
-     * ブロックが壊れていないか
+     * ブロックが壊れていないかをチェックする
      *
      * @return true  未破壊
      * @return false 破壊済み
@@ -107,30 +172,19 @@ abstract class Brick implements DrawableItem {
     }
 
     /**
-     * ブロック色取得
+     * ブロックの色を取得する(getter)
      *
      * @return ブロックの色
      */
     abstract protected int getColor();
 
     /**
-     * ブロック種別取得
+     * ブロックの種別を取得する
      *
-     * @return ブロック種別
+     * @return ブロックの種別
      */
-    public BrickType getType()
+    public Type getType()
     {
-        return brickType;
-    }
-
-    /**
-     * 静的定義初期化
-     *
-     * @param w ブロック幅
-     * @param h ブロック高さ
-     */
-    static public void Initialize(int w, int h) {
-        Brick.WIDTH = w;
-        Brick.HEIGHT = h;
+        return type;
     }
 }

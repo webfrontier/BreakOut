@@ -14,18 +14,18 @@ public class BrickNormal extends Brick {
     /**
      * コンストラクタ
      *
-     * @param x ブロック位置X座標
-     * @param y ブロック位置Y座標
+     * @param x ブロックのX座標
+     * @param y ブロックのY座標
      */
     public BrickNormal(int x, int y) {
         super(x, y);
 
-        // ブロック種別
-        super.brickType = BrickType.Normal;
+        // ブロックの種別を上書きする
+        super.type = Type.Normal;
     }
 
     /**
-     * ブロック色取得
+     * ブロックの色を取得する(getter)
      *
      * @return ブロックの色
      */

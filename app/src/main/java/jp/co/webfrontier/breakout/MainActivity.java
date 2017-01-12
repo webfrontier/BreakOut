@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * ブロック崩しメインアクティビティ
+ * ブロック崩しアプリのメインアクティビティ
+ * クリックイベントをハンドルするためにOnClickListenerインターフェースを実装します
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /**
@@ -20,12 +21,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * BlueNinja BLE接続制御
      */
-    private BlueNinjaController mBlueNinjaController = new BlueNinjaController(this);
+    private BlueNinjaController blueNinjaController = new BlueNinjaController(this);
 
     /**
      * BreakoutView
      */
-    private BreakoutView mBreakoutView;
+    private BreakoutView breakoutView;
 
     /**
      * アプリ生成時に呼び出し
@@ -37,11 +38,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Log.d(TAG, "onCreate()");
+        Log.d(TAG, "アクティビティが生成されたよ");
 
-        mBlueNinjaController.init();
+        blueNinjaController.init();
 
-        mBreakoutView = (BreakoutView)findViewById(R.id.breakout);
+        breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
 
     /**
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
 
-        Log.d(TAG, "onPause()");
+        Log.d(TAG, "アクティビティが一時停止したよ");
     }
 
     /**
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume()");
+        Log.d(TAG, "アクティビティが再開したよ");
     }
 
     /**
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public void onClick(View v) {
         // ここにクリックイベントが発生した時に行う処理を書く
-        Log.d(TAG, "クリックされたよ");
+        Log.d(TAG, "アクティビティがクリックされたよ");
     }
 
     /**
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public boolean onTouchEvent(MotionEvent event) {
         // ここにタッチイベントが発生した時に行う処理を書く
-        Log.d(TAG, "タッチされたよ");
+        Log.d(TAG, "アクティビティがタッチされたよ");
         Log.d(TAG, "x座標:" + event.getX() + ", y座標:" + event.getY() + " で発生したよ");
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN: // 押下された場合

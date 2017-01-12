@@ -21,8 +21,8 @@ public class BrickUnbroken extends Brick {
     public BrickUnbroken(int x, int y) {
         super(x, y);
 
-        // ブロック種別
-        super.brickType = BrickType.Unbroken;
+        // ブロックの種別を上書きする
+        super.type = Type.Unbroken;
     }
 
     /**

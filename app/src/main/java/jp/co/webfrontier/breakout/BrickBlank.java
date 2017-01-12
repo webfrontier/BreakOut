@@ -20,12 +20,12 @@ public class BrickBlank extends Brick {
     public BrickBlank(int x, int y) {
         super(x, y);
 
-        // ブロック種別
-        super.brickType = BrickType.Blank;
+        // ブロックの種別を設定する
+        super.type = Type.Blank;
     }
 
     /**
-     * ブロック色取得
+     * ブロックの色を取得する(getter)
      *
      * @return ブロックの色
      */

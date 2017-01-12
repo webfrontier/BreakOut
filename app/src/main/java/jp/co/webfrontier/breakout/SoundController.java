@@ -5,7 +5,7 @@ import android.media.AudioAttributes;
 import android.media.SoundPool;
 
 /**
- * 効果音制御クラス
+ * 効果音を制御するクラス
  */
 public final class SoundController {
     /**

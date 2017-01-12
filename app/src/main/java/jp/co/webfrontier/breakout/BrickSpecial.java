@@ -20,12 +20,12 @@ public class BrickSpecial extends Brick {
     public BrickSpecial(int x, int y) {
         super(x, y);
 
-        // ブロック種別
-        super.brickType = BrickType.Special;
+        // ブロックの種別を上書きする
+        super.type = Type.Special;
     }
 
     /**
-     * ブロック色取得
+     * ブロックの色を取得する(getter)
      *
      * @return ブロックの色
      */

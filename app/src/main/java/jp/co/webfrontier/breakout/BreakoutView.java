@@ -165,8 +165,8 @@ public class BreakoutView extends View {
         int brick_w = fieldRect.width() / BRICK_COLS;
         int brick_h = fieldRect.height() / 30;
 
-        // ブロックサイズ設定
-        Brick.Initialize(brick_w, brick_h);
+        // ブロックの大きさを設定する
+        Brick.setSize(brick_w, brick_h);
 
         for(int col = 0; col < BRICK_COLS; col++) {
             bricks[col] = new BrickNormal(col * brick_w, brick_h + STATUS_H + UPPER_SPACE);
@@ -380,11 +380,12 @@ public class BreakoutView extends View {
     public void update() {
         if(getMode() == MODE_RUNNING) {
 
-            // パッドの更新
+            // パッドの状態を更新
             pad.update(this);
 
             int xCrash; // ブロックとの当たり判定（X方向）
             int yCrash; // ブロックとの当たり判定（Y方向）
+
             // ボールごとに表示更新／当たり判定
             for(int i = balls.size()-1; i>=0; i--) {
                 Ball ball = balls.get(i);
@@ -396,12 +397,15 @@ public class BreakoutView extends View {
                 // ボール残数あり
                 if(getRemainingBricksCount() == 0) {
                     // ブロックがなくなった状態
+                    // ゲームクリア
                 } else {
-                    // ゲーム継続のため、再描画が必要
+                    // ブロックがまだ残っている状態
+                    // ゲーム継続のため、一定時間待機した後に再度呼び出してもらう
                     refreshHandler.sleep(REFRESH_INTERVAL);
                 }
             } else if(ballCnt == 0) {
                 // ボールの残数がなくなった状態
+                // ゲームオーバー
             }
         } else {
             // View#invalidateメソッドを呼び再描画を要求する
@@ -411,7 +415,8 @@ public class BreakoutView extends View {
 
     /**
      * Viewの描画処理を行う
-     * View#invalidateメソッドを呼部とシステムから呼ばれる
+     * View#invalidateメソッドを呼び出すとシステムから呼ばれる
+     * 各表示部品ごとに描画を行う
      *
      * @param canvas 描画キャンバス
      */
@@ -435,7 +440,7 @@ public class BreakoutView extends View {
     }
 
     /**
-     * スタートボタン押下
+     * スタートボタンを押下したときの処理
      */
     public void pushStart() {
         switch(getMode()){
