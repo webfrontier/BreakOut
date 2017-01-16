@@ -21,7 +21,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /**
      * ブロック列数
-     * [Task 12] ブロック行列追加
      */
     public static final int BRICK_COLS = 6;
 
