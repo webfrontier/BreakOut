@@ -303,16 +303,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 新しくゲーム開始する
      */
     private void initializeGame() {
-
-        // パッドを初期位置に配置する
-        // initializePad();
-
         // ボールの状態を初期化する
         initializeBall();
-
-        // ボールをゲームフィールドに追加する
-        // addBall(500, 500);
-
 
         // ブロックを生成し初期位置に配置する
         createBrick();
