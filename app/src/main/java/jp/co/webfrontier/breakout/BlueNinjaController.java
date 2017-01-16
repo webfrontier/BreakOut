@@ -487,7 +487,7 @@ public class BlueNinjaController {
                     JSONObject json = new JSONObject(data);
                     double ax = json.getDouble("ax");
                     // パッドへデータ設定
-                    ((BreakoutView) mMainActivity.findViewById(R.id.breakout)).setPadDelta(ax * 50);
+                    mMainActivity.getPad().setPadDelta(ax * 50);
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
@@ -510,8 +510,7 @@ public class BlueNinjaController {
      */
     private void changeBleStatus(BleStatus status) {
         Log.d(TAG, "changeBleStatus(" + status.name() + ")");
-
-        ((BreakoutView) mMainActivity.findViewById(R.id.breakout)).setBLEConnected(status == BleStatus.CONNECTED);
+        mMainActivity.setBLEConnected(status == BleStatus.CONNECTED);
     }
 
     /**

@@ -21,7 +21,7 @@ public class BrickSpecial extends Brick {
         super(x, y);
 
         // ブロックの種別を上書きする
-        super.type = Type.Special;
+        super.type = Type.NORMAL;
     }
 
     /**

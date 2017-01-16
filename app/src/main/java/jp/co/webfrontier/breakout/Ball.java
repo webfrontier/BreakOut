@@ -3,7 +3,7 @@ package jp.co.webfrontier.breakout;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
 
@@ -18,20 +18,11 @@ public class Ball implements DrawableItem {
     private static final String TAG = "Ball";
 
     /**
-     * ボール位置定義
-     */
-    private static final int LEFT_TOP   = 0;    // 左上
-    private static final int RIGHT_TOP  = 1;    // 右上
-    private static final int LEFT_DOWN  = 2;    // 左下
-    private static final int RIGHT_DOWN = 3;    // 右下
-    /**
-     * 初期速度（X方向）
-     * [Task 6] ボール速度（初期速度）
+     * 初速度（X方向）
      */
     public static final float INITIAL_SPEED_X = -0.2f;
     /**
-     * 初期速度（Y方向）
-     * [Task 6] ボール速度（初期速度）
+     * 初速度（Y方向）
      */
     public static final float INITIAL_SPEED_Y = 3f;
     /**
@@ -44,24 +35,19 @@ public class Ball implements DrawableItem {
     public static final int DEFAULT_RADIUS = 16;
 
     /**
-     * ゲームフィールドの領域
+     * 中心の座標
      */
-    private static Rect fieldRect = new Rect();
-
+    private Point c = new Point();
     /**
-     * ボールの中心座標
-     */
-    private PointF c;
-    /**
-     * ボールの半径
+     * 半径
      */
     private int r;
     /**
-     * ボール速度（X方向）
+     * 速度（X方向）
      */
     private float xSpeed = INITIAL_SPEED_X;
     /**
-     * ボール速度（Y方向）
+     * 速度（Y方向）
      */
     private float ySpeed = INITIAL_SPEED_Y;
     /**
@@ -79,7 +65,7 @@ public class Ball implements DrawableItem {
      * @param x ボールの位置(X座標)
      * @param y ボールの位置(Y座標)
      */
-    public Ball(float x, float y) {
+    public Ball(int x, int y) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
         this.c.x = x;
@@ -95,7 +81,7 @@ public class Ball implements DrawableItem {
      * @param xSpeed ボールの速度(X座標)
      * @param ySpeed ボールの速度(Y座標)
      */
-    public Ball(float x, float y, float xSpeed, float ySpeed) {
+    public Ball(int x, int y, float xSpeed, float ySpeed) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
         this.c.x = x;
@@ -114,28 +100,28 @@ public class Ball implements DrawableItem {
      * @param ySpeed ボールの速度(Y座標)
      * @param r ボールの半径
      */
-    public Ball(float x, float y, float xSpeed, float ySpeed, int r) {
+    public Ball(int x, int y, int r, float xSpeed, float ySpeed) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
         this.c.x = x;
         this.c.y = y;
+        this.r = r;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
-        this.r = r;
     }
 
     /**
-     * ボールの中心のX座標を取得する(getter)
+     * ボールの中心座標を取得する(getter)
      *
      * @return ボールの中心座標
      */
-    public PointF getCenterPoint() { return c; }
+    public Point getCenter() { return c; }
 
     /**
      * ボールの中心座標を設定する(setter)
      *
      */
-    public void setCenterPoint(float x, float y) {
+    public void setCenter(int x, int y) {
         c.x = x;
         c.y = y;
     }
@@ -179,13 +165,17 @@ public class Ball implements DrawableItem {
      */
     @Override
     public Rect getRect() {
-        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
         return new Rect(
-                (int)this.c.x - r - 1,
-                (int)this.c.y - r - 1,
-                (int)this.c.x + r + 1,
-                (int)this.c.y + r + 1
+                c.x - r,
+                c.y - r,
+                c.x + r,
+                c.y + r
         );
+    }
+
+    public void setPosition(int x, int y) {
+        c.x = x;
+        c.y = y;
     }
 
     /**
@@ -196,7 +186,8 @@ public class Ball implements DrawableItem {
      * @param view ボールが存在するビュー
      */
     public void update(View view) {
-        view.invalidate(getRect());
+        Rect dirtyRect = getRect();
+        view.invalidate(dirtyRect);
     }
 
     /**
@@ -209,15 +200,6 @@ public class Ball implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawCircle(c.x+r, c.y+r, r, painter);
-    }
-
-    /**
-     * ゲームフィールドの領域を設定する
-     *
-     * @param rect ゲームフィールドの領域
-     */
-    public static void onGameFieldChanged(Rect rect) {
-        Ball.fieldRect.set(rect);
     }
 
     /**
@@ -240,15 +222,5 @@ public class Ball implements DrawableItem {
      */
     public void boundY() {
         ySpeed = -ySpeed;
-    }
-
-    /**
-     * ボールがゲームフィールド外に出たかを判定する
-     *
-     * @return true  ボールがゲームフィールド外に出た
-     * @return false ボールがゲームフィールド内に存在する
-     */
-    public boolean isInGameField() {
-        return false;
     }
 }

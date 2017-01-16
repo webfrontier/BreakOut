@@ -21,7 +21,7 @@ public class BrickBlank extends Brick {
         super(x, y);
 
         // ブロックの種別を設定する
-        super.type = Type.Blank;
+        super.type = Type.BLANK;
     }
 
     /**

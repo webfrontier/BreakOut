@@ -2,7 +2,6 @@ package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.View;
 
@@ -35,39 +34,52 @@ abstract class Brick implements DrawableItem {
         /**
          * ブロックがない
          */
-        Blank(0),
+        BLANK("なし", 0),
         /**
          * 通常のブロック
          */
-        Normal(1),
+        NORMAL("通常", 1),
         /**
          * 破壊不可のブロック
          */
-        Unbroken(2),
+        UNBROKEN("破壊不可", 2),
         /**
          * スペシャルブロック
          */
-        Special(3);
+        SPECIAL("スペシャル", 3);
+
+        /**
+         * 種別名
+         */
+        private final String name;
 
         /**
          * 種別値
          */
-        int value = 0;
+        private final int value;
 
         /**
          * コンストラクタ
          *
          * @param value 種別値
          */
-        private Type(int value)
+        private Type(final String name, final int value)
         {
+            this.name = name;
             this.value = value;
         }
 
         /**
-         * ブロックの種別を取得する
+         * ブロックの種別名を取得する
          *
-         * @return 種別
+         * @return 種別名
+         */
+        String getName() { return name; }
+
+        /**
+         * ブロックの種別値を取得する
+         *
+         * @return 種別値
          */
         int getValue()
         {
@@ -77,27 +89,29 @@ abstract class Brick implements DrawableItem {
     /**
      * ブロックの種別
      */
-    protected Type type = Type.Blank;
+    protected Type type = Type.BLANK;
 
     /**
-     * ブロックの左上(Left-Top)の座標
+     * ブロックの領域
      */
-    private PointF lt = new PointF();
-
-    /**
-     * ブロックの中心(Center)座標
-     */
-    private PointF c = new PointF();
-
-    /**
-     * ブロックの右下(Right-Bottom)の座標
-     */
-    private PointF rb = new PointF();
-
+    private Rect rect = new Rect();
     /**
      * ペインター
      */
     private Paint painter = new Paint();
+
+    /**
+     * ブロックを移動する
+     *
+     * @param x ゲームフィールド上のX座標
+     * @param y ゲームフィールド上のY座標
+     */
+    public void move(int x, int y) {
+        if(x < 0 || y < 0)
+            return;
+
+        rect.set(x, y, x + rect.width(), y + rect.height());
+    }
 
     /**
      * ブロックの大きさを設定する
@@ -105,9 +119,20 @@ abstract class Brick implements DrawableItem {
      * @param w ブロックの幅
      * @param h ブロックの高さ
      */
-    static public void setSize(int w, int h) {
-        Brick.WIDTH = w;
-        Brick.HEIGHT = h;
+    public void setSize(int w, int h) {
+        if(w < 0 || h < 0)
+            return;
+
+        rect.set(rect.left, rect.top, rect.left + w, rect.top + h);
+    }
+
+    /**
+     * コンストラクタ
+     *
+     */
+    public Brick() {
+        this.rect.setEmpty();
+        painter.setColor(getColor());
     }
 
     /**
@@ -117,10 +142,7 @@ abstract class Brick implements DrawableItem {
      * @param y ブロック位置Y座標
      */
     public Brick(int x,int y) {
-        this.lt.x = x;
-        this.lt.y = y;
-        this.rb.x = x + WIDTH;
-        this.rb.y = y + HEIGHT;
+        this.rect.set(x, y, x + WIDTH, y + HEIGHT);
         painter.setColor(getColor());
     }
 
@@ -132,7 +154,7 @@ abstract class Brick implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         if(isUnbroken()) {
-            canvas.drawRect(lt.x, lt.y, rb.x - SPACE, rb.y - SPACE, painter);
+            canvas.drawRect(rect.left, rect.top, rect.right - SPACE, rect.bottom - SPACE, painter);
         }
     }
 
@@ -143,22 +165,16 @@ abstract class Brick implements DrawableItem {
      */
     @Override
     public Rect getRect() {
-        // float -> intのキャストを行うため、1ずつ広くサイズを返却する。
-        return new Rect(
-                (int)this.lt.x - 1,
-                (int)this.lt.y - 1,
-                (int)this.rb.x + 1,
-                (int)this.rb.y + 1
-        );
+        return new Rect(rect);
     }
 
     /**
-     * ブロック破壊
+     * ブロックを破壊する
      *
-     * @param view ブロック描画オブジェクト
+     * @param view ビュー
      */
     public void crash(View view) {
-        view.invalidate(getRect());
+        view.invalidate(rect.left, rect.top, rect.right, rect.bottom);
     }
 
     /**

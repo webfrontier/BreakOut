@@ -22,7 +22,7 @@ public class BrickUnbroken extends Brick {
         super(x, y);
 
         // ブロックの種別を上書きする
-        super.type = Type.Unbroken;
+        super.type = Type.UNBROKEN;
     }
 
     /**

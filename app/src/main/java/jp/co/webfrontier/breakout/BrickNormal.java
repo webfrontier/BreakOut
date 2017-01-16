@@ -11,6 +11,13 @@ public class BrickNormal extends Brick {
      */
     private static final String TAG = "BrickNormal";
 
+    public BrickNormal() {
+        super();
+
+        // ブロックの種別を上書きする
+        super.type = Type.NORMAL;
+    }
+
     /**
      * コンストラクタ
      *
@@ -21,7 +28,7 @@ public class BrickNormal extends Brick {
         super(x, y);
 
         // ブロックの種別を上書きする
-        super.type = Type.Normal;
+        super.type = Type.NORMAL;
     }
 
     /**
