@@ -158,6 +158,13 @@ public class Breakout {
 
         // 描画要素をクリアする
         view.clearDrawingItems();
+
+        /**
+         * B-02．パッドを表示させる
+         * パッドを初期位置に表示させる
+         * 移動はさせない(描画更新はなし)
+         */
+        initializePad();
     }
 
     /**
