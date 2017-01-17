@@ -171,6 +171,7 @@ public class Breakout {
 
         if(currentState == State.INIT) {
             if(newState == State.READY) {
+                // 開始可能になったのでスタートする
                 start();
             }
         } else if(currentState == State.READY) {
