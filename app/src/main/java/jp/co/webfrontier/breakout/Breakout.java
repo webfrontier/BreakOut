@@ -314,7 +314,7 @@ public class Breakout {
         adjustPad();
 
         int padX = (fieldRect.width() - pad.getWidth())/2;
-        int padY = fieldRect.top + fieldRect.height() - 10*pad.getHeight();
+        int padY = fieldRect.height() - 10*pad.getHeight();
         pad.setRect(new Rect(padX, padY, padX + pad.getWidth(), padY + pad.getHeight()));
         view.addDrawingItem(pad);
     }
