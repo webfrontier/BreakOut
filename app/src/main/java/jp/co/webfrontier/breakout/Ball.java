@@ -150,6 +150,13 @@ public class Ball extends Item {
     }
 
     /**
+     * ボールのX方向の速度を設定する(setter)
+     *
+     * @param xSpeed ボールのX方向の速度
+     */
+    public void setXSpeed(float xSpeed) { this.xSpeed = xSpeed; }
+
+    /**
      * ボールのY方向の速度を取得する(setter)
      *
      * @return ボールのY方向の速度
@@ -158,6 +165,12 @@ public class Ball extends Item {
         return ySpeed;
     }
 
+    /**
+     * ボールのY方向の速度を設定する(setter)
+     *
+     * @param ySpeed ボールのX方向の速度
+     */
+    public void setYSpeed(float ySpeed) { this.xSpeed = ySpeed; }
 
     public void setPosition(int x, int y) {
         c.x = x;
