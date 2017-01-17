@@ -15,11 +15,6 @@ import java.util.List;
 public class Breakout {
 
     /**
-     * ブロック列数
-     */
-    public static final int BRICK_COLS = 6;
-
-    /**
      * デバッグログ用タグ
      */
     private static final String TAG = "Breakout";
@@ -88,14 +83,14 @@ public class Breakout {
     private State state = State.INIT;
 
     /**
-     * ボール残数の初期値
-     */
-    private static final int DEFAULT_REMAINING_BALLS = 5;
-
-    /**
      * ブロックオブジェクトの配列
      */
     private Brick[] bricks = new Brick[BRICK_COLS];
+
+    /**
+     * ブロック列数
+     */
+    public static final int BRICK_COLS = 6;
 
     /**
      * パッドオブジェクト
@@ -106,6 +101,11 @@ public class Breakout {
      * ボールオブジェクトのリスト
      */
     private ArrayList<Ball> balls = new ArrayList<>();
+
+    /**
+     * ボール残数の初期値
+     */
+    private static final int DEFAULT_REMAINING_BALLS = 5;
 
     /**
      * ボール残数
@@ -240,6 +240,8 @@ public class Breakout {
             // ボールの残数がなくなった状態
             // ゲームオーバー
         }
+        // View#invalidateメソッドを呼び再描画を要求する
+        view.invalidate();
     }
 
     public Pad getPad() {

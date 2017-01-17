@@ -14,8 +14,8 @@ public class BrickSpecial extends Brick {
     /**
      * コンストラクタ
      *
-     * @param x ブロック位置X座標
-     * @param y ブロック位置Y座標
+     * @param x ブロック位置(X座標)
+     * @param y ブロック位置(Y座標)
      */
     public BrickSpecial(int x, int y) {
         super(x, y);

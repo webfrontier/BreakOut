@@ -101,6 +101,26 @@ abstract class Brick extends Item {
     private Paint painter = new Paint();
 
     /**
+     * コンストラクタ
+     *
+     */
+    public Brick() {
+        this.rect.setEmpty();
+        painter.setColor(getColor());
+    }
+
+    /**
+     * コンストラクタ
+     *
+     * @param x ブロック位置(X座標)
+     * @param y ブロック位置(Y座標)
+     */
+    public Brick(int x,int y) {
+        this.rect.set(x, y, x + WIDTH, y + HEIGHT);
+        painter.setColor(getColor());
+    }
+
+    /**
      * ブロックを移動する
      *
      * @param x ゲームフィールド上のX座標
@@ -127,29 +147,10 @@ abstract class Brick extends Item {
     }
 
     /**
-     * コンストラクタ
+     * ブロックの描画を行う
+     * Item#drawメソッドをオーバーライドして、ブロック独自の描画処理を実装する
      *
-     */
-    public Brick() {
-        this.rect.setEmpty();
-        painter.setColor(getColor());
-    }
-
-    /**
-     * コンストラクタ
-     *
-     * @param x ブロック位置X座標
-     * @param y ブロック位置Y座標
-     */
-    public Brick(int x,int y) {
-        this.rect.set(x, y, x + WIDTH, y + HEIGHT);
-        painter.setColor(getColor());
-    }
-
-    /**
-     * ブロックの描画処理を行う
-     *
-     * @param canvas キャンバス
+     * @param canvas 描画キャンバス
      */
     @Override
     public void draw(Canvas canvas) {

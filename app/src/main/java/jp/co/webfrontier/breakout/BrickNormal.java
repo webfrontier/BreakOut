@@ -21,8 +21,8 @@ public class BrickNormal extends Brick {
     /**
      * コンストラクタ
      *
-     * @param x ブロックのX座標
-     * @param y ブロックのY座標
+     * @param x ブロック位置(X座標)
+     * @param y ブロック位置(Y座標)
      */
     public BrickNormal(int x, int y) {
         super(x, y);
