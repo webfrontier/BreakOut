@@ -11,7 +11,7 @@ import android.view.View;
  * ボールを表すクラス
  * 表示部品なのでDrawableItemインターフェースを実装する
  */
-public class Ball implements DrawableItem {
+public class Ball extends Item {
     /**
      * デバッグログ用タグ
      */
@@ -158,20 +158,6 @@ public class Ball implements DrawableItem {
         return ySpeed;
     }
 
-    /**
-     * ボールの描画領域を取得する
-     * DrawableItemインターフェースの実装
-     * @return 描画領域
-     */
-    @Override
-    public Rect getRect() {
-        return new Rect(
-                c.x - r,
-                c.y - r,
-                c.x + r,
-                c.y + r
-        );
-    }
 
     public void setPosition(int x, int y) {
         c.x = x;
@@ -181,13 +167,10 @@ public class Ball implements DrawableItem {
     /**
      * ボールの状態の更新を行う
      * 速度や当たり判定などの状況に応じて次のフレームでボールを表示する座標に更新する
-     * 更新後はViewクラスのinvalidateメソッドを呼ぶことで再描画を要求すること
      *
-     * @param view ボールが存在するビュー
      */
-    public void update(View view) {
-        Rect dirtyRect = getRect();
-        view.invalidate(dirtyRect);
+    @Override
+    public void update() {
     }
 
     /**

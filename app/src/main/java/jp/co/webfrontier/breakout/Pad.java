@@ -9,9 +9,9 @@ import android.view.View;
 
 /**
  * 操作パッドを表すクラス
- * 表示部品なのでDrawableItemインターフェースを実装する
+ * 表示要素なのでItemクラスを継承する
  */
-public class Pad implements DrawableItem {
+public class Pad extends Item {
     /**
      * デバッグログ用タグ
      */
@@ -81,16 +81,6 @@ public class Pad implements DrawableItem {
     public void setPadDelta(double d) {
     }
 
-    /**
-     * パッドの描画領域を取得する
-     * DrawableItemインターフェースの実装
-     * @return 描画領域
-     */
-    @Override
-    public Rect getRect() {
-        return new Rect(rect);
-    }
-
     public void setRect(Rect newRect) {
         rect.set(newRect);
     }
@@ -114,14 +104,10 @@ public class Pad implements DrawableItem {
     /**
      * パッドの状態の更新を行う
      * 速度や当たり判定などの状況に応じて次のフレームでボールを表示する座標に更新する
-     * 更新後はViewクラスのinvalidateメソッドを呼ぶことで再描画を要求すること
      *
-     * @param view パッド描画オブジェクト
      */
-    public void update(View view) {
-        Rect dirtyRect = getRect();
-        view.invalidate(dirtyRect);
-    }
+    @Override
+    public void update() {}
 
     /**
      * パッドの描画処理を行う
@@ -133,17 +119,5 @@ public class Pad implements DrawableItem {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, painter);
-    }
-
-    /**
-     * パッドとボールの当たり判定を行う
-     *
-     * @param ball 判定対象のボール
-     *
-     * @return true  ボールに当たった
-     * @return false ボールに当たってない
-     */
-    public boolean isBallHit(Ball ball) {
-        return false;
     }
 }

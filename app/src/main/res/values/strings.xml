@@ -1,18 +1,3 @@
 <resources>
-    <string name="app_name">Breakout</string>
-    <string name="bt_btn">BT</string>
-    <string name="start_btn">start</string>
-    <string name="ball_btn">ball</string>
-    <string name="ready_message">Touch Start</string>
-    <string name="pause_message">Pause</string>
-    <string name="game_over_message">Game Over</string>
-    <string name="game_clear_message">Congratulation!!</string>
-    <string name="new_ball_help">Push [BALL]</string>
-    <string name="stock_ball_count">残りのボール：</string>
-    <string name="remain_brick_count">残りブロック：</string>
-
-    <!-- Toast Message -->
-    <string name="msg_gatt_connect_fail">"BLE Device disconnected."</string>
-    <string name="elapsed_time">経過時間：%s</string>
-    <string name="score">得点：0</string>
+    <string name="app_name">ブロック崩しゲーム</string>
 </resources>

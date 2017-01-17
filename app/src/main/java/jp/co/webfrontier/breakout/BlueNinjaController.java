@@ -401,8 +401,6 @@ public class BlueNinjaController {
                 mBluetoothGatt = null;
 
                 setStatus(BleStatus.DISCONNECTED);
-
-                showToast(R.string.msg_gatt_connect_fail);
             }
         }
 
@@ -485,9 +483,8 @@ public class BlueNinjaController {
                 try {
                     // JSON形式で通知されるデータからX軸成分を抽出
                     JSONObject json = new JSONObject(data);
-                    double ax = json.getDouble("ax");
-                    // パッドへデータ設定
-                    mMainActivity.getPad().setPadDelta(ax * 50);
+                    // Activityへ通知
+                    mMainActivity.onBLEDataReceived(json);
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
@@ -510,7 +507,7 @@ public class BlueNinjaController {
      */
     private void changeBleStatus(BleStatus status) {
         Log.d(TAG, "changeBleStatus(" + status.name() + ")");
-        mMainActivity.setBLEConnected(status == BleStatus.CONNECTED);
+        mMainActivity.onBLEConnectionStatusChanged(status == BleStatus.CONNECTED);
     }
 
     /**

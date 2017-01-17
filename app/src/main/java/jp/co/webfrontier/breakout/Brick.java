@@ -7,9 +7,9 @@ import android.view.View;
 
 /**
  * ブロックを表す基底クラス
- * 表示部品なのでDrawableItemインターフェースを実装する
+ * 表示要素なのでItemクラスを継承する
  */
-abstract class Brick implements DrawableItem {
+abstract class Brick extends Item {
     /**
      * デバッグログ用タグ
      */
@@ -156,16 +156,6 @@ abstract class Brick implements DrawableItem {
         if(isUnbroken()) {
             canvas.drawRect(rect.left, rect.top, rect.right - SPACE, rect.bottom - SPACE, painter);
         }
-    }
-
-    /**
-     * パッドの描画領域を取得する
-     * DrawableItemインターフェースの実装
-     * @return 描画領域
-     */
-    @Override
-    public Rect getRect() {
-        return new Rect(rect);
     }
 
     /**
