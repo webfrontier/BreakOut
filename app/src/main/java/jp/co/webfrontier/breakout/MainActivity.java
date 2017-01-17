@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case MotionEvent.ACTION_MOVE: // 指を持ち上げずにスライドさせた場合
                 Log.d(TAG, "発生したアクションはACTION_MOVEだよ");
+                if(!blueNinjaController.isConnected()) {
+                    // BLE機器未接続の場合はタッチによるパッド操作を行う
+                    breakoutView.onTouch(event.getX(), event.getY());
+                }
                 break;
             case MotionEvent.ACTION_CANCEL: // UP+DOWNの同時発生(＝キャンセル)の場合
                 Log.d(TAG, "発生したアクションはACTION_CANCELだよ");
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default: // その他のアクション
                 break;
         }
+
         return true;
     }
 

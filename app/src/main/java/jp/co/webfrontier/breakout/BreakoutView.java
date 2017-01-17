@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -142,7 +143,8 @@ public class BreakoutView extends View {
      * 次のフレームからこの要素が描画されなくなる
      * @param i 描画要素
      */
-    public void removeDrawingItem(Item i) {
+    public void removeDrawingItem(Item i)
+    {
         drawableItems.remove(i);
     }
 
@@ -203,6 +205,20 @@ public class BreakoutView extends View {
         for(final Item item : drawableItems) {
             item.draw(canvas);
         }
+    }
+
+    /**
+     * ゲームフィールドがタッチされたときの処理
+     */
+    public void onTouch(final float x, final float y) {
+        if(game.getState() != Breakout.State.RUNNING) {
+            // ゲームが実行状態でない場合はパッドを動かさない
+            return;
+        }
+
+        final Point p = game.getPadPosition();
+        // パッドは水平に移動させたいので、Y座標は変えない
+        game.movePad((int)x, p.y);
     }
 
     /**

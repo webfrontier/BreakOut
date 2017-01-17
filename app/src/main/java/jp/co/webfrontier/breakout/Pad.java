@@ -66,11 +66,25 @@ public class Pad extends Item {
     }
 
     /**
-     * タッチ位置設定
+     * パッドの中心座標を取得する(getter)
      *
-     * @param x タッチX座標
+     * @return パッドの中心座標
      */
-    public void setPadCx(float x) {
+    public Point getCenter() {
+        return new Point(rect.left + rect.width()/2, rect.top + rect.height()/2);
+    }
+
+    /**
+     * パッドの中心座標を設定する(setter)
+     *
+     * @param cx 新しい中心座標(X座標)
+     * @param cy 新しい中心座標(Y座標)
+     */
+    public void setCenter(int cx, int cy) {
+        final Point center = getCenter();
+        int dx = cx - center.x;
+        int dy = cy - center.y;
+        rect.set(rect.left + dx, rect.top + dy, rect.right + dx, rect.bottom + dy);
     }
 
     /**
@@ -108,7 +122,9 @@ public class Pad extends Item {
      * この処理ではボールとの反射は考慮しない
      */
     @Override
-    public void update() {}
+    public void update() {
+
+    }
 
     /**
      * パッドの描画処理を行う

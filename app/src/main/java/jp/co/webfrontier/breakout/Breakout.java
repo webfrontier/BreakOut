@@ -1,5 +1,6 @@
 package jp.co.webfrontier.breakout;
 
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -253,8 +254,8 @@ public class Breakout {
      */
     private void adjustPad() {
         Rect fieldRect = view.getGameFieldRect();
-        int padWidth = fieldRect.width() / 6;
-        int padHeight = fieldRect.height() / 100;
+        int padWidth = fieldRect.width()/6;
+        int padHeight = fieldRect.height()/100;
         pad.setRect(new Rect(pad.left(), pad.top(), pad.left() + padWidth, pad.top() + padHeight));
     }
 
@@ -265,10 +266,29 @@ public class Breakout {
         adjustPad();
 
         Rect fieldRect = view.getGameFieldRect();
-        int padX = (fieldRect.width() - pad.getWidth()) / 2;
-        int padY = fieldRect.top + fieldRect.height() - 5 * pad.getHeight();
+        int padX = (fieldRect.width() - pad.getWidth())/2;
+        int padY = fieldRect.top + fieldRect.height() - 10*pad.getHeight();
         pad.setRect(new Rect(padX, padY, padX + pad.getWidth(), padY + pad.getHeight()));
         view.addDrawingItem(pad);
+    }
+
+    /**
+     * パッドの位置(中心座標)を取得する
+     *
+     * @return パッドの中心座標
+     */
+    public Point getPadPosition() {
+        return pad.getCenter();
+    }
+
+    /**
+     * パッドを移動させる
+     *
+     * @param x パッドの中心座標(X座標)
+     * @param y パッドの中心座標(Y座標)
+     */
+    public void movePad(int x, int y) {
+        pad.setCenter(x, y);
     }
 
     public ArrayList<Ball> getBalls() {
