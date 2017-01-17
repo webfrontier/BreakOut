@@ -61,6 +61,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         blueNinjaController.init();
 
+        /**
+         * B-04．スタートボタンを作成する
+         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+         * ボタンのラベルを文字列リソースとして定義し表示させる
+         * MainActivity#onClickメソッドをリスナーとして登録する
+         * MainActivity#onClickメソッドからゲームを開始する(ゲームをRUNNING状態にする)
+         */
+        Button btn = (Button)findViewById(R.id.start_btn);
+        btn.setOnClickListener(this);
+
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
 
@@ -133,6 +143,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         // ここにクリックイベントが発生した時に行う処理を書く
         Log.d(TAG, "ビューがクリックされたよ");
+
+        /**
+         * B-04．スタートボタンを作成する
+         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+         * ボタンのラベルを文字列リソースとして定義し表示させる
+         * MainActivity#onClickメソッドをリスナーとして登録する
+         * MainActivity#onClickメソッドからゲームを開始する(ゲームをRUNNING状態にする)
+         */
+        switch(v.getId()) {
+            case R.id.start_btn:
+                // スタートボタン
+                breakoutView.onPushStartButton();
+                break;
+            default:
+                break;
+        }
     }
 
     /**
