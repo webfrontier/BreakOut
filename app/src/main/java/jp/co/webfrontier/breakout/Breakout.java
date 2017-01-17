@@ -170,25 +170,50 @@ public class Breakout {
         Log.i(TAG, "今の状態: " + currentState + " 新しい状態: " + newState);
         this.state = newState;
 
-        if(currentState == State.INIT) {
-            if(newState == State.READY) {
-                // 開始可能になったのでスタートする
-                start();
-            }
-        } else if(currentState == State.READY) {
-            if(newState == State.RUNNING) {
-            }
-        } else if(currentState == State.RUNNING) {
-            if(newState == State.READY) {
-            } else if(newState == State.PAUSING) {
-            } else if(newState == State.GAMEOVER) {
-            } else if(newState == State.CLEAR) {
-            } else {
-            }
-        } else if(currentState == State.PAUSING) {
-        } else if(currentState == State.GAMEOVER) {
-        } else if(currentState == State.CLEAR) {
-        } else {
+        switch(currentState) {
+            case INIT:
+                // 初期状態
+                switch(newState) {
+                    case READY:
+                        // 初期状態 -> 開始可能
+                        // スタートする
+                        start();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case READY:
+                // 開始可能
+                break;
+            case RUNNING:
+                // 実行中
+                switch(newState) {
+                    case PAUSING:
+                        // 実行中 -> 一時停止
+                        break;
+                    case GAMEOVER:
+                        // 実行中 -> ゲームオーバー
+                        break;
+                    case CLEAR:
+                        // 実行中 -> ゲームクリア
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case PAUSING:
+                // 一時停止中
+                break;
+            case GAMEOVER:
+                // ゲームオーバー
+                break;
+            case CLEAR:
+                // ゲームクリア
+                break;
+            default:
+                // 上記以外
+                break;
         }
     }
 
