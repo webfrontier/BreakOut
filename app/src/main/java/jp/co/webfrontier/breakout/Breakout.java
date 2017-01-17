@@ -284,9 +284,10 @@ public class Breakout {
 
         // ボール残数があるときのみ、ボールを追加する
         if(remainingBallCount > 0) {
-            balls.add(new Ball(x, y));
+            Ball ball = new Ball(x, y);
+            balls.add(ball);
+            view.addDrawingItem(ball);
             remainingBallCount--;
-
             ret = true;
         }
 
