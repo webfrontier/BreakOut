@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -19,31 +18,22 @@ import java.util.ArrayList;
  */
 public class BreakoutView extends View {
     /**
-     * ステータス表示領域(基本部分)の高さ
-     */
-    public static final int STATUS_H = 240;
-    /**
-     * ブロックの上のスペースの高さ
-     */
-    public static final int UPPER_SPACE = 100;
-
-    /**
      * デバッグログ用タグ
      */
     private static final String TAG = "BreakoutView";
+
+    /**
+     * ステータス表示領域の高さ
+     */
+    public static final int STATUS_H = 240;
     /**
      * ステータス領域背景色
      */
     private static final int STS_BG_COLOR = Color.WHITE;
-
     /**
      * 画面の大きさ
      */
     private Rect displayRect = new Rect();
-    /**
-     * ゲームフィールドの大きさ
-     */
-    private Rect fieldRect = new Rect();
     /**
      * ペインター
      */
@@ -168,21 +158,8 @@ public class BreakoutView extends View {
         Log.d(TAG, "新しい表示領域");
         Log.d(TAG, "x: " + displayRect.left + ", y: " + displayRect.top + ", width: " + displayRect.width() + ", height: " + displayRect.height());
 
-        Log.d(TAG, "いまのゲームフィールド領域");
-        Log.d(TAG, "x: " + fieldRect.left + ", y: " + fieldRect.top + ", width: " + fieldRect.width() + ", height: " + fieldRect.height());
-        fieldRect.set(0, STATUS_H, displayRect.width(), displayRect.height());
-        Log.d(TAG, "新しいゲームフィールド領域");
-        Log.d(TAG, "x: " + fieldRect.left + ", y: " + fieldRect.top + ", width: " + fieldRect.width() + ", height: " + fieldRect.height());
-
         // ゲームフィールドの領域変更を通知
-        game.onViewSizeChanged();
-    }
-
-    /**
-     * ゲームフィールドの領域を取得する
-     */
-    public Rect getGameFieldRect() {
-        return fieldRect;
+        game.onGameFieldSizeChanged(new Rect(0, 0, displayRect.width(), displayRect.height() - STATUS_H));
     }
 
     /**
@@ -203,7 +180,8 @@ public class BreakoutView extends View {
 
         // 3. 描画要素を描画する
         for(final Item item : drawableItems) {
-            item.draw(canvas);
+            // 座標系を変換して描画する必要があるため原点を渡す
+            item.draw(canvas, displayRect.left, STATUS_H);
         }
     }
 

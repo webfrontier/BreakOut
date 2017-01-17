@@ -26,10 +26,6 @@ public class Pad extends Item {
     private static final int BLE_CONNECTED_COLOR = Color.BLUE;
 
     /**
-     * パッドの領域
-     */
-    private Rect rect = new Rect();
-    /**
      * ボールを打ち返した回数
      */
     private int hitCount = 0;
@@ -130,10 +126,12 @@ public class Pad extends Item {
      * パッドの描画処理を行う
      * Item#drawメソッドをオーバーライドして、パッド独自の描画処理を実装する
      *
-     * @param canvas 描画キャンバス
+     * @param canvas 描画するキャンバス
+     * @param x 描画を開始する座標(X座標)
+     * @param y 描画を開始する座標(Y座標)
      */
     @Override
-    public void draw(Canvas canvas) {
-        canvas.drawRect(rect.left, rect.top, rect.right, rect.bottom, painter);
+    public void draw(Canvas canvas, int x, int y) {
+        canvas.drawRect(x + rect.left, y + rect.top, x + rect.right, y + rect.bottom, painter);
     }
 }

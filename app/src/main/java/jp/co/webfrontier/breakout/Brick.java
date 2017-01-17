@@ -92,10 +92,6 @@ abstract class Brick extends Item {
     protected Type type = Type.BLANK;
 
     /**
-     * ブロックの領域
-     */
-    private Rect rect = new Rect();
-    /**
      * ペインター
      */
     private Paint painter = new Paint();
@@ -150,12 +146,14 @@ abstract class Brick extends Item {
      * ブロックの描画を行う
      * Item#drawメソッドをオーバーライドして、ブロック独自の描画処理を実装する
      *
-     * @param canvas 描画キャンバス
+     * @param canvas 描画するキャンバス
+     * @param x 描画を開始する座標(X座標)
+     * @param y 描画を開始する座標(Y座標)
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, int x, int y) {
         if(isUnbroken()) {
-            canvas.drawRect(rect.left, rect.top, rect.right - SPACE, rect.bottom - SPACE, painter);
+            canvas.drawRect(x + rect.left, y + rect.top, x + rect.right - SPACE, y + rect.bottom - SPACE, painter);
         }
     }
 

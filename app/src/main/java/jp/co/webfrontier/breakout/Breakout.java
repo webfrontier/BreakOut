@@ -84,6 +84,16 @@ public class Breakout {
     private State state = State.INIT;
 
     /**
+     * ゲームフィールドの大きさ
+     */
+    private Rect fieldRect = new Rect();
+
+    /**
+     * ゲームフィールドから上のブロックまでのスペース
+     */
+    private static final int BRICK_UPPER_SPACE = 100;
+
+    /**
      * ブロックオブジェクトの配列
      */
     private Brick[] bricks = new Brick[BRICK_COLS];
@@ -218,11 +228,24 @@ public class Breakout {
     }
 
     /**
+     * ゲームフィールドの領域を取得する
+     */
+    public Rect getGameFieldRect() {
+        return fieldRect;
+    }
+
+    /**
      * ゲームフィールドの大きさが変わったときに行う処理
      * Viewの大きさが変わったときに通知される
      *
      */
-    public void onViewSizeChanged() {
+    public void onGameFieldSizeChanged(Rect rect) {
+        Log.d(TAG, "いまのゲームフィールド領域");
+        Log.d(TAG, "x: " + fieldRect.left + ", y: " + fieldRect.top + ", width: " + fieldRect.width() + ", height: " + fieldRect.height());
+        fieldRect.set(rect);
+        Log.d(TAG, "新しいゲームフィールド領域");
+        Log.d(TAG, "x: " + fieldRect.left + ", y: " + fieldRect.top + ", width: " + fieldRect.width() + ", height: " + fieldRect.height());
+
         if (state == State.INIT) {
             setState(State.READY);
         }
@@ -240,12 +263,13 @@ public class Breakout {
 
         // 以降はゲーム実行中(RUNNING)状態で行う更新処理
 
+        // パッドを更新する
         pad.update();
 
         int xCrash; // ブロックとの当たり判定（X方向）
         int yCrash; // ブロックとの当たり判定（Y方向）
 
-        // ボールごとに表示更新／当たり判定
+        // ボールごとに更新／当たり判定
         for(int i = balls.size()-1; i>=0; i--) {
             Ball ball = balls.get(i);
             ball.update();
@@ -278,7 +302,6 @@ public class Breakout {
      * パッドの大きさをゲームフィールドの大きさから調整する
      */
     private void adjustPad() {
-        Rect fieldRect = view.getGameFieldRect();
         int padWidth = fieldRect.width()/6;
         int padHeight = fieldRect.height()/100;
         pad.setRect(new Rect(pad.left(), pad.top(), pad.left() + padWidth, pad.top() + padHeight));
@@ -290,7 +313,6 @@ public class Breakout {
     public void initializePad() {
         adjustPad();
 
-        Rect fieldRect = view.getGameFieldRect();
         int padX = (fieldRect.width() - pad.getWidth())/2;
         int padY = fieldRect.top + fieldRect.height() - 10*pad.getHeight();
         pad.setRect(new Rect(padX, padY, padX + pad.getWidth(), padY + pad.getHeight()));
@@ -380,13 +402,12 @@ public class Breakout {
      */
     public void initializeBrick() {
         // ゲームフィールドの大きさから1つあたりのブロックの大きさを設定する
-        Rect fieldRect = view.getGameFieldRect();
         int brick_w = fieldRect.width() / BRICK_COLS;
         int brick_h = fieldRect.height() / 30;
 
         for (int col = 0; col < BRICK_COLS; col++) {
             bricks[col].setSize(brick_w, brick_h);
-            bricks[col].move(col * brick_w, brick_h + view.STATUS_H + view.UPPER_SPACE);
+            bricks[col].move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
             view.addDrawingItem(bricks[col]);
         }
     }
@@ -402,6 +423,18 @@ public class Breakout {
             ++count;
         }
         return count;
+    }
+
+    /**
+     * パッドとボールの当たり判定
+     *
+     * @param ball 判定対象ボールオブジェクト
+     *
+     * @return true  パッドに当たった
+     * @return false パッドに当たってない
+     */
+    private boolean isHit(Ball ball) {
+        return false;
     }
 
     /**

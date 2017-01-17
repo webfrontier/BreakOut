@@ -14,13 +14,41 @@ public abstract class Item {
      * 継承先のクラスでは表示要素に応じた更新処理を実装すること
      *
      */
-    void update() {}
+    public void update() {}
 
     /**
      * 表示要素の描画を行う
      * 継承先のクラスでは表示要素に応じた描画処理を実装すること
      *
-     * @param canvas キャンバス
+     * @param canvas 描画するキャンバス
+     * @param x 描画を開始する座標(X座標)
+     * @param y 描画を開始する座標(Y座標)
      */
-    void draw(Canvas canvas) {}
+    public void draw(Canvas canvas, int x, int y) {}
+
+    /**
+     * 衝突判定に使用する領域を取得する
+     * 継承先のクラスでは表示要素に応じた処理を実装すること
+     *
+     * @return
+     */
+    public Rect getRect() { return rect; }
+
+    /**
+     * 他の表示要素との衝突判定を行う
+     *
+     * @param target 判定対象となる表示要素
+     *
+     * @return true  衝突している
+     * @return false 衝突していない
+     */
+    public boolean isCollided(Item target) {
+        final Rect r = target.getRect();
+        return rect.intersects(r.left, r.top, r.right, r.bottom);
+    }
+
+    /**
+     * 表示要素の領域
+     */
+    protected Rect rect = new Rect();
 }

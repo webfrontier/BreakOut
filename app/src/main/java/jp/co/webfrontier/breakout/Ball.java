@@ -71,6 +71,7 @@ public class Ball extends Item {
         this.c.x = x;
         this.c.y = y;
         this.r = DEFAULT_RADIUS;
+        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -89,6 +90,7 @@ public class Ball extends Item {
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.r = DEFAULT_RADIUS;
+        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -108,6 +110,7 @@ public class Ball extends Item {
         this.r = r;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
+        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -192,11 +195,13 @@ public class Ball extends Item {
      * ボールの描画を行う
      * Item#drawメソッドをオーバーライドして、ボール独自の描画処理を実装する
      *
-     * @param canvas 描画キャンバス
+     * @param canvas 描画するキャンバス
+     * @param x 描画を開始する座標(X座標)
+     * @param y 描画を開始する座標(Y座標)
      */
     @Override
-    public void draw(Canvas canvas) {
-        canvas.drawCircle(c.x+r, c.y+r, r, painter);
+    public void draw(Canvas canvas, int x, int y) {
+        canvas.drawCircle(x + c.x + r, y + c.y + r, r, painter);
     }
 
     /**
