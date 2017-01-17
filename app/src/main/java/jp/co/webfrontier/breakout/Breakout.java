@@ -175,7 +175,7 @@ public class Breakout {
          */
         // ボールの状態を初期化する
         initializeBall();
-        addBall(fieldRect.width()/2, fieldRect.top + fieldRect.height()/2);
+        addBall(fieldRect.width()/2, fieldRect.height()/2);
     }
 
     /**
