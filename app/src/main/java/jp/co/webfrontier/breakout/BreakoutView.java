@@ -204,4 +204,28 @@ public class BreakoutView extends View {
             item.draw(canvas);
         }
     }
+
+    /**
+     * スタートボタンが押下されたときの処理
+     */
+    public void onPushStartButton() {
+        Breakout.State state = game.getState();
+        switch(state){
+            case READY:
+                game.setState(Breakout.State.RUNNING);
+                break;
+            case RUNNING:
+                game.setState(Breakout.State.PAUSING);
+                break;
+            case PAUSING:
+                game.setState(Breakout.State.RUNNING);
+                break;
+            case GAMEOVER:
+            case CLEAR:
+                game.setState(Breakout.State.READY);
+                break;
+            default:
+                break;
+        }
+    }
 }
