@@ -24,11 +24,6 @@ public class Pad extends Item {
      * パッドの色(BLE接続状態)
      */
     private static final int BLE_CONNECTED_COLOR = Color.BLUE;
-
-    /**
-     * ボールを打ち返した回数
-     */
-    private int hitCount = 0;
     /**
      * パッドを描画するView
      */
@@ -37,17 +32,12 @@ public class Pad extends Item {
      * BLEの接続状態
      */
     private boolean BLEConnected = false;
-    /**
-     * ペインタ
-     */
-    private Paint painter = new Paint();
 
     /**
      * コンストラクタ
      */
     public Pad() {
-        this.rect.setEmpty();
-        // ペインタへ色設定
+        // ペインターへ色設定
         painter.setColor(BLE_DISCONNECTED_COLOR);
     }
 
@@ -62,37 +52,23 @@ public class Pad extends Item {
     }
 
     /**
-     * パッドの中心座標を取得する(getter)
-     *
-     * @return パッドの中心座標
-     */
-    public Point getCenter() {
-        return new Point(rect.left + rect.width()/2, rect.top + rect.height()/2);
-    }
-
-    /**
      * パッドの中心座標を設定する(setter)
      *
      * @param cx 新しい中心座標(X座標)
      * @param cy 新しい中心座標(Y座標)
      */
     public void setCenter(int cx, int cy) {
-        final Point center = getCenter();
         int dx = cx - center.x;
         int dy = cy - center.y;
         rect.set(rect.left + dx, rect.top + dy, rect.right + dx, rect.bottom + dy);
-    }
-
-    /**
-     * タッチ位置設定
-     *
-     * @param d パッド移動変化値
-     */
-    public void setPadDelta(double d) {
+        center.x = cx;
+        center.y = cy;
     }
 
     public void setRect(Rect newRect) {
         rect.set(newRect);
+        center.x = rect.left + rect.width()/2;
+        center.y = rect.top + rect.height()/2;
     }
 
     public int top() {

@@ -92,16 +92,16 @@ abstract class Brick extends Item {
     protected Type type = Type.BLANK;
 
     /**
-     * ペインター
+     * 破壊されたかどうか
      */
-    private Paint painter = new Paint();
+    private boolean broken = false;
 
     /**
      * コンストラクタ
      *
      */
     public Brick() {
-        this.rect.setEmpty();
+        // ペインターへ色設定
         painter.setColor(getColor());
     }
 
@@ -152,28 +152,29 @@ abstract class Brick extends Item {
      */
     @Override
     public void draw(Canvas canvas, int x, int y) {
-        if(isUnbroken()) {
-            canvas.drawRect(x + rect.left, y + rect.top, x + rect.right - SPACE, y + rect.bottom - SPACE, painter);
+        if(broken) {
+            return;
         }
+        canvas.drawRect(x + rect.left, y + rect.top, x + rect.right - SPACE, y + rect.bottom - SPACE, painter);
     }
 
     /**
      * ブロックを破壊する
      *
-     * @param view ビュー
      */
-    public void crash(View view) {
-        view.invalidate(rect.left, rect.top, rect.right, rect.bottom);
+    public void crash() {
+        broken = true;
     }
 
     /**
-     * ブロックが壊れていないかをチェックする
+     * ブロックが破壊されているか
      *
-     * @return true  未破壊
-     * @return false 破壊済み
+     * @return true  破壊されている
+     * @return false 破壊されていない
      */
-    public boolean isUnbroken() {
-        return true;
+    public boolean isUnBroken()
+    {
+        return !broken;
     }
 
     /**

@@ -35,13 +35,4 @@ public class BrickUnbroken extends Brick {
     {
         return Color.WHITE;
     }
-
-    /**
-     * ブロック破壊
-     *
-     * @param view ブロック描画オブジェクト
-     */
-    public void crash(View view) {
-        super.crash(view);
-    }
 }

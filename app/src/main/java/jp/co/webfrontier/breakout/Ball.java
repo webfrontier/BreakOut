@@ -49,11 +49,6 @@ public class Ball extends Item {
      * デフォルトの半径
      */
     public static final int DEFAULT_RADIUS = 16;
-
-    /**
-     * 中心の座標
-     */
-    private Point c = new Point();
     /**
      * 半径
      */
@@ -66,14 +61,6 @@ public class Ball extends Item {
      * 速度（Y方向）
      */
     private float ySpeed = INITIAL_SPEED_Y;
-    /**
-     * パッドに当たった回数
-     */
-    private int hitCount = 0;
-    /**
-     * ペインター
-     */
-    private Paint painter = new Paint();
 
     /**
      * コンストラクタ
@@ -84,10 +71,10 @@ public class Ball extends Item {
     public Ball(int x, int y) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
-        this.c.x = x;
-        this.c.y = y;
+        this.center.x = x;
+        this.center.y = y;
         this.r = DEFAULT_RADIUS;
-        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.center.x - this.r, this.center.y - this.r, this.center.x + this.r, this.center.y + this.r);
     }
 
     /**
@@ -101,12 +88,12 @@ public class Ball extends Item {
     public Ball(int x, int y, float xSpeed, float ySpeed) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
-        this.c.x = x;
-        this.c.y = y;
+        this.center.x = x;
+        this.center.y = y;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.r = DEFAULT_RADIUS;
-        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.center.x - this.r, this.center.y - this.r, this.center.x + this.r, this.center.y + this.r);
     }
 
     /**
@@ -121,20 +108,13 @@ public class Ball extends Item {
     public Ball(int x, int y, int r, float xSpeed, float ySpeed) {
         painter.setColor(DEFAULT_COLOR);
         painter.setAntiAlias(true);
-        this.c.x = x;
-        this.c.y = y;
+        this.center.x = x;
+        this.center.y = y;
         this.r = r;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
-        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.center.x - this.r, this.center.y - this.r, this.center.x + this.r, this.center.y + this.r);
     }
-
-    /**
-     * ボールの中心座標を取得する(getter)
-     *
-     * @return ボールの中心座標
-     */
-    public Point getCenter() { return c; }
 
     /**
      * ボールの中心座標を設定する(setter)
@@ -143,9 +123,9 @@ public class Ball extends Item {
      * @param y 中心座標(Y座標)
      */
     public void setCenter(int x, int y) {
-        c.x = x;
-        c.y = y;
-        rect.set(c.x - r, c.y - r, c.x + r, c.y + r);
+        center.x = x;
+        center.y = y;
+        rect.set(center.x - r, center.y - r, center.x + r, center.y + r);
     }
 
     /**
@@ -215,16 +195,15 @@ public class Ball extends Item {
      */
     @Override
     public void draw(Canvas canvas, int x, int y) {
-        canvas.drawCircle(x + c.x + r, y + c.y + r, r, painter);
+        canvas.drawCircle(x + center.x + r, y + center.y + r, r, painter);
     }
 
     /**
      * パッドで反射された場合の処理を行う
      *
-     * @param x パッドの中央位置のX座標
+     * @param x 反射対象の中央位置(X座標)
      */
     public void reflectByPad(float x) {
-        ++hitCount;
         boundY();
     }
 

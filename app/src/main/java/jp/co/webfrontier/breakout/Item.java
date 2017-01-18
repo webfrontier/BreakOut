@@ -1,6 +1,8 @@
 package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 
 /**
@@ -30,9 +32,16 @@ public abstract class Item {
      * 衝突判定に使用する領域を取得する
      * 継承先のクラスでは表示要素に応じた処理を実装すること
      *
-     * @return
+     * @return 衝突判定領域
      */
     public Rect getRect() { return rect; }
+
+    /**
+     * 衝突判定に使用する領域の中心座標を取得する
+     *
+     * @return 中心座標
+     */
+    public Point getCenter() { return center; }
 
     /**
      * 他の表示要素との衝突判定を行う
@@ -51,4 +60,14 @@ public abstract class Item {
      * 表示要素の領域
      */
     protected Rect rect = new Rect();
+
+    /**
+     * 表示要素の中心座標
+     */
+    protected Point center = new Point();
+
+    /**
+     * ペインター
+     */
+    protected Paint painter = new Paint();
 }
