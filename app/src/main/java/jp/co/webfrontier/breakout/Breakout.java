@@ -331,6 +331,31 @@ public class Breakout {
                 // パッドと衝突したのでボールを反射させる
                 ball.reflect(pad);
             }
+
+            /**
+             * B-09．ゲームフィールドの上左右端でボールを反射させる
+             * 上端はY方向、左右端はX方向で当たり判定を行いボールを反転させる
+             */
+            final Rect ballRect = ball.getRect();
+            // X方向の反射
+            if(ballRect.left <= fieldRect.left) {
+                // 左端での反射
+                ball.setCenter(ball.getRadius(), ball.getCenter().y);
+                ball.boundX();
+            } else if(ballRect.right >= fieldRect.right) {
+                // 右端での反射
+                ball.setCenter(fieldRect.right - ball.getRadius(), ball.getCenter().y);
+                ball.boundX();
+            }
+
+            // Y方向の反射
+            if(ballRect.top <= fieldRect.top) {
+                // 上端での反射
+                ball.setCenter(ball.getCenter().x, ball.getRadius());
+                // 速度反転
+                ball.boundY();
+            }
+
         }
 
         // ゲームフィールド外に出たボールを削除
