@@ -220,7 +220,7 @@ public class Ball extends Item {
         if(MAX_SPEED_X < Math.abs(xSpeed)) {
             if(xSpeed > 0) {
                 xSpeed = MAX_SPEED_X;
-            }else{
+            } else {
                 xSpeed = -MAX_SPEED_X;
             }
         } else {
