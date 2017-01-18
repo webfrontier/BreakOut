@@ -26,6 +26,22 @@ public class Ball extends Item {
      */
     public static final float INITIAL_SPEED_Y = 3f;
     /**
+     * ボールの最大速度（X方向）
+     */
+    private static final float MAX_SPEED_X = 5f;
+    /**
+     * ボールの最大速度（Y方向）
+     */
+    private static final float MAX_SPEED_Y = 8f;
+    /**
+     * ボールの速度変化率（X方向）
+     */
+    private static final float CHANGE_RATE_SPEED_X = 1.01f;
+    /**
+     * ボールの速度変化率（Y方向）
+     */
+    private static final float CHANGE_RATE_SPEED_Y = 1.2f;
+    /**
      * デフォルトの色
      */
     public static final int DEFAULT_COLOR = Color.WHITE;
@@ -71,7 +87,7 @@ public class Ball extends Item {
         this.c.x = x;
         this.c.y = y;
         this.r = DEFAULT_RADIUS;
-        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -90,7 +106,7 @@ public class Ball extends Item {
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.r = DEFAULT_RADIUS;
-        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -110,7 +126,7 @@ public class Ball extends Item {
         this.r = r;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
-        this.rect.set(this.c.x, this.c.y, this.c.x + this.r, this.c.y + this.r);
+        this.rect.set(this.c.x - this.r, this.c.y - this.r, this.c.x + this.r, this.c.y + this.r);
     }
 
     /**
@@ -123,10 +139,13 @@ public class Ball extends Item {
     /**
      * ボールの中心座標を設定する(setter)
      *
+     * @param x 中心座標(X座標)
+     * @param y 中心座標(Y座標)
      */
     public void setCenter(int x, int y) {
         c.x = x;
         c.y = y;
+        rect.set(c.x - r, c.y - r, c.x + r, c.y + r);
     }
 
     /**
@@ -175,11 +194,6 @@ public class Ball extends Item {
      */
     public void setYSpeed(float ySpeed) { this.xSpeed = ySpeed; }
 
-    public void setPosition(int x, int y) {
-        c.x = x;
-        c.y = y;
-    }
-
     /**
      * ボールの状態の更新を行う
      * Item#updateメソッドをオーバーライドして、ボール独自の更新処理を実装する
@@ -207,9 +221,11 @@ public class Ball extends Item {
     /**
      * パッドで反射された場合の処理を行う
      *
-     * @param pad_cx パッドの中心座標
+     * @param x パッドの中央位置のX座標
      */
-    public void hitPad(float pad_cx) {
+    public void reflectByPad(float x) {
+        ++hitCount;
+        boundY();
     }
 
     /**

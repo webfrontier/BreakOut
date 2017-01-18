@@ -145,13 +145,6 @@ public class Breakout {
      * 新しくゲーム開始する
      */
     private void start() {
-        // ボールの状態を初期化する
-        initializeBall();
-
-        // ブロックを生成する
-        createBrick();
-        // 初期位置に配置する
-        initializeBrick();
     }
 
     /**
@@ -423,18 +416,6 @@ public class Breakout {
             ++count;
         }
         return count;
-    }
-
-    /**
-     * パッドとボールの当たり判定
-     *
-     * @param ball 判定対象ボールオブジェクト
-     *
-     * @return true  パッドに当たった
-     * @return false パッドに当たってない
-     */
-    private boolean isHit(Ball ball) {
-        return false;
     }
 
     /**
