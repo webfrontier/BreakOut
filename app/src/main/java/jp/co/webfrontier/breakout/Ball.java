@@ -199,11 +199,11 @@ public class Ball extends Item {
     }
 
     /**
-     * パッドで反射された場合の処理を行う
+     * 他の表示要素との反射処理を行う
      *
-     * @param x 反射対象の中央位置(X座標)
+     * @param item 反射対象の表示要素
      */
-    public void reflect(float x) {
+    public void reflect(Item item) {
         boundY();
     }
 
