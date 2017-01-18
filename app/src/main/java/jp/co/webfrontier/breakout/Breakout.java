@@ -329,7 +329,7 @@ public class Breakout {
              */
             if(ball.isCollided(pad)) {
                 // パッドと衝突したのでボールを反射させる
-                ball.reflect(pad.getCenter().x);
+                ball.reflect(pad);
             }
         }
 
