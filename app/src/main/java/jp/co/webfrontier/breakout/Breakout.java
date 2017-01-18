@@ -258,10 +258,7 @@ public class Breakout {
 
         // パッドを更新する
         pad.update();
-
-        int xCrash; // ブロックとの当たり判定（X方向）
-        int yCrash; // ブロックとの当たり判定（Y方向）
-
+        
         // ボールごとに更新／当たり判定
         for(int i = balls.size()-1; i>=0; i--) {
             Ball ball = balls.get(i);
