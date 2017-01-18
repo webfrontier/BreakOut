@@ -2,12 +2,9 @@ package jp.co.webfrontier.breakout;
 
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ブロック崩しゲームのクラス
@@ -94,24 +91,30 @@ public class Breakout {
     private static final int BRICK_UPPER_SPACE = 100;
 
     /**
-     * ブロックオブジェクトの配列
+     * ブロックの配列
      */
     private Brick[] bricks = new Brick[BRICK_COLS];
 
     /**
-     * ブロック列数
+     * ブロックの列数
      */
     public static final int BRICK_COLS = 6;
 
     /**
-     * パッドオブジェクト
+     * パッド
      */
     private Pad pad = new Pad();
 
     /**
-     * ボールオブジェクトのリスト
+     * ゲームフィールドに出ているボールのリスト
      */
-    private ArrayList<Ball> balls = new ArrayList<>();
+    private ArrayList<Ball> activeBalls = new ArrayList<>();
+
+    /**
+     * ゲームフィールドから出たボールのリスト
+     * 削除処理用
+     */
+    private ArrayList<Ball> deactiveBalls = new ArrayList<>();
 
     /**
      * ボール残数の初期値
@@ -145,6 +148,10 @@ public class Breakout {
      * 新しくゲーム開始する
      */
     private void start() {
+        Log.d(TAG, "ゲームを開始するよ。スタートボタンを押してね。");
+
+        // 描画要素をクリアする
+        view.clearDrawingItems();
     }
 
     /**
@@ -210,9 +217,27 @@ public class Breakout {
                 break;
             case GAMEOVER:
                 // ゲームオーバー
+                switch(newState) {
+                    case READY:
+                        // ゲームオーバー -> 開始可能
+                        // スタートする
+                        start();
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case CLEAR:
                 // ゲームクリア
+                switch(newState) {
+                    case READY:
+                        // ゲームクリア -> 開始可能
+                        // スタートする
+                        start();
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 // 上記以外
@@ -258,27 +283,43 @@ public class Breakout {
 
         // パッドを更新する
         pad.update();
-        
+
+        // ボール削除用のリストをクリア
+        deactiveBalls.clear();
+
         // ボールごとに更新／当たり判定
-        for(int i = balls.size()-1; i>=0; i--) {
-            Ball ball = balls.get(i);
+        for(int i = activeBalls.size()-1; i>=0; i--) {
+            Ball ball = activeBalls.get(i);
             ball.update();
         }
 
-        // ボール残総数を返却
-        int ballCnt = remainingBallCount + balls.size();
-        if(ballCnt > 0) {
+        // ゲームフィールド外に出たボールを削除
+        for(final Ball ball : deactiveBalls) {
+            removeBall(ball);
+        }
+        deactiveBalls.clear();
+
+        // 総ボール数をチェック
+        int ballCount = remainingBallCount + activeBalls.size();
+        if(ballCount > 0) {
             // ボール残数あり
             if(getRemainingBricksCount() == 0) {
                 // ブロックがなくなった状態
                 // ゲームクリア
+                Log.d(TAG, "ゲームクリア！おめでとう！！");
+                setState(State.CLEAR);
             } else {
                 // ブロックがまだ残っている状態
-                // ゲーム継続のため、一定時間待機した後に再度呼び出してもらう
+                if(activeBalls.size() == 0) {
+                    // ゲームフィールドにボールがなくなったので、新たなボールを払い出す
+                    addBall(fieldRect.width()/2, fieldRect.height()/2);
+                }
             }
-        } else if(ballCnt == 0) {
+        } else if(ballCount == 0) {
             // ボールの残数がなくなった状態
             // ゲームオーバー
+            Log.d(TAG, "残念。ゲームオーバーだよ。");
+            setState(State.GAMEOVER);
         }
         // View#invalidateメソッドを呼び再描画を要求する
         view.invalidate();
@@ -328,10 +369,6 @@ public class Breakout {
         pad.setCenter(x, y);
     }
 
-    public ArrayList<Ball> getBalls() {
-        return balls;
-    }
-
     /**
      * 新しいボールをゲームフィールドへ追加する
      *
@@ -344,7 +381,7 @@ public class Breakout {
         // ボール残数があるときのみ、ボールを追加する
         if(remainingBallCount > 0) {
             Ball ball = new Ball(x, y);
-            balls.add(ball);
+            activeBalls.add(ball);
             view.addDrawingItem(ball);
             remainingBallCount--;
             ret = true;
@@ -354,6 +391,16 @@ public class Breakout {
     }
 
     /**
+     * ボールをゲームフィールドから取り除く
+     *
+     * @param ball ゲームフィールドから削除するボール
+     */
+    private void removeBall(Ball ball) {
+        activeBalls.remove(ball);
+        view.removeDrawingItem(ball);
+    }
+
+     /**
      * ボールの状態を初期化する
      */
     private void initializeBall() {
@@ -361,20 +408,7 @@ public class Breakout {
         remainingBallCount = DEFAULT_REMAINING_BALLS;
 
         // ゲームフィールドにあるボールをクリア
-        balls.clear();
-    }
-
-    /**
-     * ゲームフィールド上のボール有無
-     *
-     * @return true:ボールあり／false ボールなし
-     */
-    public boolean isBallinField() {
-        return (balls.size() > 0);
-    }
-
-    public Brick[] getBricks() {
-        return bricks;
+        activeBalls.clear();
     }
 
     /**
@@ -403,14 +437,25 @@ public class Breakout {
     }
 
     /**
+     * 残ボール数の取得
+     *
+     * @return 残ボール数
+     */
+    public int getRemainingBallCount() {
+        return remainingBallCount;
+    }
+
+    /**
      * 残ブロック数取得
      *
      * @return 残ブロック数
      */
     public int getRemainingBricksCount() {
         int count = 0;
-        for(int col = 0; col < BRICK_COLS; col++) {
-            ++count;
+        for(final Brick brick : bricks) {
+            if(brick.isUnBroken()) {
+                ++count;
+            }
         }
         return count;
     }

@@ -140,6 +140,14 @@ public class BreakoutView extends View {
     }
 
     /**
+     * 描画要素のリストを空にする
+     */
+    public void clearDrawingItems()
+    {
+        drawableItems.clear();
+    }
+
+    /**
      * Viewのサイズが変更された場合にシステムから呼ばれるメソッド
      * コンストラクタ、初期化処理時にはViewのサイズが不定のため、View#onSizeChangedメソッドをオーバーライドして処理する
      *
@@ -161,6 +169,24 @@ public class BreakoutView extends View {
 
         // ゲームフィールドの領域変更を通知
         game.onGameFieldSizeChanged(new Rect(0, 0, displayRect.width(), displayRect.height() - STATUS_H));
+
+        // 残りボール数の表示
+        showRemainingBallCount();
+
+        // 残りブロック数の表示
+        showRemainingBrickCount();
+    }
+
+    /**
+     * 残り(ゲームフィールドに出ていない)のボール数の表示
+     */
+    private void showRemainingBallCount() {
+    }
+
+    /**
+     * 残りのブロック数を表示する
+     */
+    private void showRemainingBrickCount() {
     }
 
     /**
@@ -173,15 +199,22 @@ public class BreakoutView extends View {
      */
     @Override
     public void onDraw(Canvas canvas) {
-        // 1. ステータス領域の色を設定する
+        // 1. ステータス領域を描画する
+        // 色を設定する
         canvas.drawColor(STS_BG_COLOR);
+
+        // 残りボール数の表示
+        showRemainingBallCount();
+
+        // 残りブロック数の表示
+        showRemainingBrickCount();
 
         // 2. ゲームフィールドを描画する
         canvas.drawRect(displayRect.left, STATUS_H, displayRect.width(), displayRect.height(), painter);
 
-        // 3. 描画要素を描画する
+        // ゲームフィールド内の描画要素を描画する
         for(final Item item : drawableItems) {
-            // 座標系を変換して描画する必要があるため原点を渡す
+            // キャンバスの座標系に変換して描画する必要があるためオフセット値を渡す
             item.draw(canvas, displayRect.left, STATUS_H);
         }
     }
