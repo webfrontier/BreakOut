@@ -1,6 +1,7 @@
 package jp.co.webfrontier.breakout;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -191,12 +193,24 @@ public class BreakoutView extends View {
      * 残り(ゲームフィールドに出ていない)のボール数の表示
      */
     private void showRemainingBallCount() {
+        TextView tv = (TextView)getRootView().findViewById(R.id.remaining_balls);
+        if(tv != null) {
+            Resources resource = getContext().getResources();
+            CharSequence newMessage = resource.getText(R.string.remaining_ball_count);
+            tv.setText(newMessage + Integer.toString(game.getRemainingBallCount()));
+        }
     }
 
     /**
      * 残りのブロック数を表示する
      */
     private void showRemainingBrickCount() {
+        TextView tv = (TextView)getRootView().findViewById(R.id.remaining_bricks);
+        if(tv != null) {
+            Resources resource = getContext().getResources();
+            CharSequence newMessage = resource.getText(R.string.remaining_brick_count);
+            tv.setText(newMessage + Integer.toString(game.getRemainingBricksCount()));
+        }
     }
 
     /**

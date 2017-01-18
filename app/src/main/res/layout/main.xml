@@ -19,6 +19,26 @@
             android:layout_width="450px"
             android:layout_height="240px">
 
+            <TextView
+                android:id="@+id/remaining_balls"
+                android:text="@string/remaining_ball_count"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/remaining_bricks"
+                android:text="@string/remaining_brick_count"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
         </LinearLayout>
 
         <Button
