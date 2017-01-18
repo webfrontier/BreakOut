@@ -325,6 +325,20 @@ public class BreakoutView extends View {
             // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
             game.setState(Breakout.State.READY);
         }
+
+        /**
+         * B-06．パッドとボールを動かす
+         * 当たり判定は考慮せずパッドとボールを動かす
+         * フレームの更新(フレームレート60fps)/描画処理などの話をする
+         */
+        if(game.getState() != Breakout.State.RUNNING) {
+            // ゲームが実行状態でない場合はパッドを動かさない
+            return;
+        }
+
+        final Point p = game.getPadPosition();
+        // パッドは水平に移動させたいので、Y座標は変えない
+        game.movePad((int)x, p.y);
     }
 
     /**
