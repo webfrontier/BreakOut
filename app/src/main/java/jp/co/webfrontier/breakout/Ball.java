@@ -203,7 +203,7 @@ public class Ball extends Item {
      *
      * @param x 反射対象の中央位置(X座標)
      */
-    public void reflectByPad(float x) {
+    public void reflect(float x) {
         boundY();
     }
 
