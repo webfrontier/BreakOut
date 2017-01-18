@@ -356,7 +356,7 @@ public class Breakout {
                 // 速度反転
                 ball.boundY();
             }
-            
+
             if(!ball.getRect().intersects(fieldRect.left, fieldRect.top, fieldRect.right, fieldRect.bottom)) {
                 // ボールがゲームフィールド外に出たら、後で消すために削除処理用のリストに登録
                 deactiveBalls.add(ball);
