@@ -56,6 +56,17 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
+        <TextView
+            android:id="@+id/game_state_message"
+            android:text="@string/game_ready_message"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:textColor="#ff8888ff"
+            android:textSize="24sp"/>
+
     </RelativeLayout>
 
 </FrameLayout>
