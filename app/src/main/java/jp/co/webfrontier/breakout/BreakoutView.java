@@ -190,6 +190,19 @@ public class BreakoutView extends View {
     }
 
     /**
+     * ゲームの状態に応じたメッセージを表示する
+     *
+     */
+    public void showStateMessage() {
+    }
+
+    /**
+     * ゲームの状態に応じたメッセージを非表示にする
+     */
+    public void hideStateMessage() {
+    }
+
+    /**
      * Viewの描画処理を行う
      * View#invalidateメソッドを呼び出すとシステムから呼ばれる
      * ステータス領域、ゲームフィールドを描画する
@@ -223,6 +236,12 @@ public class BreakoutView extends View {
      * ゲームフィールドがタッチされたときの処理
      */
     public void onTouch(final float x, final float y) {
+        if(game.getState() == Breakout.State.GAMEOVER
+                || game.getState() == Breakout.State.CLEAR) {
+            // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
+            game.setState(Breakout.State.READY);
+            return;
+        }
     }
 
     /**
