@@ -617,7 +617,7 @@ public class Breakout {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
                 /** B-13．ブロックを複数行にする
-                 *  二次元配列を作る
+                 *  複数行にした場合の表示位置を調整する
                  */
                 brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
