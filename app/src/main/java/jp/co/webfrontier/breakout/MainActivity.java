@@ -146,11 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "ビューがクリックされたよ");
 
         /**
-<<<<<<< ec37c11b1e464f4117553d904ce4444ac2e03a57
          * B-05．スタートボタンを作成する
-=======
-         * B-04．スタートボタンを作成する
->>>>>>> B-04．スタートボタンを作成する
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
