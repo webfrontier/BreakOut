@@ -1,5 +1,6 @@
 package jp.co.webfrontier.breakout;
 
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -71,6 +73,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         Button btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
+        /**
+         * B-14．BLEデバイスと接続してパッド操作を行う
+         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+         * ボタンのラベルを文字列リソースとして定義し表示させる
+         * MainActivity#onClickメソッドをリスナーとして登録する
+         * MainActivity#onClickメソッドからBT接続を行う
+         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
+         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
+         */
+        btn = (Button) findViewById(R.id.bt_btn);
+        // デバイスがBLEに対応しているかを確認する.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            // BLEに対応していない旨のToastやダイアログを表示する.
+            // BLE非対応のため、無効化
+            btn.setEnabled(false);
+        } else {
+            btn.setOnClickListener(this);
+        }
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
@@ -156,6 +176,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.start_btn:
                 // スタートボタン
                 breakoutView.onPushStartButton();
+                break;
+            /**
+             * B-14．BLEデバイスと接続してパッド操作を行う
+             * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+             * ボタンのラベルを文字列リソースとして定義し表示させる
+             * MainActivity#onClickメソッドをリスナーとして登録する
+             * MainActivity#onClickメソッドからBT接続を行う
+             * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
+             * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
+             */
+            case R.id.bt_btn:
+                // BT接続
+                if(blueNinjaController.isConnected()) {
+                    blueNinjaController.disconnectBle();
+                } else {
+                    blueNinjaController.connectBle();
+                }
                 break;
             default:
                 break;
@@ -244,5 +281,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param dataObject 受信データ(Json)
      */
     @Override
-    public void onBLEDataReceived(JSONObject dataObject) {}
+    public void onBLEDataReceived(JSONObject dataObject) {
+        /**
+         * B-14．BLEデバイスと接続してパッド操作を行う
+         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+         * ボタンのラベルを文字列リソースとして定義し表示させる
+         * MainActivity#onClickメソッドをリスナーとして登録する
+         * MainActivity#onClickメソッドからBT接続を行う
+         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
+         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
+         */
+        try {
+            // 通知されるデータからX軸方向の加速度を抽出
+            final double ax = dataObject.getDouble("ax");
+            // パッドの移動量を決める
+            // パッドは水平に移動させたいので、Y座標は変えない
+            breakoutView.movePad((float)ax*50, 0);
+        } catch(JSONException e) {
+            Log.d(TAG, "BlueNinjaからのデータが不正です");
+        }
+    }
 }
