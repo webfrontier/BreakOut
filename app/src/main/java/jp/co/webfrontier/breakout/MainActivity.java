@@ -1,20 +1,13 @@
 package jp.co.webfrontier.breakout;
 
-import android.content.pm.PackageManager;
-import android.graphics.Rect;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ブロック崩しアプリのメインアクティビティ
@@ -129,12 +122,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case MotionEvent.ACTION_UP: // 指を持ち上げた場合
                 Log.d(TAG, "発生したアクションはACTION_UPだよ");
+                breakoutView.onTouch(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_MOVE: // 指を持ち上げずにスライドさせた場合
                 Log.d(TAG, "発生したアクションはACTION_MOVEだよ");
                 if(!blueNinjaController.isConnected()) {
                     // BLE機器未接続の場合はタッチによるパッド操作を行う
-                    breakoutView.onTouch(event.getX(), event.getY());
+                    final Point p = breakoutView.getPadPosition();
+                    // 水平方向にのみ移動させたい
+                    breakoutView.movePad(event.getX() - p.x, 0);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL: // UP+DOWNの同時発生(＝キャンセル)の場合

@@ -233,6 +233,30 @@ public class BreakoutView extends View {
     }
 
     /**
+     * 現在のパッドの位置を取得する
+     *
+     * @return パッドの中心座標
+     */
+    public Point getPadPosition() {
+        final Point c = game.getPadPosition();
+        Point p = new Point(c.x, c.y);
+        p.offset(displayRect.left, STATUS_H);
+
+        return p;
+    }
+
+    /**
+     * パッドを移動させる
+     * ゲームが実行状態出ない場合はパッドを移動させない
+     * 移動後もパッドは必ずゲームフィールド内に全て表示される
+     *
+     * @param dx X方向の移動量
+     * @param dy Y方向の移動量
+     */
+    public void movePad(final float dx, final float dy) {
+    }
+
+    /**
      * ゲームフィールドがタッチされたときの処理
      */
     public void onTouch(final float x, final float y) {
@@ -240,7 +264,6 @@ public class BreakoutView extends View {
                 || game.getState() == Breakout.State.CLEAR) {
             // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
             game.setState(Breakout.State.READY);
-            return;
         }
     }
 

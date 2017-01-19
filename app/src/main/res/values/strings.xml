@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ブロック崩しゲーム</string>
+    <!-- Toast Message -->
+    <string name="msg_gatt_connect_fail">"BLE機器が切断されました"</string>
 </resources>
