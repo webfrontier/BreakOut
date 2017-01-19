@@ -398,7 +398,7 @@ public class Breakout {
 
             /**
              * B-10．ブロックの破壊とボールの反射を行う
-             *
+             * 
              */
             for(int row = 0; row < BRICK_ROW; row++) {
                 for(int col = 0; col < BRICK_COL; col++) {
