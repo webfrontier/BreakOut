@@ -218,12 +218,49 @@ public class BreakoutView extends View {
      *
      */
     public void showStateMessage() {
+        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
+         * ゲームの開始が可能になったらスタート画面を出す
+         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
+         * ブロックを全て消したらゲームクリア
+         * 全てのボールがゲームフィールド外に出たらゲームオーバー
+         */
+        TextView tv = (TextView)getRootView().findViewById(R.id.game_state_message);
+        if(tv != null) {
+            Breakout.State state = game.getState();
+            switch(state) {
+                case READY:
+                    tv.setText(R.string.game_ready_message);
+                    break;
+                case PAUSING:
+                    tv.setText(R.string.game_pause_message);
+                    break;
+                case GAMEOVER:
+                    tv.setText(R.string.game_over_message);
+                    break;
+                case CLEAR:
+                    tv.setText(R.string.game_clear_message);
+                    break;
+                default:
+                    break;
+            }
+            tv.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
      * ゲームの状態に応じたメッセージを非表示にする
      */
     public void hideStateMessage() {
+        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
+         * ゲームの開始が可能になったらスタート画面を出す
+         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
+         * ブロックを全て消したらゲームクリア
+         * 全てのボールがゲームフィールド外に出たらゲームオーバー
+         */
+        TextView tv = (TextView)getRootView().findViewById(R.id.game_state_message);
+        if(tv != null) {
+            tv.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
