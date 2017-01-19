@@ -5,4 +5,8 @@
     <string name="start_btn">スタート</string>
     <string name="remaining_ball_count">残りのボール：</string>
     <string name="remaining_brick_count">残りブロック：</string>
+    <string name="game_ready_message">スタートボタンを押してね</string>
+    <string name="game_pause_message">一時停止中</string>
+    <string name="game_over_message">ゲームオーバー</string>
+    <string name="game_clear_message">ゲームクリア！！</string>
 </resources>
