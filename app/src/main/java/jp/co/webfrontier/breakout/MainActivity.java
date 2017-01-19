@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         blueNinjaController.init();
 
         /**
-         * B-04．スタートボタンを作成する
+         * B-05．スタートボタンを作成する
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(TAG, "ビューがクリックされたよ");
 
         /**
-         * B-04．スタートボタンを作成する
+         * B-05．スタートボタンを作成する
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
