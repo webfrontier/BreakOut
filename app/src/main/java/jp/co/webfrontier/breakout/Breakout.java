@@ -613,10 +613,13 @@ public class Breakout {
         int brick_h = fieldRect.height() / 30;
 
         for(int row = 0; row < BRICK_ROW; row++) {
-            for (int col = 0; col < BRICK_COL; col++) {
+            for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                brick.move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
+                /** B-13．ブロックを複数行にする
+                 *  複数行にした場合の表示位置を調整する
+                 */
+                brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
             }
         }
