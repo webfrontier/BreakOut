@@ -94,7 +94,10 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    public static final int BRICK_ROW = 1;
+    /** B-13．ブロックを複数行にする
+     *  二次元配列を作る
+     */
+    public static final int BRICK_ROW = 5;
 
     /**
      * ブロックの列数
@@ -397,11 +400,14 @@ public class Breakout {
              * B-10．ブロックの破壊とボールの反射を行う
              *
              */
-            for(final Brick brick : bricks) {
-                if(brick.isUnBroken() && ball.isCollided(brick)) {
-                    // ブロックと衝突したのでブロックを破壊しボールを反射させる
-                    brick.crash();
-                    ball.reflect(brick);
+            for(int row = 0; row < BRICK_ROW; row++) {
+                for(int col = 0; col < BRICK_COL; col++) {
+                    final Brick brick = bricks[row][col];
+                    if(brick.isUnBroken() && ball.isCollided(brick)) {
+                        // ブロックと衝突したのでブロックを破壊しボールを反射させる
+                        brick.crash();
+                        ball.reflect(brick);
+                    }
                 }
             }
 
@@ -610,7 +616,10 @@ public class Breakout {
             for (int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                brick.move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
+                /** B-13．ブロックを複数行にする
+                 *  二次元配列を作る
+                 */
+                brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
             }
         }
