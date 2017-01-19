@@ -396,8 +396,9 @@ public class Breakout {
             Ball ball = activeBalls.get(i);
             ball.update();
 
-            /** B-13．ブロックを複数行にする
-             *  二次元配列を作る
+            /**
+             * B-10．ブロックの破壊とボールの反射を行う
+             *
              */
             for(int row = 0; row < BRICK_ROW; row++) {
                 for(int col = 0; col < BRICK_COL; col++) {
@@ -615,6 +616,9 @@ public class Breakout {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
+                /** B-13．ブロックを複数行にする
+                 *  二次元配列を作る
+                 */
                 brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
             }
