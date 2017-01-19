@@ -9,4 +9,5 @@
     <string name="game_pause_message">一時停止中</string>
     <string name="game_over_message">ゲームオーバー</string>
     <string name="game_clear_message">ゲームクリア！！</string>
+    <string name="bt_btn">接続</string>
 </resources>
