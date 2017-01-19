@@ -91,15 +91,20 @@ public class Breakout {
     private static final int BRICK_UPPER_SPACE = 100;
 
     /**
-     * ブロックの配列
+     * ブロックの行数
      */
-    private Brick[] bricks = new Brick[BRICK_COLS];
+    public static final int BRICK_ROW = 1;
 
     /**
      * ブロックの列数
      */
-    public static final int BRICK_COLS = 6;
+    public static final int BRICK_COL = 6;
 
+    /**
+     * ブロックの配列
+     */
+    private Brick[] bricks = new Brick[BRICK_COL];
+    
     /**
      * パッド
      */
@@ -415,7 +420,7 @@ public class Breakout {
      * ブロックを生成する
      */
     private void createBrick() {
-        for (int col = 0; col < BRICK_COLS; col++) {
+        for (int col = 0; col < BRICK_COL; col++) {
             bricks[col] = new BrickNormal();
         }
     }
@@ -426,10 +431,10 @@ public class Breakout {
      */
     public void initializeBrick() {
         // ゲームフィールドの大きさから1つあたりのブロックの大きさを設定する
-        int brick_w = fieldRect.width() / BRICK_COLS;
+        int brick_w = fieldRect.width() / BRICK_COL;
         int brick_h = fieldRect.height() / 30;
 
-        for (int col = 0; col < BRICK_COLS; col++) {
+        for (int col = 0; col < BRICK_COL; col++) {
             bricks[col].setSize(brick_w, brick_h);
             bricks[col].move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
             view.addDrawingItem(bricks[col]);
