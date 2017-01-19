@@ -94,7 +94,10 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    public static final int BRICK_ROW = 1;
+    /** B-13．ブロックを複数行にする
+     *  二次元配列を作る
+     */
+    public static final int BRICK_ROW = 5;
 
     /**
      * ブロックの列数
@@ -610,10 +613,10 @@ public class Breakout {
         int brick_h = fieldRect.height() / 30;
 
         for(int row = 0; row < BRICK_ROW; row++) {
-            for (int col = 0; col < BRICK_COL; col++) {
+            for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                brick.move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
+                brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
             }
         }
