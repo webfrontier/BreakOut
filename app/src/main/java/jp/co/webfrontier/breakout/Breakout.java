@@ -399,9 +399,8 @@ public class Breakout {
             Ball ball = activeBalls.get(i);
             ball.update();
 
-            /**
-             * B-10．ブロックの破壊とボールの反射を行う
-             *
+            /** B-13．ブロックを複数行にする
+             *  二次元配列を作る
              */
             /** B-13．ブロックを複数行にする
              *  二次元配列を作る
