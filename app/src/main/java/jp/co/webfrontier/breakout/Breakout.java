@@ -94,7 +94,10 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    public static final int BRICK_ROW = 1;
+    /** B-13．ブロックを複数行にする
+     *  二次元配列を作る
+     */
+    public static final int BRICK_ROW = 5;
 
     /**
      * ブロックの列数
