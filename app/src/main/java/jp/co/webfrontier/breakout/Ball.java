@@ -172,7 +172,7 @@ public class Ball extends Item {
      *
      * @param ySpeed ボールのX方向の速度
      */
-    public void setYSpeed(float ySpeed) { this.xSpeed = ySpeed; }
+    public void setYSpeed(float ySpeed) { this.ySpeed = ySpeed; }
 
     /**
      * ボールの状態の更新を行う
@@ -195,7 +195,7 @@ public class Ball extends Item {
      */
     @Override
     public void draw(Canvas canvas, int x, int y) {
-        canvas.drawCircle(x + center.x + r, y + center.y + r, r, painter);
+        canvas.drawCircle(x + center.x, y + center.y, r, painter);
     }
 
     /**

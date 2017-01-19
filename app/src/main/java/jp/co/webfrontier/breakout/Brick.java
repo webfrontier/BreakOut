@@ -114,6 +114,8 @@ abstract class Brick extends Item {
     public Brick(int x,int y) {
         this.rect.set(x, y, x + WIDTH, y + HEIGHT);
         painter.setColor(getColor());
+        center.x = x + WIDTH/2;
+        center.y = y + HEIGHT/2;
     }
 
     /**
