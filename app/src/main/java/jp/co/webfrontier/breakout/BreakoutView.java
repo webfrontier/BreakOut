@@ -256,17 +256,6 @@ public class BreakoutView extends View {
     }
 
     /**
-     * パッドを移動させる
-     * ゲームが実行状態出ない場合はパッドを移動させない
-     * 移動後もパッドは必ずゲームフィールド内に全て表示される
-     *
-     * @param dx X方向の移動量
-     * @param dy Y方向の移動量
-     */
-    public void movePad(final float dx, final float dy) {
-    }
-
-    /**
      * パッドの色を取得する
      *
      * @return パッドの色
@@ -285,14 +274,14 @@ public class BreakoutView extends View {
     }
 
     /**
-     * ゲームフィールドがタッチされたときの処理
+     * パッドを移動させる
+     * ゲームが実行状態出ない場合はパッドを移動させない
+     * 移動後もパッドは必ずゲームフィールド内に全て表示される
+     *
+     * @param dx X方向の移動量
+     * @param dy Y方向の移動量
      */
-    public void onTouch(final float x, final float y) {
-        if(game.getState() == Breakout.State.GAMEOVER
-                || game.getState() == Breakout.State.CLEAR) {
-            // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
-            game.setState(Breakout.State.READY);
-        }
+    public void movePad(final float dx, final float dy) {
 
         /**
          * B-06．パッドとボールを動かす
@@ -304,9 +293,38 @@ public class BreakoutView extends View {
             return;
         }
 
-        final Point p = game.getPadPosition();
-        // パッドは水平に移動させたいので、Y座標は変えない
-        game.movePad((int)x, p.y);
+        // パッドがゲームフィールド内に全て表示されるようにする
+        final Pad pad = game.getPad();
+        float px = pad.getCenter().x + dx;
+        float py = pad.getCenter().y + dy;
+        float pw = pad.getWidth();
+        float ph = pad.getHeight();
+
+        // X方向
+        if(px < pw/2) {
+            px = pw/2;
+        } else if(px > game.getGameFieldRect().width() - pw/2) {
+            px = game.getGameFieldRect().width() - pw/2;
+        }
+        // Y方向
+        if(py < ph/2) {
+            py = ph/2;
+        } else if(py > game.getGameFieldRect().height() - ph/2) {
+            py = game.getGameFieldRect().height() - ph/2;
+        }
+
+        game.movePad((int)px, (int)py);
+    }
+
+    /**
+     * ゲームフィールドがタッチされたときの処理
+     */
+    public void onTouch(final float x, final float y) {
+        if(game.getState() == Breakout.State.GAMEOVER
+                || game.getState() == Breakout.State.CLEAR) {
+            // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
+            game.setState(Breakout.State.READY);
+        }
     }
 
     /**
