@@ -282,7 +282,6 @@ public class BreakoutView extends View {
      * @param dy Y方向の移動量
      */
     public void movePad(final float dx, final float dy) {
-
         /**
          * B-06．パッドとボールを動かす
          * 当たり判定は考慮せずパッドとボールを動かす
@@ -315,7 +314,7 @@ public class BreakoutView extends View {
 
         game.movePad((int)px, (int)py);
     }
-
+    
     /**
      * ゲームフィールドがタッチされたときの処理
      */
