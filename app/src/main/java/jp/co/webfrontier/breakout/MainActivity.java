@@ -156,9 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param connected BLE機器接続状態
      */
     @Override
-    public void onBLEConnectionStatusChanged(boolean connected) {
-        breakoutView.invalidate();
-    }
+    public void onBLEConnectionStatusChanged(boolean connected) {}
 
     /**
      * BLE機器からのデータ受信
@@ -166,7 +164,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param dataObject 受信データ(Json)
      */
     @Override
-    public void onBLEDataReceived(JSONObject dataObject) {
-
-    }
+    public void onBLEDataReceived(JSONObject dataObject) {}
 }

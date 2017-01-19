@@ -1,6 +1,5 @@
 package jp.co.webfrontier.breakout;
 
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -16,16 +15,10 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -36,16 +29,16 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * BLE(BlueNinja)接続制御クラス [Task 13] BLE接続
+ * BLE(BlueNinja)接続制御クラス
  */
 public class BlueNinjaController {
     /**
      * デバッグログ用タグ
      */
-    private static final String TAG = "BleActivity";
+    private static final String TAG = "BlueNinjaController";
 
     /**
-     * BlueNinja接続先デバイス名
+     * 接続先のBlueNinjaデバイス名
      */
     private static final String DEFAULT_DEVICE_NAME = "SINOBI";
 
@@ -73,120 +66,144 @@ public class BlueNinjaController {
 
     // メッセージ種別
     private enum MsgType {
-        BLE_STATUS_CHANGE,  // BLE状態変化
-        MESSAGE_SEND,       // メッセージ送信
-        INVALID;
+        INVALID("不正", -1),
+        BLE_STATUS_CHANGE("BLE状態変化", 0),
+        MESSAGE_SEND("メッセージ送信", 1);
 
-        public static MsgType cast(int value) {
-            MsgType[] enumArray = MsgType.values();
-            for(MsgType type : enumArray) {
-                if(type.ordinal() == value) {
+        private final String name;
+        /**
+         * 状態値
+         */
+        private final int value;
+
+        /**
+         * コンストラクタ
+         *
+         * @param name 状態名
+         * @param value 状態の値
+         */
+        private MsgType(final String name, final int value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+
+        /**
+         * メッセージの値を取得する
+         *
+         * @return 状態値
+         */
+        public int getValue()
+        {
+            return value;
+        }
+
+        /**
+         * Enumを取得する
+         *
+         * @param value Enumの数値
+         * @return Enum
+         */
+        public static MsgType getEnum(final int value) {
+            MsgType[] types = MsgType.values();
+            for (MsgType type : types) {
+                if (type.getValue() == value) {
                     return type;
                 }
             }
-
-            // 範囲外の値
-            Log.e(TAG, "cast(INVALID)");
-            return INVALID;
+            return MsgType.INVALID;
         }
     }
 
     /**
      * BLE接続状態
      */
-    private enum BleStatus {
-        DISCONNECTED,       // 切断
-        SCANNING,           // 検索中
-        SCAN_FAILED,        // 検索失敗
-        DEVICE_FOUND,       // デバイス検出
-        CONNECTING,         // 接続中
-        CONNECTED,          // 接続済み
-        SERVICE_NOT_FOUND,  // サービスなし
-        SERVICE_FOUND,      // サービス検出
-        INVALID;
+    private enum BLEStatus {
+        INVALID("無効", -1),
+        DISCONNECTED("切断", 0),
+        SCANNING("検索中", 1),
+        SCAN_FAILED("検索失敗", 2),
+        DEVICE_FOUND("デバイス検出", 3),
+        CONNECTING("接続中", 4),
+        CONNECTED("接続済み", 5),
+        SERVICE_NOT_FOUND("サービスなし", 6),
+        SERVICE_FOUND("サービス検出", 7);
 
-        public static BleStatus cast(int value) {
-            BleStatus[] enumArray = BleStatus.values();
-            for(BleStatus status : enumArray) {
-                if(status.ordinal() == value) {
+        private final String name;
+        /**
+         * 状態値
+         */
+        private final int value;
+
+        /**
+         * コンストラクタ
+         *
+         * @param name 状態名
+         * @param value 状態の値
+         */
+        private BLEStatus(final String name, final int value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+
+        /**
+         * 状態値を取得する
+         *
+         * @return 状態値
+         */
+        public int getValue()
+        {
+            return value;
+        }
+
+        /**
+         * Enumを取得する
+         *
+         * @param value Enumの数値
+         * @return 状態値
+         */
+        public static BLEStatus getEnum(final int value) {
+            BLEStatus[] statuses = BLEStatus.values();
+            for (BLEStatus status : statuses) {
+                if (status.getValue() == value) {
                     return status;
                 }
             }
-
-            // 範囲外の値
-            Log.e(TAG, "cast(INVALID)");
-            return INVALID;
+            return BLEStatus.INVALID;
         }
     }
     /**
      * BLE接続状態
      */
-    private BleStatus mStatus = BleStatus.DISCONNECTED;
+    private BLEStatus status = BLEStatus.INVALID;
 
     /**
      * メインアクティビティ
      */
-    private MainActivity mMainActivity;
+    private MainActivity activity;
     /**
      * BLE関連
      */
-    private BluetoothLeScanner mBluetoothLeScanner = null;
-    private BluetoothGatt mBluetoothGatt = null;
+    private BluetoothLeScanner bluetoothLeScanner = null;
+    private BluetoothGatt bluetoothGatt = null;
 
     /**
-     * ブロック崩しアクティビティインスタンス登録
+     * コンストラクタ
      *
-     * @param activity ブロック崩しアクティビティインスタンス
+     * @param activity アクティビティインスタンス
      */
     public BlueNinjaController(MainActivity activity)
     {
-        mMainActivity = activity;
+        this.activity = activity;
     }
 
     /**
      * 初期化処理
      */
     public void init() {
-
         // 初期化
-        mStatus = BleStatus.DISCONNECTED;
-    }
-
-    /**
-     * 接続デバイス名入力ダイアログ表示
-     */
-    public void showDialog() {
-
-        // カスタムビューを設定
-        LayoutInflater inflater = (LayoutInflater) mMainActivity.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-        final View layout = inflater.inflate(R.layout.ble_dialog,
-                (ViewGroup) mMainActivity.findViewById(R.id.ble_dialog));
-
-        // アラートダイアログ を生成
-        AlertDialog.Builder builder = new AlertDialog.Builder(mMainActivity);
-        builder.setTitle("BLE Connect");
-        ((EditText) layout.findViewById(R.id.bleDlg_name)).setText(DEFAULT_DEVICE_NAME);
-        builder.setView(layout);
-        builder.setPositiveButton("Connect", new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Connect ボタンクリック処理
-                EditText nameText
-                        = (EditText) layout.findViewById(R.id.bleDlg_name);
-                String name = nameText.getText().toString();
-
-                connectBle(name);
-            }
-        });
-        builder.setNegativeButton("Cancel", new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Cancel ボタンクリック処理
-                stopScan();
-            }
-        });
-
-        // 表示
-        builder.create().show();
+        status = BLEStatus.DISCONNECTED;
     }
 
     /**
@@ -196,7 +213,7 @@ public class BlueNinjaController {
      * @retval false 非接続
      */
     public boolean isConnected() {
-        return (mStatus == BleStatus.CONNECTED);
+        return (status == BLEStatus.CONNECTED);
     }
 
     /**
@@ -206,7 +223,7 @@ public class BlueNinjaController {
      * @retval false 未検索
      */
     public boolean isScanning() {
-        return (mStatus == BleStatus.SCANNING);
+        return (status == BLEStatus.SCANNING);
     }
 
     /**
@@ -226,12 +243,12 @@ public class BlueNinjaController {
 
         // Initializes Bluetooth adapter.
         final BluetoothManager bluetoothManager =
-                (BluetoothManager) mMainActivity.getSystemService(Context.BLUETOOTH_SERVICE);
+                (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
 
         // BLEサポートバージョン判定
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
-            mBluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+            bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 
             // 機器検索
             scanLeDevice(true, deviceName);
@@ -246,15 +263,15 @@ public class BlueNinjaController {
     public void disconnectBle() {
         Log.d(TAG, "disconnectBle()");
 
-        if(mBluetoothGatt != null) {
-            mBluetoothGatt.disconnect();
+        if(bluetoothGatt != null) {
+            bluetoothGatt.disconnect();
         }
     }
 
     /**
      * 機器検索ハンドラ
      */
-    private Handler mScanHandler = new Handler();
+    private Handler scanHandler = new Handler();
 
     /**
      * Device検索
@@ -267,7 +284,7 @@ public class BlueNinjaController {
 
         if (enable) {
             // Stops scanning after a pre-defined scan period.
-            mScanHandler.postDelayed(new Runnable() {
+            scanHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     stopScan();
@@ -292,7 +309,7 @@ public class BlueNinjaController {
 
         if (deviceName == null) {
             // 全BLE機器検索
-            mBluetoothLeScanner.startScan(mScanCallback);
+            bluetoothLeScanner.startScan(scanCallback);
         } else {
             // BLE機器名指定検索
             ScanFilter scanFilter =
@@ -307,10 +324,10 @@ public class BlueNinjaController {
                             .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
                             .build();
 
-            mBluetoothLeScanner.startScan(scanFilterList, scanSettings, mScanCallback);
+            bluetoothLeScanner.startScan(scanFilterList, scanSettings, scanCallback);
         }
 
-        setStatus(BleStatus.SCANNING);
+        setStatus(BLEStatus.SCANNING);
     }
 
     /**
@@ -319,16 +336,16 @@ public class BlueNinjaController {
     private void stopScan() {
         Log.d(TAG, "stopScan()");
         if(isScanning()) {
-            mBluetoothLeScanner.stopScan(mScanCallback);
-            mScanHandler.removeCallbacksAndMessages(null);
-            setStatus(BleStatus.DISCONNECTED);
+            bluetoothLeScanner.stopScan(scanCallback);
+            scanHandler.removeCallbacksAndMessages(null);
+            setStatus(BLEStatus.DISCONNECTED);
         }
     }
 
     /**
      * 機器検索結果応答コールバック
      */
-    final ScanCallback mScanCallback = new ScanCallback() {
+    final ScanCallback scanCallback = new ScanCallback() {
         /**
          * 機器検索結果応答
          *
@@ -346,8 +363,8 @@ public class BlueNinjaController {
             stopScan();
 
             // Bluetooth機器とGATT接続する
-            mBluetoothGatt = bluetoothDevice.connectGatt(mMainActivity.getApplicationContext(), false, mGattCallback);
-            if(mBluetoothGatt.connect()) {
+            bluetoothGatt = bluetoothDevice.connectGatt(activity.getApplicationContext(), false, gattCallback);
+            if(bluetoothGatt.connect()) {
                 Log.d(TAG, "GATT connected. discoverServices");
             }
         }
@@ -378,7 +395,7 @@ public class BlueNinjaController {
     /**
      * GATT接続応答コールバック
      */
-    private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+    private BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
         /**
          * 接続状態変化応答
          *
@@ -391,16 +408,19 @@ public class BlueNinjaController {
             super.onConnectionStateChange(gatt, status, newState);
             Log.d(TAG, "onConnectionStateChange(" + status + " -> " + newState + ")");
             if ((newState == BluetoothProfile.STATE_CONNECTED) || (newState == BluetoothProfile.STATE_CONNECTING)) {
-                mBluetoothGatt = gatt;
+                bluetoothGatt = gatt;
                 // サービス検索
-                mBluetoothGatt.discoverServices();
+                bluetoothGatt.discoverServices();
             } else {
                 gatt.close();
 
                 // GATT通信から切断された
-                mBluetoothGatt = null;
+                bluetoothGatt = null;
 
-                setStatus(BleStatus.DISCONNECTED);
+                setStatus(BLEStatus.DISCONNECTED);
+
+                //トーストを表示する
+                showToast(R.string.msg_gatt_connect_fail);
             }
         }
 
@@ -418,7 +438,7 @@ public class BlueNinjaController {
             List<BluetoothGattService> gattServices = gatt.getServices();
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 // 検索成功
-                setStatus(BleStatus.SERVICE_FOUND);
+                setStatus(BLEStatus.SERVICE_FOUND);
                 for(BluetoothGattService gattService : gattServices) {
                     /* サービス */
 //                    Log.d(TAG, "Service_UUID: " + gattService.getUuid());
@@ -447,7 +467,7 @@ public class BlueNinjaController {
                         // Notification を要求する
                         if (gatt.setCharacteristicNotification(characteristic, true)) {
                             // Characteristics通知設定が成功
-                            setStatus(BleStatus.CONNECTED);
+                            setStatus(BLEStatus.CONNECTED);
                             Log.d(TAG, "setCharacteristicNotification() Success");
                         } else {
                             // Characteristics通知設定が失敗
@@ -459,7 +479,7 @@ public class BlueNinjaController {
                 Log.d(TAG, "BLE Connectting Finish");
             }else{
                 // サービスなし
-                setStatus(BleStatus.SERVICE_NOT_FOUND);
+                setStatus(BLEStatus.SERVICE_NOT_FOUND);
             }
         }
 
@@ -484,7 +504,7 @@ public class BlueNinjaController {
                     // JSON形式で通知されるデータからX軸成分を抽出
                     JSONObject json = new JSONObject(data);
                     // Activityへ通知
-                    mMainActivity.onBLEDataReceived(json);
+                    activity.onBLEDataReceived(json);
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
@@ -505,26 +525,27 @@ public class BlueNinjaController {
      *
      * @param status BLE状態
      */
-    private void changeBleStatus(BleStatus status) {
+    private void changeBleStatus(BLEStatus status) {
         Log.d(TAG, "changeBleStatus(" + status.name() + ")");
-        mMainActivity.onBLEConnectionStatusChanged(status == BleStatus.CONNECTED);
+        activity.onBLEConnectionStatusChanged(status == BLEStatus.CONNECTED);
     }
 
     /**
      * メッセージハンドラ
      */
-    private Handler mHandler = new Handler() {
+    private Handler messageHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch(MsgType.cast(msg.what))
-            {
+            final MsgType type = MsgType.getEnum(msg.what);
+            switch(type) {
                 case BLE_STATUS_CHANGE:
-                    /* Statusの更新 */
-                    changeBleStatus(BleStatus.cast(msg.arg1));
+                    // ステータスの更新
+                    final BLEStatus status = BLEStatus.getEnum(msg.arg1);
+                    changeBleStatus(status);
                     break;
                 case MESSAGE_SEND:
-                    /* メッセージ表示 */
-                    Toast.makeText(mMainActivity.getApplicationContext(), mMainActivity.getString(msg.arg1), Toast.LENGTH_LONG)
+                    // メッセージの表示
+                    Toast.makeText(activity.getApplicationContext(), activity.getString(msg.arg1), Toast.LENGTH_LONG)
                             .show();
                     break;
             }
@@ -536,10 +557,10 @@ public class BlueNinjaController {
      *
      * @param status BLE状態
      */
-    private void setStatus(BleStatus status) {
-        Log.d(TAG, "setStatus(" + mStatus.name() + " -> " + status.name() + ")");
-        mStatus = status;
-        switch (mStatus) {
+    private void setStatus(BLEStatus status) {
+        Log.d(TAG, "setStatus(" + status.name() + " -> " + status.name() + ")");
+        this.status = status;
+        switch (status) {
             case SCANNING:
             case CONNECTING:
             case DEVICE_FOUND:
@@ -553,20 +574,20 @@ public class BlueNinjaController {
         }
 
         Message msg = new Message();
-        msg.what = MsgType.BLE_STATUS_CHANGE.ordinal();
-        msg.arg1 = status.ordinal();
-        mHandler.sendMessage(msg);
+        msg.what = MsgType.BLE_STATUS_CHANGE.getValue();
+        msg.arg1 = status.getValue();
+        messageHandler.sendMessage(msg);
     }
 
     /**
-     * トースト表示
+     * トーストを表示する
      *
      * @param msgId メッセージID
      */
     private void showToast(int msgId) {
         Message msg = new Message();
-        msg.what = MsgType.MESSAGE_SEND.ordinal();
+        msg.what = MsgType.MESSAGE_SEND.getValue();
         msg.arg1 = msgId;
-        mHandler.sendMessage(msg);
+        messageHandler.sendMessage(msg);
     }
 }

@@ -70,7 +70,7 @@ public class Breakout {
          *
          * @return 状態値
          */
-        int getValue()
+        public int getValue()
         {
             return value;
         }
