@@ -1,6 +1,7 @@
 package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -10,6 +11,11 @@ import android.graphics.Rect;
  * 新しい表示要素を作成する場合はこのクラスを継承すること
  */
 public abstract class Item {
+
+    /**
+     * 表示要素のデフォルト色
+     */
+    private static final int DEFAULT_COLOR = Color.WHITE;
 
     /**
      * 表示要素の更新を行う
@@ -44,6 +50,24 @@ public abstract class Item {
     public Point getCenter() { return center; }
 
     /**
+     * 表示要素の色を取得する(getter)
+     *
+     * @return 表示要素の色
+     */
+    public int getColor() {
+        return color;
+    }
+
+    /**
+     * 表示要素の色を取得する(setter)
+     *
+     * @param color 表示要素の色
+     */
+    public void setColor(final int color) {
+        this.color = color;
+    }
+
+    /**
      * 他の表示要素との衝突判定を行う
      *
      * @param target 判定対象となる表示要素
@@ -70,4 +94,6 @@ public abstract class Item {
      * ペインター
      */
     protected Paint painter = new Paint();
+
+    protected int color = DEFAULT_COLOR;
 }

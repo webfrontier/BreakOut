@@ -1,5 +1,6 @@
 package jp.co.webfrontier.breakout;
 
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
@@ -330,8 +331,31 @@ public class Breakout {
         view.invalidate();
     }
 
+    /**
+     * パッドを取得する
+     *
+     * @return パッド
+     */
     public Pad getPad() {
         return pad;
+    }
+
+    /**
+     * パッドの色を設定する
+     *
+     * @return パッドの色
+     */
+    public int getPadColor() {
+        return pad.getColor();
+    }
+
+    /**
+     * パッドの色を設定する
+     *
+     * @param color パッドに設定する色
+     */
+    public void setPadColor(final int color) {
+        pad.setColor(color);
     }
 
     /**
@@ -463,15 +487,5 @@ public class Breakout {
             }
         }
         return count;
-    }
-
-    /**
-     * BLE機器接続有無
-     *
-     * @param connect BLE機器接続有無
-     */
-    public void setBLEConnected(boolean connect) {
-        pad.setBLEConnected(connect);
-        view.invalidate();
     }
 }

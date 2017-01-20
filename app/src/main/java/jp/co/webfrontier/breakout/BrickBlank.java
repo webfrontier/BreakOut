@@ -11,6 +11,17 @@ public class BrickBlank extends Brick {
      */
     private static final String TAG = "BrickBlank";
 
+    public BrickBlank() {
+        super();
+
+        // ブロックの種別を上書きする
+        type = Type.BLANK;
+
+        // ペインターへ色設定
+        color = Color.GRAY;
+        painter.setColor(color);
+    }
+
     /**
      * コンストラクタ
      *
@@ -21,17 +32,10 @@ public class BrickBlank extends Brick {
         super(x, y);
 
         // ブロックの種別を設定する
-        super.type = Type.BLANK;
-    }
+        type = Type.BLANK;
 
-    /**
-     * ブロックの色を取得する(getter)
-     *
-     * @return ブロックの色
-     */
-    @Override
-    protected int getColor()
-    {
-        return Color.BLACK;
+        // ペインターへ色設定
+        this.color = Color.BLACK;
+        painter.setColor(color);
     }
 }

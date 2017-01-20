@@ -24,13 +24,23 @@ public class BreakoutView extends View {
     private static final String TAG = "BreakoutView";
 
     /**
-     * ステータス表示領域の高さ
-     */
-    public static final int STATUS_H = 240;
-    /**
      * ステータス領域背景色
      */
-    private static final int STS_BG_COLOR = Color.WHITE;
+    public static final int STS_BG_COLOR = Color.WHITE;
+    /**
+     * パッドの色(BLE未接続状態)
+     */
+    public static final int BLE_DISCONNECTED_COLOR = Color.YELLOW;
+    /**
+     * パッドの色(BLE接続状態)
+     */
+    public static final int BLE_CONNECTED_COLOR = Color.BLUE;
+
+    /**
+     * ステータス表示領域の高さ
+     */
+    private static final int STATUS_H = 240;
+
     /**
      * 画面の大きさ
      */
@@ -254,6 +264,24 @@ public class BreakoutView extends View {
      * @param dy Y方向の移動量
      */
     public void movePad(final float dx, final float dy) {
+    }
+
+    /**
+     * パッドの色を取得する
+     *
+     * @return パッドの色
+     */
+    public int getPadColor() {
+        return game.getPadColor();
+    }
+
+    /**
+     * パッドの色を設定する
+     *
+     * @param color パッドに設定する色
+     */
+    public void setPadColor(final int color) {
+        game.setPadColor(color);
     }
 
     /**

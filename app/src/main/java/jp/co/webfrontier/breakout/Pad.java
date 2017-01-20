@@ -16,39 +16,14 @@ public class Pad extends Item {
      * デバッグログ用タグ
      */
     private static final String TAG = "Pad";
-    /**
-     * パッドの色(BLE未接続状態)
-     */
-    private static final int BLE_DISCONNECTED_COLOR = Color.YELLOW;
-    /**
-     * パッドの色(BLE接続状態)
-     */
-    private static final int BLE_CONNECTED_COLOR = Color.BLUE;
-    /**
-     * パッドを描画するView
-     */
-    private View v;
-    /**
-     * BLEの接続状態
-     */
-    private boolean BLEConnected = false;
 
     /**
      * コンストラクタ
      */
     public Pad() {
         // ペインターへ色設定
-        painter.setColor(BLE_DISCONNECTED_COLOR);
-    }
-
-    /**
-     * BLEの接続状態を設定する(setter)
-     *
-     * @param connect BLE接続状態
-     */
-    public void setBLEConnected(boolean connect) {
-        BLEConnected = connect;
-        painter.setColor(BLEConnected ? BLE_CONNECTED_COLOR : BLE_DISCONNECTED_COLOR);
+        color = Color.YELLOW;
+        painter.setColor(color);
     }
 
     /**

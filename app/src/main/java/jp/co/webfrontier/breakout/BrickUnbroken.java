@@ -24,15 +24,4 @@ public class BrickUnbroken extends Brick {
         // ブロックの種別を上書きする
         super.type = Type.UNBROKEN;
     }
-
-    /**
-     * ブロック色取得
-     *
-     * @return ブロックの色
-     */
-    @Override
-    protected int getColor()
-    {
-        return Color.WHITE;
-    }
 }

@@ -42,10 +42,6 @@ public class Ball extends Item {
      */
     private static final float CHANGE_RATE_SPEED_Y = 1.2f;
     /**
-     * デフォルトの色
-     */
-    public static final int DEFAULT_COLOR = Color.WHITE;
-    /**
      * デフォルトの半径
      */
     public static final int DEFAULT_RADIUS = 16;
@@ -69,7 +65,7 @@ public class Ball extends Item {
      * @param y ボールの位置(Y座標)
      */
     public Ball(int x, int y) {
-        painter.setColor(DEFAULT_COLOR);
+        painter.setColor(color);
         painter.setAntiAlias(true);
         this.center.x = x;
         this.center.y = y;
@@ -86,7 +82,7 @@ public class Ball extends Item {
      * @param ySpeed ボールの速度(Y座標)
      */
     public Ball(int x, int y, float xSpeed, float ySpeed) {
-        painter.setColor(DEFAULT_COLOR);
+        painter.setColor(color);
         painter.setAntiAlias(true);
         this.center.x = x;
         this.center.y = y;
@@ -106,7 +102,7 @@ public class Ball extends Item {
      * @param r ボールの半径
      */
     public Ball(int x, int y, int r, float xSpeed, float ySpeed) {
-        painter.setColor(DEFAULT_COLOR);
+        painter.setColor(color);
         painter.setAntiAlias(true);
         this.center.x = x;
         this.center.y = y;

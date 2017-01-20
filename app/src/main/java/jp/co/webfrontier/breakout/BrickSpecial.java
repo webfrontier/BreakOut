@@ -23,15 +23,4 @@ public class BrickSpecial extends Brick {
         // ブロックの種別を上書きする
         super.type = Type.NORMAL;
     }
-
-    /**
-     * ブロックの色を取得する(getter)
-     *
-     * @return ブロックの色
-     */
-    @Override
-    protected int getColor()
-    {
-        return Color.BLUE;
-    }
 }

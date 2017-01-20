@@ -42,11 +42,7 @@ abstract class Brick extends Item {
         /**
          * 破壊不可のブロック
          */
-        UNBROKEN("破壊不可", 2),
-        /**
-         * スペシャルブロック
-         */
-        SPECIAL("スペシャル", 3);
+        UNBROKEN("破壊不可", 2);
 
         /**
          * 種別名
@@ -100,10 +96,7 @@ abstract class Brick extends Item {
      * コンストラクタ
      *
      */
-    public Brick() {
-        // ペインターへ色設定
-        painter.setColor(getColor());
-    }
+    public Brick() {}
 
     /**
      * コンストラクタ
@@ -113,7 +106,6 @@ abstract class Brick extends Item {
      */
     public Brick(int x,int y) {
         this.rect.set(x, y, x + WIDTH, y + HEIGHT);
-        painter.setColor(getColor());
         center.x = x + WIDTH/2;
         center.y = y + HEIGHT/2;
     }
@@ -178,13 +170,6 @@ abstract class Brick extends Item {
     {
         return !broken;
     }
-
-    /**
-     * ブロックの色を取得する(getter)
-     *
-     * @return ブロックの色
-     */
-    abstract protected int getColor();
 
     /**
      * ブロックの種別を取得する

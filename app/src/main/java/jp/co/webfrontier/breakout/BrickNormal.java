@@ -15,7 +15,11 @@ public class BrickNormal extends Brick {
         super();
 
         // ブロックの種別を上書きする
-        super.type = Type.NORMAL;
+        type = Type.NORMAL;
+
+        // ペインターへ色設定
+        color = Color.GRAY;
+        painter.setColor(color);
     }
 
     /**
@@ -28,17 +32,10 @@ public class BrickNormal extends Brick {
         super(x, y);
 
         // ブロックの種別を上書きする
-        super.type = Type.NORMAL;
-    }
+        type = Type.NORMAL;
 
-    /**
-     * ブロックの色を取得する(getter)
-     *
-     * @return ブロックの色
-     */
-    @Override
-    protected int getColor()
-    {
-        return Color.GRAY;
+        // ペインターへ色設定
+        color = Color.GRAY;
+        painter.setColor(color);
     }
 }
