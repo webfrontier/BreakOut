@@ -279,7 +279,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param connected BLE機器接続状態
      */
     @Override
-    public void onBLEConnectionStatusChanged(boolean connected) {}
+    public void onBLEConnectionStatusChanged(boolean connected) {
+        /**
+         * B-14．BLEデバイスと接続してパッド操作を行う
+         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
+         * ボタンのラベルを文字列リソースとして定義し表示させる
+         * MainActivity#onClickメソッドをリスナーとして登録する
+         * MainActivity#onClickメソッドからBT接続を行う
+         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
+         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
+         */
+        // BLEの接続状態に応じてパッドの色を変更する
+        breakoutView.setPadColor(connected ? BreakoutView.BLE_CONNECTED_COLOR : BreakoutView.BLE_DISCONNECTED_COLOR);
+    }
 
     /**
      * BLE機器からのデータ受信
