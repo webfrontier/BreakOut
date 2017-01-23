@@ -65,6 +65,7 @@ public abstract class Item {
      */
     public void setColor(final int color) {
         this.color = color;
+        painter.setColor(color);
     }
 
     /**
