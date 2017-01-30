@@ -1,9 +1,6 @@
 package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.view.View;
 
 /**
  * ブロックを表す基底クラス
@@ -42,7 +39,11 @@ abstract class Brick extends Item {
         /**
          * 破壊不可のブロック
          */
-        UNBROKEN("破壊不可", 2);
+        UNBROKEN("破壊不可", 2),
+        /** S-02. ボーナスブロックの追加
+         * ボーナスアイテムを出すブロック
+         */
+        BONUS("ボーナス", 3);
 
         /**
          * 種別名
