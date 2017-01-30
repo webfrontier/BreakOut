@@ -2,10 +2,10 @@ package jp.co.webfrontier.breakout;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 操作パッドを表すクラス
@@ -16,6 +16,11 @@ public class Pad extends Item {
      * デバッグログ用タグ
      */
     private static final String TAG = "Pad";
+
+    /**
+     * ボーナス種別を格納するリスト
+     */
+    private List<Bonus.Type> bonusTypeList = new ArrayList<>();
 
     /**
      * コンストラクタ
@@ -60,6 +65,23 @@ public class Pad extends Item {
 
     public int getHeight() {
         return rect.height();
+    }
+
+    /** S-03. ボーナスアイテム（ミサイル）取得
+     * ボーナスアイテム取得によるパワーアップ
+     * @param type ボーナス種別
+     */
+    public void powerUp(Bonus.Type type) {
+        bonusTypeList.add(type);
+    }
+
+    /**
+     * S-03. ボーナスアイテム（ミサイル）取得
+     * @retval true ミサイル有効
+     * @retval false ミサイル無効
+     */
+    public boolean launchMissile() {
+        return bonusTypeList.contains(Bonus.Type.MISSILE);
     }
 
     /**
