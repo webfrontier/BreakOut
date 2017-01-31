@@ -237,8 +237,8 @@ public class Ball extends Item {
             }
         } else {
             ySpeed *= CHANGE_RATE_SPEED_Y;
-            boundY();
         }
+        boundY();
     }
 
     /**
