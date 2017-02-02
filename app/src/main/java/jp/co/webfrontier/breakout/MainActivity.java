@@ -1,6 +1,10 @@
 package jp.co.webfrontier.breakout;
 
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,11 +13,13 @@ import android.view.View;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * ブロック崩しアプリのメインアクティビティ
  * クリックイベントをハンドルするためにOnClickListenerインターフェースを実装します
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, BlueNinjaListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, BlueNinjaListener {
 
     /**
      * デバッグログ用タグ
@@ -24,6 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * ブロック崩しゲームのビュー
      */
     private BreakoutView breakoutView;
+
+    /**
+     * (加速度)センサー管理
+     */
+    private SensorManager sensorManager;
 
     /**
      * BlueNinja BLE接続制御
@@ -46,9 +57,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.d(TAG, "アクティビティが生成されたよ");
 
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
         blueNinjaController.init();
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
+    }
+
+    /**
+     * アプリが停止
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Log.d(TAG, "アクティビティが停止したよ");
+
+        sensorManager.unregisterListener(this);
     }
 
     /**
@@ -69,6 +94,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         Log.d(TAG, "アクティビティが再開したよ");
+
+        final List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        if(sensors.size() > 0) {
+            final Sensor s = sensors.get(0);
+            sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
+        }
     }
 
     /**
@@ -126,12 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case MotionEvent.ACTION_MOVE: // 指を持ち上げずにスライドさせた場合
                 Log.d(TAG, "発生したアクションはACTION_MOVEだよ");
-                if(!blueNinjaController.isConnected()) {
-                    // BLE機器未接続の場合はタッチによるパッド操作を行う
-                    final Point p = breakoutView.getPadPosition();
-                    // 水平方向にのみ移動させたい
-                    breakoutView.movePad(event.getX() - p.x, 0);
-                }
                 break;
             case MotionEvent.ACTION_CANCEL: // UP+DOWNの同時発生(＝キャンセル)の場合
                 Log.d(TAG, "発生したアクションはACTION_CANCELだよ");
@@ -144,6 +169,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
+    }
+
+    /**
+     * センサーからの変更通知を処理する
+     *
+     * @param sensorEvent センサーのイベント
+     */
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float gx = sensorEvent.values[0]; // X方向の加速度
+            float gy = sensorEvent.values[1]; // Y方向の加速度
+            float gz = sensorEvent.values[2]; // Z方向の加速度
+
+            Log.d(TAG, "加速度が変わったよ");
+            Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
+
+            final Point p = breakoutView.getPadPosition();
+            // 水平方向にのみ移動させたい
+            breakoutView.movePad(gx, 0);
+        }
+    }
+
+    /**
+     * センサーからの通知
+     *
+     * @param sensor センサー
+     * @param i インデックス
+     */
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
     /**
