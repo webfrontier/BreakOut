@@ -327,11 +327,14 @@ public class Breakout {
              * B-10．ブロックの破壊とボールの反射を行う
              *
              */
-            for(final Brick brick : bricks) {
-                if(brick.isUnBroken() && ball.isCollided(brick)) {
-                    // ブロックと衝突したのでブロックを破壊しボールを反射させる
-                    brick.crash();
-                    ball.reflect(brick);
+            for(int row = 0; row < BRICK_ROW; row++) {
+                for(int col = 0; col < BRICK_COL; col++) {
+                    final Brick brick = bricks[row][col];
+                    if(brick.isUnBroken() && ball.isCollided(brick)) {
+                        // ブロックと衝突したのでブロックを破壊しボールを反射させる
+                        brick.crash();
+                        ball.reflect(brick);
+                    }
                 }
             }
 
