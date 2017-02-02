@@ -104,8 +104,8 @@ public class Breakout {
     /**
      * ブロックの配列
      */
-    private Brick[] bricks = new Brick[BRICK_COL];
-    
+    private Brick[][] bricks = new Brick[BRICK_ROW][BRICK_COL];
+
     /**
      * パッド
      */
@@ -444,8 +444,10 @@ public class Breakout {
      * ブロックを生成する
      */
     private void createBrick() {
-        for (int col = 0; col < BRICK_COL; col++) {
-            bricks[col] = new BrickNormal();
+        for(int row = 0; row < BRICK_ROW; row++) {
+            for(int col = 0; col < BRICK_COL; col++) {
+                bricks[row][col] = new BrickNormal();
+            }
         }
     }
 
@@ -458,10 +460,13 @@ public class Breakout {
         int brick_w = fieldRect.width() / BRICK_COL;
         int brick_h = fieldRect.height() / 30;
 
-        for (int col = 0; col < BRICK_COL; col++) {
-            bricks[col].setSize(brick_w, brick_h);
-            bricks[col].move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
-            view.addDrawingItem(bricks[col]);
+        for(int row = 0; row < BRICK_ROW; row++) {
+            for (int col = 0; col < BRICK_COL; col++) {
+                final Brick brick = bricks[row][col];
+                brick.setSize(brick_w, brick_h);
+                brick.move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
+                view.addDrawingItem(brick);
+            }
         }
     }
 
@@ -481,9 +486,12 @@ public class Breakout {
      */
     public int getRemainingBricksCount() {
         int count = 0;
-        for(final Brick brick : bricks) {
-            if(brick.isUnBroken()) {
-                ++count;
+        for(int row = 0; row < BRICK_ROW; row++) {
+            for(int col = 0; col < BRICK_COL; col++) {
+                final Brick brick = bricks[row][col];
+                if(brick.isUnBroken()) {
+                    ++count;
+                }
             }
         }
         return count;
