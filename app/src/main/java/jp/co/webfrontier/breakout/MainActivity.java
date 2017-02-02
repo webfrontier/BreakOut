@@ -179,16 +179,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float gx = sensorEvent.values[0]; // X方向の加速度
-            float gy = sensorEvent.values[1]; // Y方向の加速度
-            float gz = sensorEvent.values[2]; // Z方向の加速度
+            float gx = sensorEvent.values[0]; // X方向(スマホを水平にした時の横方向)の加速度(右:-9.8xxx 〜 左:9.8xxx)
+            float gy = sensorEvent.values[1]; // Y方向(スマホを水平にした時の縦方向)の加速度(上:-9.8xxx 〜 下:9.8xxx)
+            float gz = sensorEvent.values[2]; // Z方向(スマホを水平にした時の鉛直方向)の加速度(上:-9.8xxx 〜 下:9.8xxx)
 
             Log.d(TAG, "加速度が変わったよ");
             Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
 
             final Point p = breakoutView.getPadPosition();
             // 水平方向にのみ移動させたい
-            breakoutView.movePad(gx, 0);
+            breakoutView.movePad(-5.0f*gx, 0);
         }
     }
 
