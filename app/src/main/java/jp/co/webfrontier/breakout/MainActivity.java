@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
 
         Log.d(TAG, "アクティビティが一時停止したよ");
+
+        // 効果音リソースの解放
+        SoundController.release();
     }
 
     /**
@@ -100,6 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             final Sensor s = sensors.get(0);
             sensorManager.registerListener(this, s, SensorManager.SENSOR_DELAY_UI);
         }
+
+        // 効果音制御の初期化
+        SoundController.initialize(this);
     }
 
     /**
