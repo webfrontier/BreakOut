@@ -180,4 +180,16 @@ abstract class Brick extends Item {
     {
         return type;
     }
+
+    /** A-05. ゲームの得点を表示する
+     * 得点表示用のUI部品(TextView)を配置する
+     * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+     * 得点を加算していき表示する
+     */
+    /**
+     * ブロックを破壊したときに得られる得点を取得する
+     *
+     * @return 得点
+     */
+    abstract public int getPoint();
 }
