@@ -397,6 +397,15 @@ public class BreakoutView extends View {
                 || game.getState() == Breakout.State.CLEAR) {
             // ゲームオーバーかゲームクリアの状態でタッチされたら、開始可能状態に戻す
             game.setState(Breakout.State.READY);
+        } else if(game.getState() == Breakout.State.RUNNING) {
+            /** A-07. ボーナスアイテム（ミサイル）の取得
+             * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+             * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+             * タップでミサイルを発射しブロックを破壊できる
+             */
+            // ゲーム中はパッドへ通知
+            Log.d(TAG, "onTouch");
+            game.onTouch();
         }
     }
 
