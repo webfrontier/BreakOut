@@ -115,6 +115,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
 
         Log.d(TAG, "アクティビティが一時停止したよ");
+
+        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+         * 時間表示用のUI部品(Chronometer)を配置する
+         * ゲーム内時間を管理する
+         * 開始/停止/一時停止/再開を行う
+         */
+        // ゲームの経過時間を表示するためのカウンタを一時停止
+        breakoutView.pauseElapsedTimeCounter();
     }
 
     /**
@@ -125,6 +133,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         Log.d(TAG, "アクティビティが再開したよ");
+
+        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+         * 時間表示用のUI部品(Chronometer)を配置する
+         * ゲーム内時間を管理する
+         * 開始/停止/一時停止/再開を行う
+         */
+        // ゲームの経過時間を表示するためのカウンタの再開
+        breakoutView.resumeElapsedTimeCounter();
 
         final List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
         if(sensors.size() > 0) {
