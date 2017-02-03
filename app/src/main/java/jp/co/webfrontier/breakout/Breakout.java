@@ -292,7 +292,7 @@ public class Breakout {
                          * 全てのボールがゲームフィールド外に出たらゲームオーバー
                          */
                         view.showStateMessage();
-
+                        
                         /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
                          * 時間表示用のUI部品(Chronometer)を配置する
                          * ゲーム内時間を管理する
