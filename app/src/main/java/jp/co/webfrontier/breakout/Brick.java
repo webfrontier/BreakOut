@@ -90,7 +90,7 @@ abstract class Brick extends Item {
     /**
      * 破壊されたかどうか
      */
-    private boolean broken = false;
+    protected boolean broken = false;
 
     /**
      * コンストラクタ
