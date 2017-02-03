@@ -292,6 +292,13 @@ public class Breakout {
                          * 全てのボールがゲームフィールド外に出たらゲームオーバー
                          */
                         view.showStateMessage();
+
+                        /** A-05. 効果音を鳴らす
+                         * ゲームの効果音をつける
+                         * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+                         * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+                         */
+                        SoundController.playGameOver();
                         break;
                     case CLEAR:
                         // 実行中 -> ゲームクリア
@@ -302,6 +309,12 @@ public class Breakout {
                          * 全てのボールがゲームフィールド外に出たらゲームオーバー
                          */
                         view.showStateMessage();
+                        /** A-05. 効果音を鳴らす
+                         * ゲームの効果音をつける
+                         * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+                         * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+                         */
+                        SoundController.playClear();
                         break;
                     default:
                         break;
@@ -455,6 +468,12 @@ public class Breakout {
             if(ball.isCollided(pad)) {
                 // パッドと衝突したのでボールを反射させる
                 ball.reflect(pad);
+                /** A-05. 効果音を鳴らす
+                 * ゲームの効果音をつける
+                 * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+                 * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+                 */
+                SoundController.playHitPad();
             }
 
             /**
@@ -485,6 +504,12 @@ public class Breakout {
             if(!ball.getRect().intersects(fieldRect.left, fieldRect.top, fieldRect.right, fieldRect.bottom)) {
                 // ボールがゲームフィールド外に出たら、後で消すために削除処理用のリストに登録
                 deactiveBalls.add(ball);
+                /** A-05. 効果音を鳴らす
+                 * ゲームの効果音をつける
+                 * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+                 * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+                 */
+                SoundController.playLostBall();
             }
         }
 
