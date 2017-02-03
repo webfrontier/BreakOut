@@ -42,7 +42,12 @@ abstract class Brick extends Item {
         /**
          * 破壊不可のブロック
          */
-        UNBROKEN("破壊不可", 2);
+        UNBROKEN("破壊不可", 2),
+        /** A-06. ボーナスブロックの追加
+         * ボーナスアイテムを出すブロック
+         * Brickを継承して作成する
+         */
+        BONUS("ボーナス", 3);
 
         /**
          * 種別名
