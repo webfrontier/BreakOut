@@ -173,7 +173,7 @@ public class BrickNormal extends Brick {
         final int r = robustness.getValue();
         if(r == hitCount) {
             broken = true;
-            /** A-05. 効果音を鳴らす
+            /** A-04. 効果音を鳴らす
              * ゲームの効果音をつける
              * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
              * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
