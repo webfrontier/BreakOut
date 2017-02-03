@@ -63,6 +63,19 @@ public class SoundController {
                 .setAudioAttributes(audioAttributes)
                 .setMaxStreams(1)
                 .build();
+
+        /** A-05. 効果音を鳴らす
+         * ゲームの効果音をつける
+         * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+         * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+         */
+        // 音データ読み込み
+        ID_HIT_BRICK = sSoundPool.load(sActivity, R.raw.button04b, 1);
+        ID_HIT_HARD_BRICK = sSoundPool.load(sActivity, R.raw.laser1, 1);
+        ID_HIT_PAD = sSoundPool.load(sActivity, R.raw.button01b, 1);
+        ID_LOST_BALL = sSoundPool.load(sActivity, R.raw.powerdown07, 1);
+        ID_CLEAR = sSoundPool.load(sActivity, R.raw.powerup02, 1);
+        ID_GAME_OVER = sSoundPool.load(sActivity, R.raw.powerdown03, 1);
     }
 
     /**
@@ -70,5 +83,83 @@ public class SoundController {
      */
     public static void release() {
         sSoundPool.release();
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * ブロックを破壊したときの音を再生する
+     */
+    public static void playHitBrick()
+    {
+        sSoundPool.play(ID_HIT_BRICK, 1.0f, 1.0f, 0, 0, 1);
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * 破壊できないブロックに当たったときの音を再生する
+     */
+    public static void playHitHardBrick()
+    {
+        sSoundPool.play(ID_HIT_HARD_BRICK, 1.0f, 1.0f, 0, 0, 1);
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * パッドで反射したときの音を再生する
+     */
+    public static void playHitPad()
+    {
+        sSoundPool.play(ID_HIT_PAD, 1.0f, 1.0f, 0, 0, 1);
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * ボールをロストしたときの音を再生する
+     */
+    public static void playLostBall()
+    {
+        sSoundPool.play(ID_LOST_BALL, 1.0f, 1.0f, 0, 0, 1);
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * ゲームをクリアしたときの音を再生する
+     */
+    public static void playClear()
+    {
+        sSoundPool.play(ID_CLEAR, 1.0f, 1.0f, 0, 0, 1);
+    }
+
+    /** A-05. 効果音を鳴らす
+     * ゲームの効果音をつける
+     * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+     * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+     */
+    /**
+     * ゲームオーバーになったときの音を再生する
+     */
+    public static void playGameOver()
+    {
+        sSoundPool.play(ID_GAME_OVER, 1.0f, 1.0f, 0, 0, 1);
     }
 }

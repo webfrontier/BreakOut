@@ -58,5 +58,12 @@ public class BrickUnbroken extends Brick {
      *
      */
     @Override
-    public void crash() {}
+    public void crash() {
+        /** A-05. 効果音を鳴らす
+         * ゲームの効果音をつける
+         * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+         * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+         */
+        SoundController.playHitHardBrick();
+    }
 }
