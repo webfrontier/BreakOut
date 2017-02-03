@@ -125,6 +125,31 @@ public class Breakout {
      */
     private ArrayList<Ball> deactiveBalls = new ArrayList<>();
 
+    /** A-07. ボーナスアイテム（ミサイル）の取得
+     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+     * タップでミサイルを発射しブロックを破壊できる
+     */
+    /**
+     * ゲームフィールドに出ているアイテムのリスト
+     */
+    private ArrayList<Bonus> activeBonus = new ArrayList<>();
+
+    /**
+     * ゲームフィールドから出たアイテムのリスト
+     */
+    private ArrayList<Bonus> deactiveBonus = new ArrayList<>();
+
+    /**
+     * ゲームフィールドに出ているミサイルのリスト
+     */
+    private ArrayList<Missile> activeMissile = new ArrayList<>();
+
+    /**
+     * ゲームフィールドから出たミサイルのリスト
+     */
+    private ArrayList<Missile> deactiveMissile = new ArrayList<>();
+
     /**
      * ボール残数の初期値
      */
@@ -446,6 +471,28 @@ public class Breakout {
         }
     }
 
+    /** A-07. ボーナスアイテム（ミサイル）の取得
+     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+     * タップでミサイルを発射しブロックを破壊できる
+     */
+    /**
+     * ゲームフィールドをタッチしたときに行う処理
+     */
+    public void onTouch() {
+        if(getState() != State.RUNNING) {
+            return;
+        }
+
+        // ミサイルアイテム取得済みの場合
+        if(pad.launchMissile()) {
+            // ミサイル発射
+            Missile missile = new Missile(pad.getCenter().x, pad.getRect().top);
+            activeMissile.add(missile);
+            view.addDrawingItem(missile);
+        }
+    }
+
     /**
      * 1フレーム分の更新処理を行う
      */
@@ -457,6 +504,21 @@ public class Breakout {
         }
 
         // 以降はゲーム実行中(RUNNING)状態で行う更新処理
+
+        /** A-07. ボーナスアイテム（ミサイル）の取得
+         * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+         * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+         * タップでミサイルを発射しブロックを破壊できる
+         */
+        // アイテムを更新する
+        for(final Bonus bonus : activeBonus) {
+            bonus.update();
+        }
+
+        // ミサイルを更新する
+        for(Missile missile : activeMissile) {
+            missile.update();
+        }
 
         // パッドを更新する
         pad.update();
@@ -477,6 +539,18 @@ public class Breakout {
                 for(int col = 0; col < BRICK_COL; col++) {
                     final Brick brick = bricks[row][col];
                     if(brick.isUnBroken() && ball.isCollided(brick)) {
+                        /** A-07. ボーナスアイテム（ミサイル）の取得
+                         * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+                         * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+                         * タップでミサイルを発射しブロックを破壊できる
+                         */
+                        // ボーナスブロックの場合はボーナスアイテムを表示する
+                        if(brick.getType() == Brick.Type.BONUS) {
+                            Bonus bonus = new Bonus(brick.getRect());
+                            activeBonus.add(bonus);
+                            view.addDrawingItem(bonus);
+                        }
+
                         // ブロックと衝突したのでブロックを破壊しボールを反射させる
                         brick.crash();
                         ball.reflect(brick);
@@ -486,6 +560,25 @@ public class Breakout {
                          * 得点を加算していき表示する
                          */
                         score += bricks[row][col].getPoint();
+                    }
+
+                    /** A-07. ボーナスアイテム（ミサイル）の取得
+                     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+                     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+                     * タップでミサイルを発射しブロックを破壊できる
+                     */
+                    // ミサイルと当たり判定
+                    for(Missile missile : activeMissile) {
+                        // ミサイルとブロックの当たり判定
+                        if(brick.isUnBroken() && missile.isCollided(brick)) {
+                            brick.crash();
+                            deactiveMissile.add(missile);
+                        }
+
+                        // ゲームフィールドの外に出たミサイルを削除
+                        if(missile.getRect().top < fieldRect.top) {
+                            deactiveMissile.add(missile);
+                        }
                     }
                 }
             }
@@ -503,6 +596,26 @@ public class Breakout {
                  * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
                  */
                 SoundController.playHitPad();
+            }
+
+            /** A-07. ボーナスアイテム（ミサイル）の取得
+             * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+             * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+             * タップでミサイルを発射しブロックを破壊できる
+             */
+            for(final Bonus bonus : activeBonus) {
+                // パッドと当たったらアイテム取得
+                if(bonus.isCollided(pad)) {
+                    // アイテム消去
+                    deactiveBonus.add(bonus);
+                    // パッドパワーアップ
+                    pad.powerUp(bonus.getBonusType());
+                    continue;
+                }
+                // ゲームフィールドの外に出たアイテムを削除リストへ追加
+                if(bonus.getRect().bottom > fieldRect.bottom) {
+                    deactiveBonus.add(bonus);
+                }
             }
 
             /**
@@ -570,6 +683,24 @@ public class Breakout {
             Log.d(TAG, "残念。ゲームオーバーだよ。");
             setState(State.GAMEOVER);
         }
+
+        /** A-07. ボーナスアイテム（ミサイル）の取得
+         * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+         * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+         * タップでミサイルを発射しブロックを破壊できる
+         */
+        // ゲームフィールド外に出たアイテムを削除
+        for(final Bonus bonus : deactiveBonus) {
+            removeBonus(bonus);
+        }
+        deactiveBonus.clear();
+
+        // ゲームフィールド外に出たミサイルを削除
+        for(final Missile missile : deactiveMissile) {
+            removeMissile(missile);
+        }
+        deactiveMissile.clear();
+
         // View#invalidateメソッドを呼び再描画を要求する
         view.invalidate();
     }
@@ -800,4 +931,29 @@ public class Breakout {
      * @return 現在の得点
      */
     public long getScore() { return score; }
+
+    /** A-07. ボーナスアイテム（ミサイル）の取得
+     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+     * タップでミサイルを発射しブロックを破壊できる
+     */
+    /**
+     * アイテムをゲームフィールドから取り除く
+     *
+     * @param bonus ゲームフィールドから削除するアイテム
+     */
+    private void removeBonus(Bonus bonus) {
+        activeBonus.remove(bonus);
+        view.removeDrawingItem(bonus);
+    }
+
+    /**
+     * ミサイルをゲームフィールドから取り除く
+     *
+     * @param missile ゲームフィールドから削除するミサイル
+     */
+    private void removeMissile(Missile missile) {
+        activeMissile.remove(missile);
+        view.removeDrawingItem(missile);
+    }
 }

@@ -7,6 +7,9 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 操作パッドを表すクラス
  * 表示要素なのでItemクラスを継承する
@@ -16,6 +19,16 @@ public class Pad extends Item {
      * デバッグログ用タグ
      */
     private static final String TAG = "Pad";
+
+    /** A-07. ボーナスアイテム（ミサイル）の取得
+     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+     * タップでミサイルを発射しブロックを破壊できる
+     */
+    /**
+     * ボーナス種別を格納するリスト
+     */
+    private List<Bonus.Type> bonusTypeList = new ArrayList<>();
 
     /**
      * コンストラクタ
@@ -84,5 +97,27 @@ public class Pad extends Item {
     @Override
     public void draw(Canvas canvas, int x, int y) {
         canvas.drawRect(x + rect.left, y + rect.top, x + rect.right, y + rect.bottom, painter);
+    }
+
+    /** A-07. ボーナスアイテム（ミサイル）の取得
+     * ボーナスブロックを破壊するとボーナスアイテムが降ってくる
+     * ボーナスアイテムとしてブロックを破壊できるミサイルを作成する
+     * タップでミサイルを発射しブロックを破壊できる
+     */
+    /** ボーナスアイテム（ミサイル）取得
+     * ボーナスアイテム取得によるパワーアップ
+     * @param type ボーナス種別
+     */
+    public void powerUp(Bonus.Type type) {
+        bonusTypeList.add(type);
+    }
+
+    /**
+     * ミサイルを撃てるかを返す
+     * @retval true ミサイル有効
+     * @retval false ミサイル無効
+     */
+    public boolean launchMissile() {
+        return bonusTypeList.contains(Bonus.Type.MISSILE);
     }
 }
