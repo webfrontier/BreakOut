@@ -255,7 +255,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Log.d(TAG, "加速度が変わったよ");
             Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
-            // BLEデバイスが未接続時のみスマホの加速度センサーで移動させることとする
+            /**
+             * B-14．BLEデバイスと接続してパッド操作を行う
+             * BLEデバイスが未接続時のみスマホの加速度センサーで移動させることとする
+             *
+             */
             if(!blueNinjaController.isConnected()) {
                 final Point p = breakoutView.getPadPosition();
                 // 水平方向にのみ移動させたい
