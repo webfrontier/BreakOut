@@ -193,6 +193,12 @@ public class BreakoutView extends View {
      * 残り(ゲームフィールドに出ていない)のボール数の表示
      */
     private void showRemainingBallCount() {
+        /**
+         * B-11．残りのボール数とブロック数をステータス領域に表示する
+         * AndroidStudioのデザイン画面からTextViewウィジェットを追加する
+         * 初期表示文字列を文字列リソースとして定義し表示させる
+         * 文字列を更新して表示する
+         */
         TextView tv = (TextView)getRootView().findViewById(R.id.remaining_balls);
         if(tv != null) {
             Resources resource = getContext().getResources();
@@ -205,6 +211,12 @@ public class BreakoutView extends View {
      * 残りのブロック数を表示する
      */
     private void showRemainingBrickCount() {
+        /**
+         * B-11．残りのボール数とブロック数をステータス領域に表示する
+         * AndroidStudioのデザイン画面からTextViewウィジェットを追加する
+         * 初期表示文字列を文字列リソースとして定義し表示させる
+         * 文字列を更新して表示する
+         */
         TextView tv = (TextView)getRootView().findViewById(R.id.remaining_bricks);
         if(tv != null) {
             Resources resource = getContext().getResources();
