@@ -353,36 +353,6 @@ public class Breakout {
                 // パッドと衝突したのでボールを反射させる
                 ball.reflect(pad);
             }
-
-            /**
-             * B-09．ゲームフィールドでのボールの跳ね返りとボールがゲームフィールド外へ出たかの判定をする
-             * 上端はY方向、左右端はX方向で当たり判定を行いボールを反転させる
-             * 下端の判定は厳密には行わずゲームフィールドとの交差判定で行う
-             */
-            final Rect ballRect = ball.getRect();
-            // X方向の反射
-            if(ballRect.left <= fieldRect.left) {
-                // 左端での反射
-                ball.setCenter(ball.getRadius(), ball.getCenter().y);
-                ball.boundX();
-            } else if(ballRect.right >= fieldRect.right) {
-                // 右端での反射
-                ball.setCenter(fieldRect.right - ball.getRadius(), ball.getCenter().y);
-                ball.boundX();
-            }
-
-            // Y方向の反射
-            if(ballRect.top <= fieldRect.top) {
-                // 上端での反射
-                ball.setCenter(ball.getCenter().x, ball.getRadius());
-                // 速度反転
-                ball.boundY();
-            }
-
-            if(!ball.getRect().intersects(fieldRect.left, fieldRect.top, fieldRect.right, fieldRect.bottom)) {
-                // ボールがゲームフィールド外に出たら、後で消すために削除処理用のリストに登録
-                deactiveBalls.add(ball);
-            }
         }
 
         // ゲームフィールド外に出たボールを削除
