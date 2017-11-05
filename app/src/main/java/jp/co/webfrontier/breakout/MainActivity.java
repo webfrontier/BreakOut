@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
         /**
-         * B-14．BLEデバイスと接続してパッド操作を行う
+         * B-12．BLEデバイスと接続してパッド操作を行う
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 breakoutView.onPushStartButton();
                 break;
             /**
-             * B-14．BLEデバイスと接続してパッド操作を行う
+             * B-12．BLEデバイスと接続してパッド操作を行う
              * AndroidStudioのデザイン画面からボタンウィジェットを追加する
              * ボタンのラベルを文字列リソースとして定義し表示させる
              * MainActivity#onClickメソッドをリスナーとして登録する
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(TAG, "加速度が変わったよ");
             Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
             /**
-             * B-14．BLEデバイスと接続してパッド操作を行う
+             * B-12．BLEデバイスと接続してパッド操作を行う
              * BLEデバイスが未接続時のみスマホの加速度センサーで移動させることとする
              *
              */
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBLEConnectionStatusChanged(boolean connected) {
         /**
-         * B-14．BLEデバイスと接続してパッド操作を行う
+         * B-12．BLEデバイスと接続してパッド操作を行う
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBLEDataReceived(JSONObject dataObject) {
         /**
-         * B-14．BLEデバイスと接続してパッド操作を行う
+         * B-12．BLEデバイスと接続してパッド操作を行う
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
          * ボタンのラベルを文字列リソースとして定義し表示させる
          * MainActivity#onClickメソッドをリスナーとして登録する
