@@ -344,15 +344,6 @@ public class Breakout {
         for(int i = activeBalls.size()-1; i>=0; i--) {
             Ball ball = activeBalls.get(i);
             ball.update();
-
-            /**
-             * B-07．パッドでボールを反射させる
-             * パッドとボールの当たり判定を行う
-             */
-            if(ball.isCollided(pad)) {
-                // パッドと衝突したのでボールを反射させる
-                ball.reflect(pad);
-            }
         }
 
         // ゲームフィールド外に出たボールを削除
