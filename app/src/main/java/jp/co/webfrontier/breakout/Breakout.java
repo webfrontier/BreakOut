@@ -94,7 +94,7 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    /** B-13．ブロックを複数行にする
+    /** B-11．ブロックを複数行にする
      *  二次元配列を作る
      */
     public static final int BRICK_ROW = 5;
@@ -107,7 +107,7 @@ public class Breakout {
     /**
      * ブロックの配列
      */
-    /** B-13．ブロックを複数行にする
+    /** B-11．ブロックを複数行にする
      *  二次元配列を作る
      */
     private Brick[][] bricks = new Brick[BRICK_ROW][BRICK_COL];
@@ -223,12 +223,6 @@ public class Breakout {
                 switch(newState) {
                     case READY:
                         // 初期状態 -> 開始可能
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         // スタートする
                         start();
@@ -239,12 +233,6 @@ public class Breakout {
                 break;
             case READY:
                 // 開始可能
-                /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                 * ゲームの開始が可能になったらスタート画面を出す
-                 * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                 * ブロックを全て消したらゲームクリア
-                 * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                 */
                 switch(newState) {
                     case RUNNING:
                         // 開始可能 -> 実行中
@@ -259,32 +247,14 @@ public class Breakout {
                 switch(newState) {
                     case PAUSING:
                         // 実行中 -> 一時停止
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         break;
                     case GAMEOVER:
                         // 実行中 -> ゲームオーバー
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         break;
                     case CLEAR:
                         // 実行中 -> ゲームクリア
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         break;
                     default:
@@ -293,12 +263,6 @@ public class Breakout {
                 break;
             case PAUSING:
                 // 一時停止中
-                /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                 * ゲームの開始が可能になったらスタート画面を出す
-                 * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                 * ブロックを全て消したらゲームクリア
-                 * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                 */
                 switch(newState) {
                     case RUNNING:
                         // 一時停止 -> 実行中
@@ -313,12 +277,6 @@ public class Breakout {
                 switch(newState) {
                     case READY:
                         // ゲームオーバー -> 開始可能
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         // スタートする
                         start();
@@ -332,12 +290,6 @@ public class Breakout {
                 switch(newState) {
                     case READY:
                         // ゲームクリア -> 開始可能
-                        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-                         * ゲームの開始が可能になったらスタート画面を出す
-                         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-                         * ブロックを全て消したらゲームクリア
-                         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-                         */
                         view.showStateMessage();
                         // スタートする
                         start();
@@ -403,7 +355,7 @@ public class Breakout {
              * B-10．ブロックの破壊とボールの反射を行う
              *
              */
-            /** B-13．ブロックを複数行にする
+            /** B-11．ブロックを複数行にする
              *  二次元配列を作る
              */
             for(int row = 0; row < BRICK_ROW; row++) {
@@ -602,7 +554,7 @@ public class Breakout {
      * ブロックを生成する
      */
     private void createBrick() {
-        /** B-13．ブロックを複数行にする
+        /** B-11．ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {
@@ -621,14 +573,14 @@ public class Breakout {
         int brick_w = fieldRect.width() / BRICK_COL;
         int brick_h = fieldRect.height() / 30;
 
-        /** B-13．ブロックを複数行にする
+        /** B-11．ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                /** B-13．ブロックを複数行にする
+                /** B-11．ブロックを複数行にする
                  *  複数行にした場合の表示位置を調整する
                  */
                 brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
@@ -653,7 +605,7 @@ public class Breakout {
      */
     public int getRemainingBricksCount() {
         int count = 0;
-        /** B-13．ブロックを複数行にする
+        /** B-11．ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {

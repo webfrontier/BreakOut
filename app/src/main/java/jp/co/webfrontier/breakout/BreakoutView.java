@@ -193,12 +193,6 @@ public class BreakoutView extends View {
      * 残り(ゲームフィールドに出ていない)のボール数の表示
      */
     private void showRemainingBallCount() {
-        /**
-         * B-11．残りのボール数とブロック数をステータス領域に表示する
-         * AndroidStudioのデザイン画面からTextViewウィジェットを追加する
-         * 初期表示文字列を文字列リソースとして定義し表示させる
-         * 文字列を更新して表示する
-         */
         TextView tv = (TextView)getRootView().findViewById(R.id.remaining_balls);
         if(tv != null) {
             Resources resource = getContext().getResources();
@@ -211,12 +205,6 @@ public class BreakoutView extends View {
      * 残りのブロック数を表示する
      */
     private void showRemainingBrickCount() {
-        /**
-         * B-11．残りのボール数とブロック数をステータス領域に表示する
-         * AndroidStudioのデザイン画面からTextViewウィジェットを追加する
-         * 初期表示文字列を文字列リソースとして定義し表示させる
-         * 文字列を更新して表示する
-         */
         TextView tv = (TextView)getRootView().findViewById(R.id.remaining_bricks);
         if(tv != null) {
             Resources resource = getContext().getResources();
@@ -230,7 +218,7 @@ public class BreakoutView extends View {
      *
      */
     public void showStateMessage() {
-        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
+        /** スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
          * ゲームの開始が可能になったらスタート画面を出す
          * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
          * ブロックを全て消したらゲームクリア
@@ -263,12 +251,6 @@ public class BreakoutView extends View {
      * ゲームの状態に応じたメッセージを非表示にする
      */
     public void hideStateMessage() {
-        /** B-12. スタート、クリア、ゲームオーバー、一時停止中でメッセージを表示する
-         * ゲームの開始が可能になったらスタート画面を出す
-         * ゲームの実行中にスタートボタンが押されたら一時停止、再度スタートボタンが押されたら再開
-         * ブロックを全て消したらゲームクリア
-         * 全てのボールがゲームフィールド外に出たらゲームオーバー
-         */
         TextView tv = (TextView)getRootView().findViewById(R.id.game_state_message);
         if(tv != null) {
             tv.setVisibility(View.INVISIBLE);
