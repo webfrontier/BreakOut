@@ -73,24 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         Button btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
-        /**
-         * B-12．BLEデバイスと接続してパッド操作を行う
-         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
-         * ボタンのラベルを文字列リソースとして定義し表示させる
-         * MainActivity#onClickメソッドをリスナーとして登録する
-         * MainActivity#onClickメソッドからBT接続を行う
-         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
-         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
-         */
-        btn = (Button) findViewById(R.id.bt_btn);
-        // デバイスがBLEに対応しているかを確認する.
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            // BLEに対応していない旨のToastやダイアログを表示する.
-            // BLE非対応のため、無効化
-            btn.setEnabled(false);
-        } else {
-            btn.setOnClickListener(this);
-        }
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
@@ -183,23 +165,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // スタートボタン
                 breakoutView.onPushStartButton();
                 break;
-            /**
-             * B-12．BLEデバイスと接続してパッド操作を行う
-             * AndroidStudioのデザイン画面からボタンウィジェットを追加する
-             * ボタンのラベルを文字列リソースとして定義し表示させる
-             * MainActivity#onClickメソッドをリスナーとして登録する
-             * MainActivity#onClickメソッドからBT接続を行う
-             * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
-             * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
-             */
-            case R.id.bt_btn:
-                // BT接続
-                if(blueNinjaController.isConnected()) {
-                    blueNinjaController.disconnectBle();
-                } else {
-                    blueNinjaController.connectBle();
-                }
-                break;
             default:
                 break;
         }
@@ -255,16 +220,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Log.d(TAG, "加速度が変わったよ");
             Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
-            /**
-             * B-12．BLEデバイスと接続してパッド操作を行う
-             * BLEデバイスが未接続時のみスマホの加速度センサーで移動させることとする
-             *
-             */
-            if(!blueNinjaController.isConnected()) {
-                final Point p = breakoutView.getPadPosition();
-                // 水平方向にのみ移動させたい
-                breakoutView.movePad(-5.0f * gx, 0);
-            }
+
+            final Point p = breakoutView.getPadPosition();
+            // 水平方向にのみ移動させたい
+            breakoutView.movePad(-5.0f * gx, 0);
         }
     }
 
@@ -285,19 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param connected BLE機器接続状態
      */
     @Override
-    public void onBLEConnectionStatusChanged(boolean connected) {
-        /**
-         * B-12．BLEデバイスと接続してパッド操作を行う
-         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
-         * ボタンのラベルを文字列リソースとして定義し表示させる
-         * MainActivity#onClickメソッドをリスナーとして登録する
-         * MainActivity#onClickメソッドからBT接続を行う
-         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
-         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
-         */
-        // BLEの接続状態に応じてパッドの色を変更する
-        breakoutView.setPadColor(connected ? BreakoutView.BLE_CONNECTED_COLOR : BreakoutView.BLE_DISCONNECTED_COLOR);
-    }
+    public void onBLEConnectionStatusChanged(boolean connected) {}
 
     /**
      * BLE機器からのデータ受信
@@ -305,24 +252,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param dataObject 受信データ(Json)
      */
     @Override
-    public void onBLEDataReceived(JSONObject dataObject) {
-        /**
-         * B-12．BLEデバイスと接続してパッド操作を行う
-         * AndroidStudioのデザイン画面からボタンウィジェットを追加する
-         * ボタンのラベルを文字列リソースとして定義し表示させる
-         * MainActivity#onClickメソッドをリスナーとして登録する
-         * MainActivity#onClickメソッドからBT接続を行う
-         * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
-         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
-         */
-        try {
-            // 通知されるデータからX軸方向の加速度を抽出
-            final double ax = dataObject.getDouble("ax");
-            // パッドの移動量を決める
-            // パッドは水平に移動させたいので、Y座標は変えない
-            breakoutView.movePad((float)ax*50, 0);
-        } catch(JSONException e) {
-            Log.d(TAG, "BlueNinjaからのデータが不正です");
-        }
-    }
+    public void onBLEDataReceived(JSONObject dataObject) {}
 }
