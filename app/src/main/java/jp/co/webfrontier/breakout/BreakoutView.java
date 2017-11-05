@@ -327,37 +327,7 @@ public class BreakoutView extends View {
      * @param dy Y方向の移動量
      */
     public void movePad(final float dx, final float dy) {
-        /**
-         * B-06．パッドとボールを動かす
-         * 当たり判定は考慮せずパッドとボールを動かす
-         * フレームの更新(フレームレート60fps)/描画処理などの話をする
-         */
-        if(game.getState() != Breakout.State.RUNNING) {
-            // ゲームが実行状態でない場合はパッドを動かさない
-            return;
-        }
 
-        // パッドがゲームフィールド内に全て表示されるようにする
-        final Pad pad = game.getPad();
-        float px = pad.getCenter().x + dx;
-        float py = pad.getCenter().y + dy;
-        float pw = pad.getWidth();
-        float ph = pad.getHeight();
-
-        // X方向
-        if(px < pw/2) {
-            px = pw/2;
-        } else if(px > game.getGameFieldRect().width() - pw/2) {
-            px = game.getGameFieldRect().width() - pw/2;
-        }
-        // Y方向
-        if(py < ph/2) {
-            py = ph/2;
-        } else if(py > game.getGameFieldRect().height() - ph/2) {
-            py = game.getGameFieldRect().height() - ph/2;
-        }
-
-        game.movePad((int)px, (int)py);
     }
     
     /**
