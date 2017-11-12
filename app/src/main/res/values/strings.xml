@@ -2,6 +2,7 @@
     <string name="app_name">ブロック崩しゲーム</string>
     <!-- Toast Message -->
     <string name="msg_gatt_connect_fail">"BLE機器が切断されました"</string>
+    <string name="start_btn">スタート</string>
     <string name="remaining_ball_count">残りのボール：</string>
     <string name="remaining_brick_count">残りブロック：</string>
     <string name="game_ready_message">スタートボタンを押してね</string>
