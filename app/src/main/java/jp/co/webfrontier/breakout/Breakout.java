@@ -512,7 +512,7 @@ public class Breakout {
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
-                if(brick.isUnBroken()) {
+                if(brick != null && brick.isUnBroken()) {
                     ++count;
                 }
             }
