@@ -208,6 +208,36 @@ public class Ball extends Item {
      * @param item 反射対象の表示要素
      */
     public void reflect(Item item) {
+        /** B-08．反射した後のボールの移動速度を変更する
+         * 最大速度、速度変化率の利用
+         *
+         */
+        // 当たる位置によりX方向の反射角を変える。
+        xSpeed += (getCenter().x - item.getCenter().x) / 8;
+
+        // X方向の速度変化
+        // 最大速度の大きさ以下に抑える
+        if(MAX_SPEED_X < Math.abs(xSpeed)) {
+            if(xSpeed > 0) {
+                xSpeed = MAX_SPEED_X;
+            } else {
+                xSpeed = -MAX_SPEED_X;
+            }
+        } else {
+            xSpeed *= CHANGE_RATE_SPEED_X;
+        }
+
+        // Y方向の速度変化
+        // 最大速度の大きさ以下に抑える
+        if(MAX_SPEED_Y < Math.abs(ySpeed)) {
+            if(ySpeed > 0) {
+                ySpeed = MAX_SPEED_Y;
+            } else {
+                ySpeed = -MAX_SPEED_Y;
+            }
+        } else {
+            ySpeed *= CHANGE_RATE_SPEED_Y;
+        }
         boundY();
     }
 
