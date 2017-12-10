@@ -94,7 +94,10 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    public static final int BRICK_ROW = 1;
+    /** B-11．ブロックを複数行にする
+     *  二次元配列を作る
+     */
+    public static final int BRICK_ROW = 5;
 
     /**
      * ブロックの列数
@@ -103,6 +106,9 @@ public class Breakout {
 
     /**
      * ブロックの配列
+     */
+    /** B-11．ブロックを複数行にする
+     *  二次元配列を作る
      */
     private Brick[][] bricks = new Brick[BRICK_ROW][BRICK_COL];
 
@@ -349,6 +355,9 @@ public class Breakout {
              * B-10．ブロックの破壊とボールの反射を行う
              *
              */
+            /** B-11．ブロックを複数行にする
+             *  二次元配列を作る
+             */
             for(int row = 0; row < BRICK_ROW; row++) {
                 for(int col = 0; col < BRICK_COL; col++) {
                     final Brick brick = bricks[row][col];
@@ -545,6 +554,9 @@ public class Breakout {
      * ブロックを生成する
      */
     private void createBrick() {
+        /** B-11．ブロックを複数行にする
+         *  二次元配列を作る
+         */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 bricks[row][col] = new BrickNormal();
@@ -561,11 +573,17 @@ public class Breakout {
         int brick_w = fieldRect.width() / BRICK_COL;
         int brick_h = fieldRect.height() / 30;
 
+        /** B-11．ブロックを複数行にする
+         *  二次元配列を作る
+         */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                brick.move(col * brick_w, brick_h + BRICK_UPPER_SPACE);
+                /** B-11．ブロックを複数行にする
+                 *  複数行にした場合の表示位置を調整する
+                 */
+                brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
                 view.addDrawingItem(brick);
             }
         }
@@ -587,6 +605,9 @@ public class Breakout {
      */
     public int getRemainingBricksCount() {
         int count = 0;
+        /** B-11．ブロックを複数行にする
+         *  二次元配列を作る
+         */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
