@@ -177,6 +177,12 @@ public class Breakout {
         initializeBall();
         addBall(fieldRect.width()/2, fieldRect.height()/2);
 
+        /**
+         * B-04．ブロックを表示させる
+         * ブロックを生成し初期位置に配置する
+         */
+        createBrick();
+        initializeBrick();
     }
 
     /**
