@@ -94,7 +94,7 @@ public class Breakout {
     /**
      * ブロックの行数
      */
-    /** B-11．ブロックを複数行にする
+    /** ブロックを複数行にする
      *  二次元配列を作る
      */
     public static final int BRICK_ROW = 5;
@@ -107,7 +107,7 @@ public class Breakout {
     /**
      * ブロックの配列
      */
-    /** B-11．ブロックを複数行にする
+    /** ブロックを複数行にする
      *  二次元配列を作る
      */
     private Brick[][] bricks = new Brick[BRICK_ROW][BRICK_COL];
@@ -166,14 +166,14 @@ public class Breakout {
         view.clearDrawingItems();
 
         /**
-         * B-02．パッドを表示させる
+         * パッドを表示させる
          * パッドを初期位置に表示させる
          * 移動はさせない(描画更新はなし)
          */
         initializePad();
 
         /**
-         * B-03．ボールを表示させる
+         * ボールを表示させる
          * ボールをゲームフィールドの中央に表示させる
          * 座標系(原点と軸)の話をする
          * 移動はさせない(描画更新はなし)
@@ -184,7 +184,7 @@ public class Breakout {
         addBall(fieldRect.width()/2, fieldRect.height()/2);
 
         /**
-         * B-04．ブロックを表示させる
+         * ブロックを表示させる
          * ブロックを生成し初期位置に配置する
          */
         createBrick();
@@ -352,10 +352,10 @@ public class Breakout {
             ball.update();
 
             /**
-             * B-10．ブロックの破壊とボールの反射を行う
+             * ブロックの破壊とボールの反射を行う
              *
              */
-            /** B-11．ブロックを複数行にする
+            /** ブロックを複数行にする
              *  二次元配列を作る
              */
             for(int row = 0; row < BRICK_ROW; row++) {
@@ -370,7 +370,7 @@ public class Breakout {
             }
 
             /**
-             * B-07．パッドでボールを反射させる
+             * パッドでボールを反射させる
              * パッドとボールの当たり判定を行う
              */
             if(ball.isCollided(pad)) {
@@ -379,7 +379,7 @@ public class Breakout {
             }
 
             /**
-             * B-09．ゲームフィールドでのボールの跳ね返りとボールがゲームフィールド外へ出たかの判定をする
+             * ゲームフィールドでのボールの跳ね返りとボールがゲームフィールド外へ出たかの判定をする
              * 上端はY方向、左右端はX方向で当たり判定を行いボールを反転させる
              * 下端の判定は厳密には行わずゲームフィールドとの交差判定で行う
              */
@@ -554,7 +554,8 @@ public class Breakout {
      * ブロックを生成する
      */
     private void createBrick() {
-        /** B-11．ブロックを複数行にする
+        /**
+         *  ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {
@@ -573,14 +574,16 @@ public class Breakout {
         int brick_w = fieldRect.width() / BRICK_COL;
         int brick_h = fieldRect.height() / 30;
 
-        /** B-11．ブロックを複数行にする
+        /**
+         *  ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
                 brick.setSize(brick_w, brick_h);
-                /** B-11．ブロックを複数行にする
+                /**
+                 *  ブロックを複数行にする
                  *  複数行にした場合の表示位置を調整する
                  */
                 brick.move(col * brick_w, row * brick_h + BRICK_UPPER_SPACE);
@@ -605,7 +608,8 @@ public class Breakout {
      */
     public int getRemainingBricksCount() {
         int count = 0;
-        /** B-11．ブロックを複数行にする
+        /**
+         *  ブロックを複数行にする
          *  二次元配列を作る
          */
         for(int row = 0; row < BRICK_ROW; row++) {

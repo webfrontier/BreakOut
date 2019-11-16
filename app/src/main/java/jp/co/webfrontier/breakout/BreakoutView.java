@@ -328,7 +328,7 @@ public class BreakoutView extends View {
      */
     public void movePad(final float dx, final float dy) {
         /**
-         * B-06．パッドとボールを動かす
+         * パッドとボールを動かす
          * 当たり判定は考慮せずパッドとボールを動かす
          * フレームの更新(フレームレート60fps)/描画処理などの話をする
          */

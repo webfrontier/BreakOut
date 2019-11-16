@@ -179,7 +179,7 @@ public class Ball extends Item {
     @Override
     public void update() {
         /**
-         * B-06．パッドとボールを動かす
+         * パッドとボールを動かす
          * 当たり判定は考慮せずパッドとボールを動かす
          * フレームの更新(フレームレート60fps)/描画処理などの話をする
          */
@@ -208,7 +208,8 @@ public class Ball extends Item {
      * @param item 反射対象の表示要素
      */
     public void reflect(Item item) {
-        /** B-08．反射した後のボールの移動速度を変更する
+        /**
+         * 反射した後のボールの移動速度を変更する
          * 最大速度、速度変化率の利用
          *
          */
