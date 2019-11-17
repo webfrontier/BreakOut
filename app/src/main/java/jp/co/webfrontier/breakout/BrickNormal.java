@@ -166,6 +166,7 @@ public class BrickNormal extends Brick {
      * ブロックが壊れるまでのボールヒット回数を導入する
      * ブロック耐久度の違うブロックをランダムで生成する
      * crashメソッドをオーバーライドして、ブロック耐久度と比較する
+     * 残り耐久度によってブロックの色を変更する
      */
     @Override
     public void crash() {
@@ -173,6 +174,10 @@ public class BrickNormal extends Brick {
         final int r = robustness.getValue();
         if(r == hitCount) {
             broken = true;
+        } else if (r - hitCount <= 1) {
+            painter.setColor(Color.GRAY);
+        } else if (r - hitCount <= 3) {
+            painter.setColor(Color.CYAN);
         }
     }
 }
