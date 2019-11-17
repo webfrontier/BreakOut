@@ -56,3 +56,6 @@ google-services.json
 gen-external-apklibs
 
 # End of https://www.gitignore.io/api/android
+
+# Generated Docs
+doc/doxygen

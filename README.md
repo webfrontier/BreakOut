@@ -9,6 +9,8 @@ Breakout
 
 ## 使い方
 
-![ゲーム画面](images/Screenshot_20160814-155537.png)
+![ゲーム画面](images/screenshot.png)
+
+![BlueNinja](images/blueninja.png)
 
 ## 操作方法
