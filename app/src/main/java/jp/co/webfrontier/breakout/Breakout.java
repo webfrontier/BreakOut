@@ -368,14 +368,19 @@ public class Breakout {
                     }
                 }
             }
-
+            
             /**
-             * パッドでボールを反射させる
-             * パッドとボールの当たり判定を行う
+             * ボールが下に向かっている時だけ判定を行う
              */
-            if(ball.isCollided(pad)) {
-                // パッドと衝突したのでボールを反射させる
-                ball.reflect(pad);
+            if (ball.getYSpeed() >= 0) {
+                /**
+                 * パッドでボールを反射させる
+                 * パッドとボールの当たり判定を行う
+                 */
+                if (ball.isCollided(pad)) {
+                    // パッドと衝突したのでボールを反射させる
+                    ball.reflect(pad);
+                }
             }
 
             /**
