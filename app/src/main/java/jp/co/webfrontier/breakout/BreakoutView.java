@@ -9,9 +9,11 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -393,5 +395,100 @@ public class BreakoutView extends View {
             default:
                 break;
         }
+    }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * 経過時間を表示するChronometerを開始する
+     */
+    public void startElapsedTimeCounter() {
+        final Breakout.State state = game.getState();
+        if (state != Breakout.State.RUNNING) {
+            return;
+        }
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            game.setElapsedMilliseconds(0);
+            counter.setBase(SystemClock.elapsedRealtime());
+            counter.start();
+        }
+    }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * 経過時間を表示するChronometerを停止する
+     */
+    public void stopElapsedTimeCounter() {
+        final Breakout.State state = game.getState();
+        if (state != Breakout.State.RUNNING
+                && state != Breakout.State.CLEAR
+                && state != Breakout.State.GAMEOVER)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.stop();
+        }
+    }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * 経過時間を表示するChronometerを一時停止する
+     * Chronometerは内部時間が止まらないため、再開時のために一時停止した時間を覚えておく
+     */
+    public void pauseElapsedTimeCounter() {
+        final Breakout.State state = game.getState();
+        if (state != Breakout.State.RUNNING
+                && state != Breakout.State.PAUSING)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.stop();
+            game.setElapsedMilliseconds(counter.getBase() - SystemClock.elapsedRealtime());
+        }
+    }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * 経過時間を表示するChronometerを再開する
+     * Chronometerは内部時間が止まらないため、一時停止の時間に巻き戻す
+     */
+    public void resumeElapsedTimeCounter() {
+        final Breakout.State state = game.getState();
+        if (state != Breakout.State.RUNNING
+                && state != Breakout.State.PAUSING)
+            return;
+        Chronometer counter = (Chronometer)getRootView().findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            counter.setBase(SystemClock.elapsedRealtime() + game.getElapsedMilliseconds());
+            counter.start();
+        }
+    }
+
+    // [Task 17] スタートから一定時間経つとボールのスピードが上がる
+    /**
+     * ゲーム開始からの経過時間(ミリ秒)を取得する
+     */
+    private long getElapsedTime() {
+        Chronometer counter = (Chronometer)findViewById(R.id.elapsed_time);
+        if(counter != null) {
+            return SystemClock.elapsedRealtime() - counter.getBase();
+        }
+        return 0;
     }
 }

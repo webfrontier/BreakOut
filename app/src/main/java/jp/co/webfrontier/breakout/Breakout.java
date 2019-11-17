@@ -138,6 +138,13 @@ public class Breakout {
      */
     private int remainingBallCount;
 
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    private long elapsedMilliseconds = 0; // ゲームの経過時間
+
     /**
      * ゲームを表示するビュー
      */
@@ -237,6 +244,12 @@ public class Breakout {
                     case RUNNING:
                         // 開始可能 -> 実行中
                         view.hideStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.startElapsedTimeCounter();
                         break;
                     default:
                         break;
@@ -248,14 +261,32 @@ public class Breakout {
                     case PAUSING:
                         // 実行中 -> 一時停止
                         view.showStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.pauseElapsedTimeCounter();
                         break;
                     case GAMEOVER:
                         // 実行中 -> ゲームオーバー
                         view.showStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.stopElapsedTimeCounter();
                         break;
                     case CLEAR:
                         // 実行中 -> ゲームクリア
                         view.showStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.stopElapsedTimeCounter();
                         break;
                     default:
                         break;
@@ -267,6 +298,12 @@ public class Breakout {
                     case RUNNING:
                         // 一時停止 -> 実行中
                         view.hideStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.resumeElapsedTimeCounter();
                         break;
                     default:
                         break;
@@ -291,6 +328,12 @@ public class Breakout {
                     case READY:
                         // ゲームクリア -> 開始可能
                         view.showStateMessage();
+                        /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+                         * 時間表示用のUI部品(Chronometer)を配置する
+                         * ゲーム内時間を管理する
+                         * 開始/停止/一時停止/再開を行う
+                         */
+                        view.stopElapsedTimeCounter();
                         // スタートする
                         start();
                         break;
@@ -643,4 +686,28 @@ public class Breakout {
         }
         return count;
     }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * ゲーム開始からの経過時間を取得する
+     *
+     * @return ゲーム開始からの経過時間
+     */
+    public long getElapsedMilliseconds() { return elapsedMilliseconds; }
+
+    /** A-03. ゲーム開始からの経過時間(ゲーム内時間)を表示する
+     * 時間表示用のUI部品(Chronometer)を配置する
+     * ゲーム内時間を管理する
+     * 開始/停止/一時停止/再開を行う
+     */
+    /**
+     * ゲーム開始からの経過時間を設定する
+     *
+     * @param s 設定したい時間
+     */
+    public void setElapsedMilliseconds(long s) { elapsedMilliseconds = s; }
 }
