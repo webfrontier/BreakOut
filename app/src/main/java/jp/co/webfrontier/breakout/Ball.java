@@ -21,7 +21,7 @@ public class Ball extends Item {
     /**
      * 初速度
      */
-    public static final float INITIAL_SPEED = 5f;
+    public static final float INITIAL_SPEED = 3f;
     /**
      * 最初の角度(Y方向移動量1に対してのX方向移動量)
      */
@@ -42,7 +42,7 @@ public class Ball extends Item {
     /**
      * ボールの速度変化率
      */
-    private static final float CHANGE_RATE_SPEED = 1.5f;
+    private static final float CHANGE_RATE_SPEED = 1.2f;
 
     /**
      * デフォルトの半径
