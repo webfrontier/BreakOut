@@ -121,6 +121,8 @@ abstract class Brick extends Item {
             return;
 
         rect.set(x, y, x + rect.width(), y + rect.height());
+        center.x = x  + rect.width()/2;
+        center.y = y  + rect.height()/2;
     }
 
     /**
@@ -134,6 +136,8 @@ abstract class Brick extends Item {
             return;
 
         rect.set(rect.left, rect.top, rect.left + w, rect.top + h);
+        center.x = rect.left  + w/2;
+        center.y = rect.top  + h/2;
     }
 
     /**

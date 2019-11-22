@@ -208,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             float gy = sensorEvent.values[1]; // Y方向(スマホを水平にした時の縦方向)の加速度(上:-9.8xxx 〜 下:9.8xxx)
             float gz = sensorEvent.values[2]; // Z方向(スマホを水平にした時の鉛直方向)の加速度(上:-9.8xxx 〜 下:9.8xxx)
 
-            Log.d(TAG, "加速度が変わったよ");
-            Log.d(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
+            Log.v(TAG, "加速度が変わったよ");
+            Log.v(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
 
             final Point p = breakoutView.getPadPosition();
             // 水平方向にのみ移動させたい

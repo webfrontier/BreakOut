@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -18,29 +19,31 @@ public class Ball extends Item {
     private static final String TAG = "Ball";
 
     /**
-     * 初速度（X方向）
+     * 初速度
      */
-    public static final float INITIAL_SPEED_X = -0.2f;
+    public static final float INITIAL_SPEED = 5f;
     /**
-     * 初速度（Y方向）
+     * 最初の角度(Y方向移動量1に対してのX方向移動量)
      */
-    public static final float INITIAL_SPEED_Y = 3f;
+    public static final float INITIAL_ANGLE = -0.5f;
     /**
-     * ボールの最大速度（X方向）
+     * 最初のY方向
      */
-    private static final float MAX_SPEED_X = 5f;
+    public static final float INITIAL_Y_DIRECTION = 1f;
+
     /**
-     * ボールの最大速度（Y方向）
+     * ボールの最大速度
      */
-    private static final float MAX_SPEED_Y = 8f;
+    private static final float MAX_SPEED = 12f;
     /**
-     * ボールの速度変化率（X方向）
+     * ボールの最大角度(Y方向移動量1に対してのX方向移動量)
      */
-    private static final float CHANGE_RATE_SPEED_X = 1.01f;
+    private static final float MAX_ANGLE = 4f;
     /**
-     * ボールの速度変化率（Y方向）
+     * ボールの速度変化率
      */
-    private static final float CHANGE_RATE_SPEED_Y = 1.2f;
+    private static final float CHANGE_RATE_SPEED = 1.5f;
+
     /**
      * デフォルトの半径
      */
@@ -50,13 +53,25 @@ public class Ball extends Item {
      */
     private int r;
     /**
-     * 速度（X方向）
+     * 速度
      */
-    private float xSpeed = INITIAL_SPEED_X;
+    private float speed = INITIAL_SPEED;
     /**
-     * 速度（Y方向）
+     * 角度(Y方向移動量1に対してのX方向移動量)
      */
-    private float ySpeed = INITIAL_SPEED_Y;
+    private float angle = INITIAL_ANGLE;
+    /**
+     * Y方向
+     */
+    private float yDirection = INITIAL_Y_DIRECTION;
+    /**
+     * X移動量
+     */
+    private float xMovement = calcXMovement();
+    /**
+     * Y移動量
+     */
+    private float yMovement = calcYMovement();
 
     /**
      * コンストラクタ
@@ -78,16 +93,16 @@ public class Ball extends Item {
      *
      * @param x ボールの位置(X座標)
      * @param y ボールの位置(Y座標)
-     * @param xSpeed ボールの速度(X座標)
-     * @param ySpeed ボールの速度(Y座標)
+     * @param speed ボールの速度
+     * @param angle ボールの角度
      */
-    public Ball(int x, int y, float xSpeed, float ySpeed) {
+    public Ball(int x, int y, float speed, float angle) {
         painter.setColor(color);
         painter.setAntiAlias(true);
         this.center.x = x;
         this.center.y = y;
-        this.xSpeed = xSpeed;
-        this.ySpeed = ySpeed;
+        this.speed = speed;
+        this.angle = angle;
         this.r = DEFAULT_RADIUS;
         this.rect.set(this.center.x - this.r, this.center.y - this.r, this.center.x + this.r, this.center.y + this.r);
     }
@@ -97,18 +112,18 @@ public class Ball extends Item {
      *
      * @param x ボールの位置(X座標)
      * @param y ボールの位置(Y座標)
-     * @param xSpeed ボールの速度(X座標)
-     * @param ySpeed ボールの速度(Y座標)
+     * @param speed ボールの速度
+     * @param angle ボールの角度
      * @param r ボールの半径
      */
-    public Ball(int x, int y, int r, float xSpeed, float ySpeed) {
+    public Ball(int x, int y, int r, float speed, float angle) {
         painter.setColor(color);
         painter.setAntiAlias(true);
         this.center.x = x;
         this.center.y = y;
         this.r = r;
-        this.xSpeed = xSpeed;
-        this.ySpeed = ySpeed;
+        this.speed = speed;
+        this.angle = angle;
         this.rect.set(this.center.x - this.r, this.center.y - this.r, this.center.x + this.r, this.center.y + this.r);
     }
 
@@ -139,36 +154,31 @@ public class Ball extends Item {
     public void setRadius(int r) { this.r = r; }
 
     /**
-     * ボールのX方向の速度を取得する(getter)
+     * ボールの速度を取得する(getter)
      *
-     * @return ボールのX方向の速度
+     * @return ボールの速度
      */
-    public float getXSpeed() {
-        return xSpeed;
+    public float getSpeed() {
+        return speed;
     }
 
     /**
-     * ボールのX方向の速度を設定する(setter)
+     * ボールの角度を取得する(getter)
      *
-     * @param xSpeed ボールのX方向の速度
+     * @return ボールの角度
      */
-    public void setXSpeed(float xSpeed) { this.xSpeed = xSpeed; }
-
-    /**
-     * ボールのY方向の速度を取得する(setter)
-     *
-     * @return ボールのY方向の速度
-     */
-    public float getYSpeed() {
-        return ySpeed;
+    public float getAngle() {
+        return angle;
     }
 
     /**
-     * ボールのY方向の速度を設定する(setter)
+     * ボールのY方向を取得する(getter)
      *
-     * @param ySpeed ボールのX方向の速度
+     * @return ボールのY方向
      */
-    public void setYSpeed(float ySpeed) { this.ySpeed = ySpeed; }
+    public float getYDirection() {
+        return yDirection;
+    }
 
     /**
      * ボールの状態の更新を行う
@@ -178,13 +188,6 @@ public class Ball extends Item {
      */
     @Override
     public void update() {
-        /**
-         * パッドとボールを動かす
-         * 当たり判定は考慮せずパッドとボールを動かす
-         * フレームの更新(フレームレート60fps)/描画処理などの話をする
-         */
-        center.x += xSpeed;
-        center.y += ySpeed;
         this.rect.set(center.x - r, center.y - r, center.x + r, center.y + r);
     }
 
@@ -213,46 +216,94 @@ public class Ball extends Item {
          * 最大速度、速度変化率の利用
          *
          */
-        // 当たる位置によりX方向の反射角を変える。
-        xSpeed += (getCenter().x - item.getCenter().x) / 8;
 
-        // X方向の速度変化
-        // 最大速度の大きさ以下に抑える
-        if(MAX_SPEED_X < Math.abs(xSpeed)) {
-            if(xSpeed > 0) {
-                xSpeed = MAX_SPEED_X;
-            } else {
-                xSpeed = -MAX_SPEED_X;
-            }
-        } else {
-            xSpeed *= CHANGE_RATE_SPEED_X;
-        }
+        // 当たる位置によりX方向の反射角を変える
+        float changeAngle = angle + (getCenter().x - item.getCenter().x) / 20;
 
-        // Y方向の速度変化
-        // 最大速度の大きさ以下に抑える
-        if(MAX_SPEED_Y < Math.abs(ySpeed)) {
-            if(ySpeed > 0) {
-                ySpeed = MAX_SPEED_Y;
-            } else {
-                ySpeed = -MAX_SPEED_Y;
-            }
-        } else {
-            ySpeed *= CHANGE_RATE_SPEED_Y;
+        // 角度に制限をつける
+        if(changeAngle > MAX_ANGLE) {
+            changeAngle = MAX_ANGLE;
+        } else if(angle < -MAX_ANGLE) {
+            changeAngle = -MAX_ANGLE;
         }
+        updateAngle(changeAngle);
+
         boundY();
+
+        Log.d(TAG,"speed:" + speed + " angle:" + angle);
+        Log.d(TAG,"xMovement:" + xMovement + " yMovement:" + yMovement);
     }
 
     /**
      * X方向の反射処理を行う
      */
     public void boundX() {
-        xSpeed = -xSpeed;
+        updateAngle(-angle);
     }
 
     /**
      * Y方向の反射処理を行う
      */
     public void boundY() {
-        ySpeed = -ySpeed;
+        updateYDirection(-yDirection);
+    }
+
+    /**
+     * X方向の移動量算出する
+     *
+     *
+     * @return x方向の移動量
+     */
+    private float calcXMovement() {
+        return Math.abs(calcYMovement()) * angle;
+    }
+
+    /**
+     * Y方向の移動量算出する
+     *
+     * @return y方向の移動量
+     */
+    private float calcYMovement() {
+        float absAngle = Math.abs(angle);
+        float yMovementSquare = speed * speed / ((absAngle * absAngle) + 1);
+        return ((float) Math.sqrt(yMovementSquare))* yDirection;
+    }
+
+    /**
+     * 角度を更新する
+     *
+     * @param angle
+     */
+    private void updateAngle(float angle) {
+        if (this.angle != angle) {
+            this.angle = angle;
+            xMovement = calcXMovement();
+            yMovement = calcYMovement();
+        }
+    }
+
+    /**
+     * 速度を更新する
+     *
+     * return y方向の移動量
+     */
+    private void updateSpeed(float speed) {
+        if (this.speed != speed) {
+            this.speed = speed;
+            xMovement = calcXMovement();
+            yMovement = calcYMovement();
+        }
+    }
+
+    /**
+     * Y方向を更新する
+     *
+     * @param yDirection Yの方向
+     */
+    private void updateYDirection(float yDirection) {
+        if(this.yDirection != yDirection) {
+            this.yDirection = yDirection;
+            yMovement = calcYMovement();
+        }
     }
 }

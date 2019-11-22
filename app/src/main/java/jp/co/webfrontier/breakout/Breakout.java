@@ -166,24 +166,6 @@ public class Breakout {
         view.clearDrawingItems();
 
         /**
-         * パッドを表示させる
-         * パッドを初期位置に表示させる
-         * 移動はさせない(描画更新はなし)
-         */
-        initializePad();
-
-        /**
-         * ボールを表示させる
-         * ボールをゲームフィールドの中央に表示させる
-         * 座標系(原点と軸)の話をする
-         * 移動はさせない(描画更新はなし)
-         * パッドとの当たり判定もなし
-         */
-        // ボールの状態を初期化する
-        initializeBall();
-        addBall(fieldRect.width()/2, fieldRect.height()/2);
-
-        /**
          * ブロックを表示させる
          * ブロックを生成し初期位置に配置する
          */
@@ -370,17 +352,9 @@ public class Breakout {
             }
             
             /**
-             * ボールが下に向かっている時だけ判定を行う
+             * ボールが下に向かっている時だけパッドとの判定を行う
              */
-            if (ball.getYSpeed() >= 0) {
-                /**
-                 * パッドでボールを反射させる
-                 * パッドとボールの当たり判定を行う
-                 */
-                if (ball.isCollided(pad)) {
-                    // パッドと衝突したのでボールを反射させる
-                    ball.reflect(pad);
-                }
+            if (ball.getYDirection() >= 0) {
             }
 
             /**
