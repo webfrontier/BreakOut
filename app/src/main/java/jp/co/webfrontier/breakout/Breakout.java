@@ -178,6 +178,17 @@ public class Breakout {
          * 移動はさせない(描画更新はなし)
          */
         initializePad();
+
+        /**
+         * B-03．ボールを表示させる
+         * ボールをゲームフィールドの中央に表示させる
+         * 座標系(原点と軸)の話をする
+         * 移動はさせない(描画更新はなし)
+         * パッドとの当たり判定もなし
+         */
+        // ボールの状態を初期化する
+        initializeBall();
+        addBall(fieldRect.width()/2, fieldRect.height()/2);
     }
 
     /**
