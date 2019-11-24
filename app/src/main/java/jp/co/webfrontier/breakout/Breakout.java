@@ -665,6 +665,12 @@ public class Breakout {
                  */
                 if(row%2 == 0 && col%2 == 0) {
                     bricks[row][col] = new BrickUnbroken();
+                } else if(row == BRICK_ROW/2 && col == BRICK_COL/2) {
+                    /** A-06. ボーナスブロックの追加
+                     * ボーナスアイテムを出すブロック
+                     * Brickを継承して作成する
+                     */
+                    bricks[row][col] = new BrickBonus();
                 } else {
                     bricks[row][col] = new BrickNormal();
                 }
