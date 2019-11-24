@@ -203,15 +203,6 @@ public class Breakout {
         // ボールの状態を初期化する
         initializeBall();
         addBall(fieldRect.width()/2, fieldRect.height()/2);
-<<<<<<< HEAD
-=======
-
-        /**
-         * ブロックを表示させる
-         * ブロックを生成し初期位置に配置する
-         */
-        createBrick();
-        initializeBrick();
 
         /** A-05. ゲームの得点を表示する
          * 得点表示用のUI部品(TextView)を配置する
@@ -219,7 +210,6 @@ public class Breakout {
          * 得点を加算していき表示する
          */
         score = 0;
->>>>>>> 6fb1ac82a92a07e4e05c9cd6e9f8e78f3a472f19
     }
 
     /**
