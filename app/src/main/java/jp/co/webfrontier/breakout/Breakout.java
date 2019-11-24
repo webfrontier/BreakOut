@@ -145,6 +145,13 @@ public class Breakout {
      */
     private long elapsedMilliseconds = 0; // ゲームの経過時間
 
+    /** A-05. ゲームの得点を表示する
+     * 得点表示用のUI部品(TextView)を配置する
+     * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+     * 得点を加算していき表示する
+     */
+    private long score = 0;
+
     /**
      * ゲームを表示するビュー
      */
@@ -196,6 +203,23 @@ public class Breakout {
         // ボールの状態を初期化する
         initializeBall();
         addBall(fieldRect.width()/2, fieldRect.height()/2);
+<<<<<<< HEAD
+=======
+
+        /**
+         * ブロックを表示させる
+         * ブロックを生成し初期位置に配置する
+         */
+        createBrick();
+        initializeBrick();
+
+        /** A-05. ゲームの得点を表示する
+         * 得点表示用のUI部品(TextView)を配置する
+         * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+         * 得点を加算していき表示する
+         */
+        score = 0;
+>>>>>>> 6fb1ac82a92a07e4e05c9cd6e9f8e78f3a472f19
     }
 
     /**
@@ -424,6 +448,12 @@ public class Breakout {
                         // ブロックと衝突したのでブロックを破壊しボールを反射させる
                         brick.crash();
                         ball.reflect(brick);
+                        /** A-05. ゲームの得点を表示する
+                         * 得点表示用のUI部品(TextView)を配置する
+                         * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+                         * 得点を加算していき表示する
+                         */
+                        score += bricks[row][col].getPoint();
                     }
                 }
             }
@@ -739,4 +769,16 @@ public class Breakout {
      * @param s 設定したい時間
      */
     public void setElapsedMilliseconds(long s) { elapsedMilliseconds = s; }
+
+    /** A-05. ゲームの得点を表示する
+     * 得点表示用のUI部品(TextView)を配置する
+     * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+     * 得点を加算していき表示する
+     */
+    /**
+     * ゲームの得点を取得する
+     *
+     * @return 現在の得点
+     */
+    public long getScore() { return score; }
 }
