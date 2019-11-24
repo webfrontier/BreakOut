@@ -10,4 +10,5 @@
     <string name="game_over_message">ゲームオーバー</string>
     <string name="game_clear_message">ゲームクリア！！</string>
     <string name="bt_btn">接続</string>
+    <string name="elapsed_time">経過時間：%s</string>
 </resources>
