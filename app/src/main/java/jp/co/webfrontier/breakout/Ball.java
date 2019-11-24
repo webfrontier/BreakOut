@@ -236,6 +236,17 @@ public class Ball extends Item {
         }
         updateAngle(changeAngle);
 
+        /**
+         * B-06．反射した後のボールの移動速度を変更する
+         * 最大速度、速度変化率の利用
+         */
+        // 最大速度の大きさ以下に抑える
+        float changeSpeed = speed * CHANGE_RATE_SPEED;
+        if(MAX_SPEED < changeSpeed) {
+            changeSpeed = MAX_SPEED;
+        }
+        updateSpeed(changeSpeed);
+
         boundY();
 
         Log.d(TAG,"speed:" + speed + " angle:" + angle);
