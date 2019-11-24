@@ -172,6 +172,7 @@ public class BrickNormal extends Brick {
     public void crash() {
         hitCount++;
         final int r = robustness.getValue();
+
         if(r == hitCount) {
             broken = true;
         } else if (r - hitCount <= 1) {
@@ -179,5 +180,12 @@ public class BrickNormal extends Brick {
         } else if (r - hitCount <= 3) {
             painter.setColor(Color.CYAN);
         }
+
+        /** A-04. 効果音を鳴らす
+         * ゲームの効果音をつける
+         * ブロックを破壊したとき, 破壊できないブロックに当たったとき,パッドで反射したとき
+         * ボールをロストしたとき, ゲームをクリアしたとき, ゲームオーバーになったとき
+         */
+        SoundController.playHitBrick();
     }
 }
