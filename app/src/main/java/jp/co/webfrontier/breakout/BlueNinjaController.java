@@ -37,11 +37,6 @@ public class BlueNinjaController {
      */
     private static final String TAG = "BlueNinjaController";
 
-    /**
-     * B-12．BLEデバイスと接続してパッド操作を行う
-     * 各機器ごとの名前に変更する
-     *
-     */
     // 接続先のBlueNinjaデバイス名
     private static final String DEFAULT_DEVICE_NAME = "SINOBI";
 
