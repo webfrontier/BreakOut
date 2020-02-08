@@ -39,6 +39,16 @@
                 android:textColor="#000000"
                 android:textSize="18sp"/>
 
+            <Chronometer
+                android:id="@+id/elapsed_time"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:format="@string/elapsed_time" />
+
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
