@@ -75,13 +75,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
 
+        /**
+         * B-07:接続ボタンを作成する
+         */
+        Button bt_btn = (Button)findViewById(R.id.bt_btn);
+
         // デバイスがBLEに対応しているかを確認する.
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             // BLEに対応している
+            /**
+             * B-07:接続ボタンを作成する
+             * MainActivity#onClickメソッドをリスナーとして登録する
+             */
+            bt_btn.setOnClickListener(this);
         } else {
             // BLEに対応していない
+            /**
+             * B-07:接続ボタンを作成する
+             * 対応していない時はボタンを不可にする
+             */
+            bt_btn.setEnabled(false);
         }
-
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
@@ -173,6 +187,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.start_btn:
                 // スタートボタン
                 breakoutView.onPushStartButton();
+                break;
+            /**
+             * B-07:接続ボタンを作成する
+             * クリック時に対応するようにidを設定する。
+             */
+            case R.id.bt_btn:
+                Log.d(TAG, "接続ボタンがクリックされたよ");
                 break;
             default:
                 break;

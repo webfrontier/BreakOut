@@ -56,8 +56,21 @@
                 android:height="50dp"
                 android:layout_gravity="right" />
 
+            <!-- B-07:接続ボタンを追加する
+                AndroidStudioのデザイン画面からボタンウィジェットを追加する
+                ボタンのラベルを文字列リソースとして定義し表示させる -->
+            <Button
+                android:id="@+id/bt_btn"
+                android:text="@string/bt_btn"
+                android:layout_width="200px"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:textSize="16sp"
+                android:layout_gravity="right"
+                android:height="50dp" />
+
         </LinearLayout>
-        
+
     </LinearLayout>
 
     <RelativeLayout
