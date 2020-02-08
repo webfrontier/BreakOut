@@ -194,6 +194,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             case R.id.bt_btn:
                 Log.d(TAG, "接続ボタンがクリックされたよ");
+                /**
+                 * B-08．BLEデバイスと接続してパッド操作を行う
+                 * MainActivity#onClickメソッドからBT接続を行う
+                 */
+                if(blueNinjaController.isConnected()) {
+                    blueNinjaController.disconnectBle();
+                } else {
+                    blueNinjaController.connectBle();
+                }
                 break;
             default:
                 break;
@@ -256,10 +265,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.v(TAG, "加速度が変わったよ");
             Log.v(TAG, "X方向: " + gx + ", Y方向: " + gy + ", Z方向: " + gz);
 
-
-            final Point p = breakoutView.getPadPosition();
-            // 水平方向にのみ移動させたい
-            breakoutView.movePad(-5.0f * gx, 0);
+            /**
+             * B-08．BLEデバイスと接続してパッド操作を行う
+             * BLEデバイスと接続したらスマホのセンサーによる移動をやめる。
+             */
+            if(!blueNinjaController.isConnected()) {
+                final Point p = breakoutView.getPadPosition();
+                // 水平方向にのみ移動させたい
+                breakoutView.movePad(-5.0f * gx, 0);
+            }
         }
     }
 
@@ -281,10 +295,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onBLEConnectionStatusChanged(boolean connected) {
+        /**
+         * B-08．BLEデバイスと接続してパッド操作を行う
+         * BLEの接続状態に応じてパッドの色を変更する.
+         */
         if (connected) {
             // BLEデバイスと接続しました
+            breakoutView.setPadColor(BreakoutView.BLE_CONNECTED_COLOR);
         } else {
             // BLEデバイスが切断されました
+            breakoutView.setPadColor(BreakoutView.BLE_DISCONNECTED_COLOR);
         }
     }
 
@@ -308,6 +328,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             final double ay = dataObject.getDouble("ay");
             // 通知されるデータからZ軸方向の加速度を抽出
             final double az = dataObject.getDouble("az");
+            /**
+             * B-08．BLEデバイスと接続してパッド操作を行う
+             * BlueNinjaから受信した加速度センサーの値をもとにパッドを移動させる
+             * パッドは水平に移動させたいので、Y座標は変えない
+             */
+            breakoutView.movePad((float)ax*50, 0);
         } catch(JSONException e) {
             Log.e(TAG, "BlueNinjaからのデータが不正です");
         }
