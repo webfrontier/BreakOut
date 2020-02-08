@@ -49,6 +49,16 @@
                 android:textSize="18sp"
                 android:format="@string/elapsed_time" />
 
+            <TextView
+                android:id="@+id/score"
+                android:text="@string/score"
+                android:visibility="visible"
+                android:layout_width="450px"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -215,6 +215,20 @@ public class BreakoutView extends View {
         }
     }
 
+    /** A-05. ゲームの得点を表示する
+     * 得点表示用のUI部品(TextView)を配置する
+     * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+     * 得点を加算していき表示する
+     */
+    public void showScore() {
+        TextView tv = (TextView)getRootView().findViewById(R.id.score);
+        if(tv != null) {
+            Resources resource = getContext().getResources();
+            CharSequence newMessage = "得点：";
+            tv.setText(newMessage + Long.toString(game.getScore()));
+        }
+    }
+
     /**
      * ゲームの状態に応じたメッセージを表示する
      *
@@ -278,6 +292,13 @@ public class BreakoutView extends View {
 
         // 残りブロック数の表示
         showRemainingBrickCount();
+
+        /** A-05. ゲームの得点を表示する
+         * 得点表示用のUI部品(TextView)を配置する
+         * ブロックの耐久度ごとに破壊したときに得られる得点を決める
+         * 得点を加算していき表示する
+         */
+        showScore();
 
         // 2. ゲームフィールドを描画する
         canvas.drawRect(displayRect.left, STATUS_H, displayRect.width(), displayRect.height(), painter);
