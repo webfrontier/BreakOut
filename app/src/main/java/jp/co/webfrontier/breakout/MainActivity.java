@@ -1,5 +1,6 @@
 package jp.co.webfrontier.breakout;
 
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,13 +13,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
  * ブロック崩しアプリのメインアクティビティ
  * クリックイベントをハンドルするためにOnClickListenerインターフェースを実装します
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+                                                                    SensorEventListener, BlueNinjaListener{
 
     /**
      * デバッグログ用タグ
@@ -34,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * (加速度)センサー管理
      */
     private SensorManager sensorManager;
+
+    /**
+     * BlueNinja BLE接続制御
+     */
+    private BlueNinjaController blueNinjaController = new BlueNinjaController(this);
 
     /**
      * Activityのライフタイム管理
@@ -53,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 
+        blueNinjaController.init();
+
         /**
          * スタートボタンを作成する
          * AndroidStudioのデザイン画面からボタンウィジェットを追加する
@@ -62,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         Button btn = (Button)findViewById(R.id.start_btn);
         btn.setOnClickListener(this);
+
+        // デバイスがBLEに対応しているかを確認する.
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            // BLEに対応している
+        } else {
+            // BLEに対応していない
+        }
+
 
         breakoutView = (BreakoutView)findViewById(R.id.breakout);
     }
@@ -223,6 +243,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    /**
+     * BLE機器の接続状態の変更通知
+     *
+     * @param connected BLE機器接続状態
+     */
+    @Override
+    public void onBLEConnectionStatusChanged(boolean connected) {
+        if (connected) {
+            // BLEデバイスと接続しました
+        } else {
+            // BLEデバイスが切断されました
+        }
+    }
+
+
+    /**
+     * BLE機器からのデータ受信
+     *
+     * @param dataObject 受信データ(Json)
+     */
+    @Override
+    public void onBLEDataReceived(JSONObject dataObject) {
+        /**
+         * データ形式はJSON形式で{ ax: xx(-1〜1), ay: yy(-1〜1), az: zz(-1〜1) }(xx: X軸方向の加速度, yy: Y軸方向の加速度, zz: Z軸方向の加速度)
+         */
+        try {
+            Log.d(TAG, "BlueNinjaからのデータ:" + dataObject.toString(2));
+
+            // 通知されるデータからX軸方向の加速度を抽出
+            final double ax = dataObject.getDouble("ax");
+            // 通知されるデータからY軸方向の加速度を抽出
+            final double ay = dataObject.getDouble("ay");
+            // 通知されるデータからZ軸方向の加速度を抽出
+            final double az = dataObject.getDouble("az");
+        } catch(JSONException e) {
+            Log.e(TAG, "BlueNinjaからのデータが不正です");
+        }
     }
 
 
