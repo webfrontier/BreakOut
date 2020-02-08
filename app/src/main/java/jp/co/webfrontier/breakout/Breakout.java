@@ -566,7 +566,17 @@ public class Breakout {
          */
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
-                bricks[row][col] = new BrickNormal();
+                /** A-02. 壊れないブロックを作る
+                 * Brickを継承して新たな壊れないブロックのクラスを作成
+                 * crashメソッドをオーバーライドして、ブロックが壊れないようにする
+                 * 偶数行、偶数列の位置に壊れないブロックを配置する
+                 * 残りブロック数のカウントに壊れないブロックを含まないようにする
+                 */
+                if(row%2 == 0 && col%2 == 0) {
+                    bricks[row][col] = new BrickUnbroken();
+                } else {
+                    bricks[row][col] = new BrickNormal();
+                }
             }
         }
     }
@@ -621,7 +631,13 @@ public class Breakout {
         for(int row = 0; row < BRICK_ROW; row++) {
             for(int col = 0; col < BRICK_COL; col++) {
                 final Brick brick = bricks[row][col];
-                if(brick != null && brick.isUnBroken()) {
+                /** A-02. 壊れないブロックを作る
+                 * Brickを継承して新たな壊れないブロックのクラスを作成
+                 * crashメソッドをオーバーライドして、ブロックが壊れないようにする
+                 * 偶数行、偶数列の位置に壊れないブロックを配置する
+                 * 残りブロック数のカウントに壊れないブロックを含まないようにする
+                 */
+                if(brick.getType() == Brick.Type.NORMAL && brick.isUnBroken()) {
                     ++count;
                 }
             }
