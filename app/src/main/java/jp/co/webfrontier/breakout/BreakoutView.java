@@ -332,9 +332,30 @@ public class BreakoutView extends View {
             return;
         }
 
+        /**
+         * B-04．パッドとボールを動かす
+         * 当たり判定は考慮せずパッドとボールを動かす
+         * フレームの更新(フレームレート60fps)/描画処理などの話をする
+         */
+        // パッドがゲームフィールド内に全て表示されるようにする
         final Pad pad = game.getPad();
-        float px = pad.getCenter().x;
-        float py = pad.getCenter().y;
+        float px = pad.getCenter().x + dx;
+        float py = pad.getCenter().y + dy;
+        float pw = pad.getWidth();
+        float ph = pad.getHeight();
+
+        // X方向
+        if(px < pw/2) {
+            px = pw/2;
+        } else if(px > game.getGameFieldRect().width() - pw/2) {
+            px = game.getGameFieldRect().width() - pw/2;
+        }
+        // Y方向
+        if(py < ph/2) {
+            py = ph/2;
+        } else if(py > game.getGameFieldRect().height() - ph/2) {
+            py = game.getGameFieldRect().height() - ph/2;
+        }
 
         game.movePad((int)px, (int)py);
     }

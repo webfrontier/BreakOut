@@ -188,6 +188,14 @@ public class Ball extends Item {
      */
     @Override
     public void update() {
+        /**
+         * B-04. パッドとボールを動かす
+         * 当たり判定は考慮せずパッドとボールを動かす
+         * フレームの更新(フレームレート60fps)/描画処理などの話をする
+         */
+        center.x += xMovement;
+        center.y += yMovement;
+
         this.rect.set(center.x - r, center.y - r, center.x + r, center.y + r);
     }
 
